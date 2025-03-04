@@ -25,7 +25,7 @@ const OnboardingSlides = () => {
       title: "Your Client Playbook",
       text: "Turn every client into a loyal regular with detailed profiles, service history, and tailored experiences that keep them coming back.",
       buttons: [
-        { label: "Login", action: () => alert("Login Clicked!") },
+        { label: "Signin", action: () => alert("Signin Clicked!") },
         { label: "Sign up", action: () => alert("Sign Up Clicked!") },
       ],
     },

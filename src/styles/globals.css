@@ -55,10 +55,13 @@ p {
   font-size: 18px;
   font-family: var(--font-open-sans);
 }
-input:focus, textarea:focus {
+
+input:focus,
+textarea:focus {
   border: none;
   outline: none;
 }
+
 .onboarding {
   height: 100vh;
   display: flex;
@@ -113,7 +116,7 @@ input:focus, textarea:focus {
 }
 
 .mw-600 {
-  min-width: 600px;
+  width: 600px;
 }
 
 .content {
@@ -303,13 +306,18 @@ input:focus, textarea:focus {
   display: inline-block;
 }
 
-.side_bottom {
+.side_h4 {
+  position: relative;
+}
+
+.side_h4::after {
+  content: "";
   height: 4px;
-  width: 85%;
+  width: 120%;
   background-color: #FFF;
   position: absolute;
-  left: 0;
-  top: 315px;
+  left: -50px;
+  bottom: -25px;
 }
 
 .theme-btn2 {
@@ -327,4 +335,205 @@ input:focus, textarea:focus {
   border: none;
   outline: 2px solid transparent;
   box-shadow: 0 5px 12px #c49a6c94;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal.css */
+.myModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transform: all .3s;
+}
+
+.myModal-content {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 600px;
+  width: 100%;
+  border: 2px solid #A83F98;
+  transform: all .3s;
+}
+
+.myModal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background: rgb(245, 183, 202);
+  background: linear-gradient(335deg, rgba(245, 183, 202, 1) 0%, rgba(168, 63, 152, 1) 70%, rgba(129, 1, 127, 1) 100%);
+  color: #FFF;
+  font-weight: 300;
+  font-family: var(--font-inter);
+}
+
+.myModal-close span {
+  line-height: 12px;
+}
+
+/* billing detail modal */
+.bd_content {
+  border: none;
+  padding: 0;
+}
+
+.bmd_top {
+  padding: 40px;
+  text-align: center;
+  background-color: #F3BDDD;
+  border-radius: 8px;
+}
+
+.bmd_top span {
+  font-size: 50px;
+}
+
+.bmd_top h4 {
+  color: #000;
+  font-family: var(--font-inter);
+  font-size: 42px;
+  font-weight: 600;
+  padding-top: 10px;
+  margin: 0;
+}
+
+.bmd_bottom {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 30px 20px 30px 40px;
+
+}
+
+.bmd_bottom a {
+  min-width: 150px;
+  padding: 5px 10px;
+  text-align: center;
+  border: 2px solid #51004F;
+  color: #000;
+  font-family: var(--font-inter);
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.bmd_bottom p {
+  color: #2D3748;
+  font-family: var(--font-inter);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* billing detail modal */
+.calendar-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 20px auto;
+}
+
+.navigation-buttons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
+.navigation-buttons button {
+  background: rgb(245, 183, 202);
+  background: linear-gradient(335deg, rgba(245, 183, 202, 1) 0%, rgba(168, 63, 152, 1) 70%, rgba(129, 1, 127, 1) 100%);
+  color: white;
+  border: none;
+  border-radius: 100%;
+  cursor: pointer;
+  font-size: 18px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  box-shadow: 0 0 10px 1px #08080830;
+}
+
+.navigation-buttons button:disabled {
+  background: #e0e0e0ab;
+  cursor: not-allowed;
+}
+
+.navigation-buttons button:first-child {
+  left: 30px;
+}
+
+.navigation-buttons button:last-child {
+  right: 30px;
+}
+
+.chat-container {
+  width: 100%;
+  padding: 20px;
+
+}
+.cc_inner {
+  border: 1px solid #dadada;
+  border-top: none;
+}
+.cc_head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #F5B7CA;
+ padding: 15px 50px; 
+}
+.cc_head img {
+  border-radius: 100%;
+}
+.cc_head h4 {
+  font-size: 24px;
+  font-family: var(--font-poppins);
+  font-weight: 600;
+  margin: 0;
+}
+
+.cc_head h5 {
+  font-size: 16px;
+  font-family: var(--font-poppins);
+  font-weight: 400;
+  margin: 0;
+}
+.cc_head button {
+  font-size: 14px;
+  color: #51004F;
+  font-weight: 600;
+  background-color: #FFF;
+  border-radius: 30px;
+  padding: 8px 40px;
+  font-family: var(--font-inter);
+  border: 1px solid transparent;
+}
+
+.payment1 button.accordion-button {
+  border: none;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.payment1 button.accordion-button::after {
+  display: none;
 }

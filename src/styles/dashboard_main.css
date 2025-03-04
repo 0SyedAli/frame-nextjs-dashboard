@@ -7,11 +7,16 @@
 .sidebar {
     width: 30%;
     background: rgb(255, 255, 255);
-    background: linear-gradient(165deg, rgba(255, 255, 255, 1) 0%, rgba(235, 148, 199, 1) 70%, rgba(120, 67, 170, 1) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(241, 179, 215, 1) 17%, rgba(120, 67, 170, 1) 63%);
     color: #fff;
-    padding: 130px 50px 0;
+    padding: 80px 50px 0;
     position: relative;
     height: 100vh;
+}
+
+.sm2-end {
+    position: absolute;
+    bottom: 0;
 }
 
 .sidebar .logo {
@@ -27,18 +32,28 @@
     object-fit: contain;
 }
 
-.sidebar nav ul {
+.side_menu2 ul {
     list-style: none;
-    padding: 0;
+    padding: 50px 0 0;
 }
 
-.sidebar nav ul li {
-    margin: 15px 0;
+.side_menu2 ul li {
+    margin: 20px 0;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.side_menu2 ul li span {
+    font-size: 19px;
 }
 
-.sidebar nav ul li a {
+.side_menu2 ul li a {
     color: #fff;
     text-decoration: none;
+    font-family: var(--font-lato);
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .main-content {
@@ -53,7 +68,7 @@
     padding-top: 50px;
 }
 
-.content {
+.main-content {
     width: 100%;
 }
 
@@ -126,12 +141,13 @@
 .dp2_item {
     border-radius: 10px;
     background-color: #F5B7CA;
-    width: 100%;
+    width: 120px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     padding: 10px;
+    margin: 0 auto;
 }
 
 .dp2_item .tc {
@@ -475,11 +491,7 @@
 }
 
 /* calendar.css */
-.calendar-container {
-    border: 2px solid #007bff;
-    border-radius: 8px;
-    padding: 20px;
-}
+
 
 .rbc-event {
     background-color: #fcb1b1 !important;
@@ -522,7 +534,7 @@
 .auth_upload_bussiness_logo label {
     display: flex;
     gap: 20px;
-    align-items: end;
+    align-items: flex-end;
 }
 
 .auth_upload_bussiness_logo label h5 {
@@ -700,6 +712,7 @@ span.aic_icon g {
     font-family: var(--font-lato);
     font-size: 13px;
     font-weight: 500;
+    box-shadow: none;
 }
 
 .m_tabs_menu button.active {
@@ -976,14 +989,17 @@ span.aic_icon g {
 .mg_items {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
     flex-wrap: nowrap;
     margin-bottom: 35px;
+    overflow: auto;
 }
 
 .mg_items img {
     cursor: pointer;
     transition: all .3s;
+    width: 170px;
+    object-fit: contain;
 }
 
 .mtm_gallary h3 {
@@ -1104,7 +1120,7 @@ span.aic_icon g {
 }
 
 .pricing_item {
-    width: 100%;
+    width: fit-content;
     border-radius: 20px;
     box-shadow: 5px 7px 15px #dcdcdc;
 
@@ -1472,55 +1488,7 @@ span.aic_icon g {
     width: 80px;
 }
 
-/* Modal.css */
-.myModal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transform: all .3s;
-}
 
-.myModal-content {
-    background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    max-width: 600px;
-    width: 100%;
-    border: 2px solid #A83F98;
-    transform: all .3s;
-}
-
-.myModal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.5rem;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100%;
-    background: rgb(245, 183, 202);
-    background: linear-gradient(335deg, rgba(245, 183, 202, 1) 0%, rgba(168, 63, 152, 1) 70%, rgba(129, 1, 127, 1) 100%);
-    color: #FFF;
-    font-weight: 300;
-    font-family: var(--font-inter);
-}
-
-.myModal-close span {
-    line-height: 12px;
-}
 
 .galary_modal {
     display: flex;
@@ -1755,5 +1723,5 @@ span.aic_icon g {
     position: absolute;
     bottom: -15px;
     left: -40px;
-    
+
 }

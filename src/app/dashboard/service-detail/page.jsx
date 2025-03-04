@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { PiPencilSimpleLineBold } from 'react-icons/pi';
@@ -29,7 +30,7 @@ const AddService = () => {
           </div>
           <div className='ab_se'>
             <h5>About the Service</h5>
-            <h5 style={{ color: '#51004F' }}><span><PiPencilSimpleLineBold /></span>Edit details</h5>
+            <Link href="add-service"><h5 style={{ color: '#51004F' }}><span><PiPencilSimpleLineBold /></span>Edit details</h5></Link>
           </div>
           <p>Microneedling is a non-surgical cosmetic procedure designed to stimulate collagen production and improve skin texture and tone. This service uses fine needles to create tiny, controlled micro-injuries on the skin's surface, triggering the body's natural healing response. As a result, new collagen and elastin fibers form, giving the skin a smoother, firmer, and more youthful appearance. It reduces fine lines, wrinkles, acne scars, and large pores.</p>
           <p>Microneedling is minimally invasive and can be customized based on skin type and specific concerns. It is a popular treatment for individuals seeking to rejuvenate their skin without the dow ntime associated with more aggressiv   e procedures. The therapy promotes gradual yet noticeable results, making it a go-to for those looking to achieve radiant, healthy skin.</p>

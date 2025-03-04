@@ -8,7 +8,7 @@ export default function DashboardLayout({ children }) {
       <SidebarDash />
       <div className="main-content">
         <Topbar />
-        <div className="content">{children}</div>
+        <div className="content main-content">{children}</div>
       </div>
     </div>
   );

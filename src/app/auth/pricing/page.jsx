@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FaCheck } from "react-icons/fa6";
 const page = () => {
     return (
@@ -10,76 +11,83 @@ const page = () => {
                 </div>
                 <div className="pricing_container">
                     <div className="pricing_item">
-                        <div className="row">
-                            <div className="col-4">
-                                <div className="pi_left">
-                                    <h5>Basic</h5>
-                                    <h2>$45.<span>00</span></h2>
-                                    <p>billed every month</p>
-                                    <button className="btn pi-btn-white">Get Started</button>
-                                    <p>01 user</p>
+                        <Link href="biling-details">
+                            <div className="row">
+                                <div className="col-4">
+                                    <div className="pi_left">
+                                        <h5>Basic</h5>
+                                        <h2>$45.<span>00</span></h2>
+                                        <p>billed every month</p>
+                                        <button className="btn pi-btn-white">Get Started</button>
+                                        <p>01 user</p>
+                                    </div>
+                                </div>
+                                <div className="col-8">
+                                    <div className="pi_right">
+                                        <p>Access these features when you get this pricing package for your business.</p>
+                                        <ul>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis unde omnis</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-8">
-                                <div className="pi_right">
-                                    <p>Access these features when you get this pricing package for your business.</p>
-                                    <ul>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis unde omnis</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
-                                    </ul>
+                        </Link>
+                    </div>
+
+                    <div className="pricing_item">
+                        <Link href="biling-details">
+                            <div className="row">
+                                <div className="col-4">
+                                    <div className="pi_left">
+                                        <h5>Premium</h5>
+                                        <h2>$75.<span>00</span></h2>
+                                        <p>billed every month</p>
+                                        <button className="btn pi-btn-white">Get Started</button>
+                                        <p>2-5 user</p>
+                                    </div>
+                                </div>
+                                <div className="col-8">
+                                    <div className="pi_right">
+                                        <p>Access these features when you get this pricing package for your business.</p>
+                                        <ul>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis unde omnis</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                     <div className="pricing_item">
-                        <div className="row">
-                            <div className="col-4">
-                                <div className="pi_left">
-                                    <h5>Premium</h5>
-                                    <h2>$75.<span>00</span></h2>
-                                    <p>billed every month</p>
-                                    <button className="btn pi-btn-white">Get Started</button>
-                                    <p>2-5 user</p>
+                        <Link href="biling-details">
+                            <div className="row">
+                                <div className="col-4">
+                                    <div className="pi_left">
+                                        <h5>Premium PRO</h5>
+                                        <h2>$95.<span>00</span></h2>
+                                        <p>billed every month</p>
+                                        <button className="btn pi-btn-white">Get Started</button>
+                                        <p>6-10 user</p>
+                                    </div>
+                                </div>
+                                <div className="col-8">
+                                    <div className="pi_right">
+                                        <p>Access these features when you get this pricing package for your business.</p>
+                                        <ul>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis unde omnis</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde</li>
+                                            <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="col-8">
-                                <div className="pi_right">
-                                    <p>Access these features when you get this pricing package for your business.</p>
-                                    <ul>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis unde omnis</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="pricing_item">
-                        <div className="row">
-                            <div className="col-4">
-                                <div className="pi_left">
-                                    <h5>Premium PRO</h5>
-                                    <h2>$95.<span>00</span></h2>
-                                    <p>billed every month</p>
-                                    <button className="btn pi-btn-white">Get Started</button>
-                                    <p>6-10 user</p>
-                                </div>
-                            </div>
-                            <div className="col-8">
-                                <div className="pi_right">
-                                    <p>Access these features when you get this pricing package for your business.</p>
-                                    <ul>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis unde omnis</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde</li>
-                                        <li><span><FaCheck /></span>Sed ut perspiciatis unde omnis</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                        </Link>
                     </div>
                     <div className="pricing_item">
                         <div className="row">

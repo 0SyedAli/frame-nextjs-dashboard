@@ -1,4 +1,4 @@
-import { Open_Sans, Inter, Epilogue, Montserrat, Lato, Roboto } from "next/font/google";
+import { Open_Sans, Inter, Epilogue, Montserrat, Lato, Roboto, Poppins } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/globals.css";
 import BootstrapClients from "@/components/BootstrapClients";
@@ -30,6 +30,11 @@ const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "700"]
 });
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["300", "400", "700"]
+});
 
 
 export const metadata = {
@@ -40,7 +45,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${epilogue.variable} ${roboto.variable} ${lato.variable} ${montserrat.variable} ${interFont.variable} ${openSans.variable}`}>
+      <body className={`${poppins.variable} ${epilogue.variable} ${roboto.variable} ${lato.variable} ${montserrat.variable} ${interFont.variable} ${openSans.variable}`}>
         {children}
         <BootstrapClients />
       </body>

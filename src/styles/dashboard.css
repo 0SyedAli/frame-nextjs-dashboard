@@ -9,7 +9,7 @@
     background: rgb(255, 255, 255);
     background: linear-gradient(165deg, rgba(255, 255, 255, 1) 0%, rgba(235, 148, 199, 1) 70%, rgba(120, 67, 170, 1) 100%);
     color: #fff;
-    padding: 130px 50px 0;
+    padding: 130px 100px 0 50px;
     position: relative;
     height: 100vh;
 }
@@ -114,10 +114,27 @@
     gap: 10px;
 }
 
+.auth_container label {
+    line-height: 100%;
+}
+
 .auth_container .remember input {
     width: 20px;
     height: 20px;
     padding: 0;
+}
+
+.register_link {
+    padding-top: 25px;
+}
+
+.register_link h5 {
+    color: #5e5e5e;
+    font-size: 17px;
+}
+
+.register_link h5 a {
+    color: rgba(var(--bs-link-color-rgb), var(--bs-link-opacity, 1));
 }
 
 .auth_head {
@@ -417,6 +434,9 @@
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
     padding: 25px 30px;
+    width: 100%;
+    height: 90px;
+    position: relative;
 }
 
 .auth_form_radio {
@@ -431,11 +451,20 @@
     margin: 0 !important;
 }
 
-.auth_form_radio label {
+.auth_form_radio label, .payment1 .auth_form_radio h5 {
     font-size: 24px;
     font-weight: 500;
     font-family: var(--font-montserrat);
     line-height: 28px;
+    margin: 0;
+}
+
+.payment1 .auth_form_radio label {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .payment_head {
@@ -516,7 +545,7 @@
 .auth_upload_bussiness_logo label {
     display: flex;
     gap: 20px;
-    align-items: end;
+    align-items: flex-end;
 }
 
 .auth_upload_bussiness_logo label h5 {
@@ -626,7 +655,7 @@ span.aic_icon g {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
     position: relative;
 }
 
@@ -885,7 +914,8 @@ span.aic_icon g {
     justify-content: space-between;
 }
 
-.hs_btns button {
+.hs_btns button,
+.hs_btns .theme-btn2 {
     width: 255px;
     height: 57px;
 }
@@ -937,4 +967,11 @@ span.aic_icon g {
     font-family: var(--font-open-sans);
     font-size: 40px;
     font-weight: 700;
+}
+
+@media screen and (max-width:1444px) {
+    .sidebar {
+
+        padding: 130px 50px 0 50px;
+    }
 }

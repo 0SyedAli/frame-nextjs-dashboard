@@ -3,6 +3,7 @@ import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import MyModal from "@/components/MyModal";
+import Chat from "@/components/Chat";
 const Marketing = () => {
     const [active, setActive] = useState('allMessages'); // Default active button
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,7 +30,9 @@ const Marketing = () => {
                     </div>
                 </div>
             </MyModal> */}
-            <div className="w-100">
+            <Chat />
+
+            {/* <div className="w-100">
                 <div className="d-flex align-items-center justify-content-between">
                     <div className="m_tabs_menu">
                         <button
@@ -493,7 +496,7 @@ const Marketing = () => {
                         </div>
                     </div>
                 )}
-            </div>
+            </div> */}
         </>
     );
 };

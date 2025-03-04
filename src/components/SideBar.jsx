@@ -7,7 +7,7 @@ export default function Sidebar() {
       <div className="logo">
         <Image src={"/images/logo.png"} alt="Profile" width={353} height={190} />
       </div>
-      <h4>Your Business, Beautifully Organized</h4>
+      <h4 className="side_h4">Your Business, Beautifully Organized</h4>
       <div className="side_bottom"></div>
       <div className="side_menu">
         <p>Transform your salon's workflow into a seamless, sophisticated experience that keeps everything running effortlessly.</p>

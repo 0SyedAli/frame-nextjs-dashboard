@@ -1,7 +1,8 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-const Login = () => {
+const Signup = () => {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
 
@@ -69,11 +70,16 @@ const Login = () => {
               </select>
             </div>
           </div>
+          <div className='text-center'>
+            <Link href="pricing" className="theme-btn2">Sign up</Link>
+            <div className='register_link'>
+              <h5>Already have an account?<Link href="signin">Signin</Link></h5>
+            </div>
+          </div>
         </form>
-        <button className="theme-btn2">Sign in</button>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

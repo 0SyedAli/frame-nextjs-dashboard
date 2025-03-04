@@ -1,6 +1,7 @@
 "use client"
 import MultiRangeSlider2 from '@/components/MultiRangeSlider2'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 const page = () => {
     return (
@@ -60,52 +61,60 @@ const page = () => {
                                 <h4>Available Services </h4>
                             </div>
                             <div className="col-3">
-                                <div className="as_item">
-                                    <Image
-                                        src="/images/asi_img1.png"
-                                        width={75}
-                                        height={79}
-                                        className="pb-icon"
-                                        alt="Frame"
-                                    />
-                                    <h5>Hair</h5>
-                                </div>
+                                <Link href="hair-services">
+                                    <div className="as_item">
+                                        <Image
+                                            src="/images/asi_img1.png"
+                                            width={75}
+                                            height={79}
+                                            className="pb-icon"
+                                            alt="Frame"
+                                        />
+                                        <h5>Hair</h5>
+                                    </div>
+                                </Link>
                             </div>
                             <div className="col-3">
-                                <div className="as_item">
-                                    <Image
-                                        src="/images/asi_img2.png"
-                                        width={54}
-                                        height={70}
-                                        className="pb-icon"
-                                        alt="Frame"
-                                    />
-                                    <h5>Nails</h5>
-                                </div>
+                                <Link href="hair-services">
+                                    <div className="as_item">
+                                        <Image
+                                            src="/images/asi_img2.png"
+                                            width={54}
+                                            height={70}
+                                            className="pb-icon"
+                                            alt="Frame"
+                                        />
+                                        <h5>Nails</h5>
+                                    </div>
+                                </Link>
                             </div>
                             <div className="col-3">
-                                <div className="as_item">
-                                    <Image
-                                        src="/images/asi_img3.png"
-                                        width={71}
-                                        height={67}
-                                        className="pb-icon"
-                                        alt="Frame"
-                                    />
-                                    <h5>Skin</h5>
-                                </div>
+                                <Link href="hair-services">
+                                    <div className="as_item">
+                                        <Image
+                                            src="/images/asi_img3.png"
+                                            width={71}
+                                            height={67}
+                                            className="pb-icon"
+                                            alt="Frame"
+                                        />
+                                        <h5>Skin</h5>
+                                    </div>
+                                </Link>
                             </div>
                             <div className="col-3">
-                                <div className="as_item">
-                                    <Image
-                                        src="/images/asi_img4.png"
-                                        width={46}
-                                        height={46}
-                                        className="pb-icon"
-                                        alt="Frame"
-                                    />
-                                    <h5>Other</h5>
-                                </div>
+                                <Link href="hair-services">
+                                    <div className="as_item">
+                                        <Image
+                                            src="/images/asi_img4.png"
+                                            width={46}
+                                            height={46}
+                                            className="pb-icon"
+                                            alt="Frame"
+                                        />
+                                        <h5>Other</h5>
+                                    </div>
+                                </Link>
                             </div>
                         </div>
                         <div className="row timings mt-5">
@@ -229,7 +238,7 @@ const page = () => {
                             </div>
                         </div>
                         <div className='mt-5 text-start'>
-                            <button className="theme-btn2">Continue</button>
+                            <Link href="/dashboard" className="theme-btn2">Continue</Link>
                         </div>
                     </form>
                 </div>
