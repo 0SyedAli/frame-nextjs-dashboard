@@ -94,7 +94,7 @@ const Marketing = () => {
                         </div>
                         <h3 className="mt-5">About / Bio</h3>
                         <div className="ast_main2">
-                            <textarea className="w-100" name="" id="" value="Providing a wide range of personal care and grooming services, including haircuts, styling, coloring, facials, manicures, pedicures, waxing, and makeup. They cater to individual preferences, enhancing clients' confidence and appearance. Using skilled professionals, quality products, and modern techniques, they create a relaxing and rejuvenating experience."></textarea>
+                            <textarea className="w-100" name="" id="" defaultValue="Providing a wide range of personal care and grooming services, including haircuts, styling, coloring, facials, manicures, pedicures, waxing, and makeup. They cater to individual preferences, enhancing clients' confidence and appearance. Using skilled professionals, quality products, and modern techniques, they create a relaxing and rejuvenating experience."></textarea>
                         </div>
                     </form>
                 </div>

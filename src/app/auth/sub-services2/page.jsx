@@ -42,7 +42,7 @@ const Page = () => {
                         <div className="row">
                             <div className="col-12">
                                 <div className="bd_fields">
-                                    <textarea type="text" rows="5">Service Introduction text (100 words)</textarea>
+                                    <textarea type="text"  rows="5">Service Introduction text (100 words)</textarea>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@ const Page = () => {
                                     </div>
                                     <div className="col-12">
                                         <div className="bd_fields">
-                                            <textarea type="text" rows="4">Service description text (100 words)</textarea>
+                                            <textarea type="text"  rows="4">Service description text (100 words)</textarea>
                                         </div>
                                     </div>
                                     <div className="col-12">
@@ -101,7 +101,7 @@ const Page = () => {
                             </div>
                         ))}
                         <div className='mt-5 text-start hs_btns'>
-                            <Link href="bussiness-detail" type="button" className="btn theme-btn2">Continue</Link>
+                            <Link href="business-detail" type="button" className="btn theme-btn2">Continue</Link>
                             <button type="button" className="btn theme-btn3" onClick={addService}>
                                 <span>+</span>
                                 Add Hair Service

@@ -1,114 +1,17 @@
-"use client";
-import { useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import MyModal from "@/components/MyModal";
+"use client"
+import MyModal from '@/components/MyModal';
+import Image from 'next/image'
+import Link from 'next/link';
 import { FaRegCheckCircle } from "react-icons/fa";
-import Link from "next/link";
-import Tabs from "@/components/Tabs";
-import { IoLockOpenOutline } from "react-icons/io5";
-import Image from "next/image";
 
-const BillingDetails = () => {
-    // modal 
+import React, { useState } from 'react'
+import { IoLockOpenOutline } from "react-icons/io5";
+import Tabs from '@/components/Tabs';
+const BillingDetails2 = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-    // modal 
-
-
-    const adminId = useSelector((state) => state.auth.user?.id || ""); // Get adminId from Redux
-    const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        companyName: "",
-        countryRegion: "",
-        street: "",
-        appartment: "",
-        postCode: "",
-        city: "",
-        phNumber: "",
-        username: "",
-    });
-
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!adminId) {
-            setError("Admin ID is missing. Please log in again.");
-            return;
-        }
-
-        // Validation (Ensure required fields are filled)
-        const requiredFields = [
-            "firstName",
-            "lastName",
-            "countryRegion",
-            "street",
-            "city",
-            "phNumber",
-            "username",
-        ];
-        for (let field of requiredFields) {
-            if (!formData[field]) {
-                setError(`Please fill in ${field.replace(/([A-Z])/g, " $1")}.`);
-                return;
-            }
-        }
-
-        setLoading(true);
-        setError("");
-
-        try {
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/addBilling`,
-                {
-                    adminId,
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    companyName: formData.companyName,
-                    countryRegion: formData.countryRegion,
-                    street: formData.street,
-                    appartment: formData.appartment,
-                    postCode: formData.postCode,
-                    city: formData.city,
-                    phNumber: formData.phNumber,
-                    username: formData.username,
-                    differentAddress: false,
-                    order: "124",
-                },
-                { headers: { "Content-Type": "application/json" } }
-            );
-
-            openModal();
-
-            setFormData({
-                firstName: "",
-                lastName: "",
-                companyName: "",
-                countryRegion: "",
-                street: "",
-                appartment: "",
-                postCode: "",
-                city: "",
-                phNumber: "",
-                username: "",
-            });
-        } catch (error) {
-            setError("Failed to save billing details.");
-            console.error(error.response?.data || error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return (
         <>
             <MyModal isOpen={isModalOpen} onClose={closeModal} myModalContent="bd_content">
@@ -130,43 +33,89 @@ const BillingDetails = () => {
                         <p>Get started in minutes and transform your business</p>
                     </div>
                     <div className="auth_form">
-                        <form onSubmit={handleSubmit}>
+                        <form>
                             <div className="row gx-3">
-                                {[
-                                    { name: "firstName", label: "First name *" },
-                                    { name: "lastName", label: "Last name *" },
-                                    { name: "companyName", label: "Company name (optional)" },
-                                    { name: "countryRegion", label: "Country / Region *" },
-                                    { name: "street", label: "Street address *" },
-                                    { name: "appartment", label: "Apartment" },
-                                    { name: "postCode", label: "Postcode / ZIP (optional)" },
-                                    { name: "city", label: "Town / City *" },
-                                    { name: "phNumber", label: "Phone *" },
-                                    { name: "username", label: "Account username *" },
-                                ].map(({ name, label }) => (
-                                    <div key={name} className="col-6">
-                                        <div className="auth_form_field">
-                                            <label htmlFor={name}>{label}</label>
-                                            <input
-                                                type="text"
-                                                name={name}
-                                                value={formData[name]}
-                                                onChange={handleChange}
-                                                required={label.includes("*")}
-                                            />
-                                        </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">First name *</label>
+                                        <input type="text" />
                                     </div>
-                                ))}
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Last name *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Company name (optional)</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Country / Region *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Street address *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Appartment</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Postcode / ZIP (optional)</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Town / City *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Phone *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Email address *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Account username *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="auth_form_field">
+                                        <label htmlFor="">Create account password *</label>
+                                        <input type="text" />
+                                    </div>
+                                </div>
                                 <div className="col-12">
                                     <div className="auth_form_check">
                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
                                         <label className="form-check-label" htmlFor="flexCheckChecked">
-                                            Ship to a different address?s
+                                            Ship to a different address?
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            {error && <p className="error text-danger">{error}</p>}
                             <div className="row">
                                 <div className="col-12">
                                     <div className="payment_head">
@@ -307,8 +256,8 @@ const BillingDetails = () => {
                                     </div>
                                 </div>
                                 <div className="col-12">
-                                    <button type="submit" className="btn gradient_btn" disabled={loading}>
-                                        {loading ? "Processing..." : "Pay now"}
+                                    <button onClick={openModal} type='button' className="btn gradient_btn">
+                                        Pay now
                                     </button>
                                 </div>
                             </div>
@@ -351,9 +300,9 @@ const BillingDetails = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
-    );
-};
+    )
+}
 
-export default BillingDetails;
+export default BillingDetails2

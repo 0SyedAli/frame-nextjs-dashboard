@@ -45,9 +45,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       MONDAY
                     </label>
                   </div>
@@ -63,9 +63,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       Tuesday
                     </label>
                   </div>
@@ -81,9 +81,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       Wednesday
                     </label>
                   </div>
@@ -99,9 +99,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       Thursday
                     </label>
                   </div>
@@ -117,9 +117,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       Friday
                     </label>
                   </div>
@@ -135,9 +135,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       Saturday
                     </label>
                   </div>
@@ -153,9 +153,9 @@ const Employees = () => {
             <div className="col-6">
               <div className="row align-items-center">
                 <div className="col-4">
-                  <div class="auth_form_check auth_form_check2">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                    <label class="form-check-label" for="flexCheckChecked232">
+                  <div className="auth_form_check auth_form_check2">
+                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                       Sunday
                     </label>
                   </div>
@@ -172,41 +172,41 @@ const Employees = () => {
           </div>
           <div className="d-flex align-items-center justify-content-between mt-5">
             <div>
-              <div class="auth_form_check auth_form_check2">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2021" />
-                <label class="form-check-label" for="flexCheckChecked2021">
+              <div className="auth_form_check auth_form_check2">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked2021" />
+                <label className="form-check-label" htmlFor="flexCheckChecked2021">
                   Hair Service - 1
                 </label>
               </div>
             </div>
             <div>
-              <div class="auth_form_check auth_form_check2">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2022" />
-                <label class="form-check-label" for="flexCheckChecked2022">
+              <div className="auth_form_check auth_form_check2">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked2022" />
+                <label className="form-check-label" htmlFor="flexCheckChecked2022">
                   Hair Service - 2
                 </label>
               </div>
             </div>
             <div>
-              <div class="auth_form_check auth_form_check2">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2023" />
-                <label class="form-check-label" for="flexCheckChecked2023">
+              <div className="auth_form_check auth_form_check2">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked2023" />
+                <label className="form-check-label" htmlFor="flexCheckChecked2023">
                   Hair Service - 3
                 </label>
               </div>
             </div>
             <div>
-              <div class="auth_form_check auth_form_check2">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2024" />
-                <label class="form-check-label" for="flexCheckChecked2024">
+              <div className="auth_form_check auth_form_check2">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked2024" />
+                <label className="form-check-label" htmlFor="flexCheckChecked2024">
                   Hair Service - 4
                 </label>
               </div>
             </div>
             <div>
-              <div class="auth_form_check auth_form_check2">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked2025" />
-                <label class="form-check-label" for="flexCheckChecked2025">
+              <div className="auth_form_check auth_form_check2">
+                <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked2025" />
+                <label className="form-check-label" htmlFor="flexCheckChecked2025">
                   Hair Service - 5
                 </label>
               </div>

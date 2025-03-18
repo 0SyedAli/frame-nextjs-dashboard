@@ -7,9 +7,9 @@ const MyModal = ({ isOpen, onClose, children, myModalContent }) => {
     return (
         <div className="myModal-overlay">
             <div className={`myModal-content ${myModalContent ? myModalContent : ""}`}>
-                <button className="myModal-close" onClick={onClose}>
+                {/* <button className="myModal-close" onClick={onClose}>
                     <span>&times;</span>
-                </button>
+                </button> */}
                 {children}
             </div>
         </div>

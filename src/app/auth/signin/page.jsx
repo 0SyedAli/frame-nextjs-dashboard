@@ -1,33 +1,117 @@
-import Link from 'next/link'
-import React from 'react'
+// import Link from 'next/link'
+// import React from 'react'
 
-const Signin = () => {
+// const Signin = () => {
+//   return (
+// <div className="content align-self-center mw-600">
+//   <div className='auth_container'>
+//     <div className='auth_head'>
+//       <h2>Getting Started</h2>
+//       <p>Elevate your salon with a seamless setup, styled for success.</p>
+//     </div>
+//     <form action="#!">
+//       <input type="text" placeholder='Username' />
+//       <input type="password" placeholder='Password' />
+//       <div className="">
+//         <div className="remember form-check">
+//           <input type="checkbox" className="form-check-input" id="exampleCheck1" />
+//           <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+//         </div>
+//       </div>
+//       <div className='text-center'>
+//         <Link href="/dashboard" className="theme-btn2">Sign in</Link>
+//         <div className='register_link'>
+//             <h5>Don't have an account?<Link href="signup"> Signup</Link></h5>
+//         </div>
+//       </div>
+//     </form>
+//   </div>
+// </div>
+//   )
+// }
+
+// export default Signin
+
+"use client";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { adminLogin, clearAuthState } from "../../../lib/slices/authslice";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+const AdminLogin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isClient, setIsClient] = useState(false); // Prevent hydration issues
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading, error, token } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    setIsClient(true); // Mark as client-side rendering
+
+    if (token) {
+      router.replace("/dashboard"); // Redirect if logged in
+    }
+
+    return () => {
+      dispatch(clearAuthState());
+    };
+  }, [dispatch, user, router]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(adminLogin({ email, password })).then((action) => {
+      if (action.meta.requestStatus === "fulfilled") {
+        router.replace("/dashboard"); // Redirect on successful login
+      }
+    });
+  };
+
+  if (!isClient) return null; // Prevent mismatched server & client rendering
+
   return (
     <div className="content align-self-center mw-600">
-      <div className='auth_container'>
-        <div className='auth_head'>
+      <div className="auth_container">
+        <div className="auth_head">
           <h2>Getting Started</h2>
           <p>Elevate your salon with a seamless setup, styled for success.</p>
         </div>
-        <form action="#!">
-          <input type="text" placeholder='Username' />
-          <input type="password" placeholder='Password' />
-          <div className="">
-            <div className="remember form-check">
-              <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-              <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div className="text-center">
+            <button type="submit" disabled={loading} className="theme-btn2">
+              {loading ? "Logging in..." : "Login"}
+            </button>
+            <div className="mt-4">
+              {user && <p className="success  text-success">Welcome, {user.name}!</p>}
+              {error && <p className="error text-danger">{error}</p>}
             </div>
-          </div>
-          <div className='text-center'>
-            <Link href="/dashboard" className="theme-btn2">Sign in</Link>
-            <div className='register_link'>
-                <h5>Don't have an account?<Link href="signup"> Signup</Link></h5>
+            <div className="register_link">
+              <h5>
+                Don't have an account?
+                <Link href="signup"> Signup</Link>
+              </h5>
             </div>
           </div>
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Signin
+export default AdminLogin;

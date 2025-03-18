@@ -2,8 +2,42 @@
 import MultiRangeSlider2 from '@/components/MultiRangeSlider2'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-const page = () => {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+const services = [
+    { id: 1, title: "Hair", value: "Hair Services", img: "/images/asi_img1.png", width: 75, height: 79 },
+    { id: 2, title: "Nails", value: "Nail Services", img: "/images/asi_img2.png", width: 54, height: 70 },
+    { id: 3, title: "Skin", value: "Skin Services", img: "/images/asi_img3.png", width: 71, height: 67 },
+    { id: 4, title: "Other", value: "Other Services", img: "/images/asi_img4.png", width: 46, height: 46 },
+];
+
+const BussinessDetail = () => {
+    const router = useRouter();
+    const [selectedService, setSelectedService] = useState(null);
+    // const [previewImage, setPreviewImage] = useState("/images/emp_img1.png");
+    // const [countries, setCountries] = useState([]);
+    // const [fileError, setFileError] = useState("");
+    // const [loading, setLoading] = useState(false);
+    // const [error, setError] = useState("");
+    // const [formData, setFormData] = useState({
+    //     firstName: "",
+    //     lastName: "",
+    //     email: "",
+    //     password: "",
+    //     pHnumber: "",
+    //     city: "",
+    //     AdminImage: null,
+    // });
+
+
+    const handleServiceClick = (serviceValue) => {
+        const newSelectedService = selectedService === serviceValue ? null : serviceValue;
+        setSelectedService(newSelectedService);
+        if (newSelectedService) {
+            router.push(`/auth/add-services?service=${encodeURIComponent(newSelectedService)}`);
+        }
+    };
+
     return (
         <div className="content w-100">
             <div className="auth_container bussiness">
@@ -46,7 +80,8 @@ const page = () => {
                                 <div className="bd_fields">
                                     <select>
                                         <option value="">Select City</option>
-                                        <option>abc</option>
+                                        <option>city 1</option>
+                                        <option>city</option>
                                     </select>
                                 </div>
                             </div>
@@ -56,65 +91,31 @@ const page = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row avail_serv pt-3">
-                            <div className="col-12 pb-4">
+                        <div className="avail_serv pt-3">
+                            <div className="pb-4">
                                 <h4>Available Services </h4>
                             </div>
-                            <div className="col-3">
-                                <Link href="hair-services">
-                                    <div className="as_item">
-                                        <Image
-                                            src="/images/asi_img1.png"
-                                            width={75}
-                                            height={79}
-                                            className="pb-icon"
-                                            alt="Frame"
-                                        />
-                                        <h5>Hair</h5>
+                            <div className='avail_serve_container'>
+                                {services.map((service) => (
+                                    <div key={service.id} className="">
+                                        <label className="as_item">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedService === service.value}
+                                                onChange={() => handleServiceClick(service.value)}
+                                            />
+                                            <Image
+                                                src={service.img}
+                                                width={service.width}
+                                                height={service.height}
+                                                className="pb-icon"
+                                                alt={service.title}
+                                            />
+                                            <h5>{service.title}</h5>
+                                        </label>
                                     </div>
-                                </Link>
-                            </div>
-                            <div className="col-3">
-                                <Link href="hair-services">
-                                    <div className="as_item">
-                                        <Image
-                                            src="/images/asi_img2.png"
-                                            width={54}
-                                            height={70}
-                                            className="pb-icon"
-                                            alt="Frame"
-                                        />
-                                        <h5>Nails</h5>
-                                    </div>
-                                </Link>
-                            </div>
-                            <div className="col-3">
-                                <Link href="hair-services">
-                                    <div className="as_item">
-                                        <Image
-                                            src="/images/asi_img3.png"
-                                            width={71}
-                                            height={67}
-                                            className="pb-icon"
-                                            alt="Frame"
-                                        />
-                                        <h5>Skin</h5>
-                                    </div>
-                                </Link>
-                            </div>
-                            <div className="col-3">
-                                <Link href="hair-services">
-                                    <div className="as_item">
-                                        <Image
-                                            src="/images/asi_img4.png"
-                                            width={46}
-                                            height={46}
-                                            className="pb-icon"
-                                            alt="Frame"
-                                        />
-                                        <h5>Other</h5>
-                                    </div>
-                                </Link>
+                                ))}
+
                             </div>
                         </div>
                         <div className="row timings mt-5">
@@ -127,9 +128,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         MONDAY
                                     </label>
                                 </div>
@@ -143,9 +144,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         Tuesday
                                     </label>
                                 </div>
@@ -159,9 +160,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         Wednesday
                                     </label>
                                 </div>
@@ -175,9 +176,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         Thursday
                                     </label>
                                 </div>
@@ -191,9 +192,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         Friday
                                     </label>
                                 </div>
@@ -207,9 +208,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         Saturday
                                     </label>
                                 </div>
@@ -223,9 +224,9 @@ const page = () => {
                         </div>
                         <div className="row align-items-center">
                             <div className="col-3">
-                                <div class="auth_form_check auth_form_check2">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
-                                    <label class="form-check-label" for="flexCheckChecked232">
+                                <div className="auth_form_check auth_form_check2">
+                                    <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked232" />
+                                    <label className="form-check-label" htmlFor="flexCheckChecked232">
                                         Sunday
                                     </label>
                                 </div>
@@ -247,4 +248,4 @@ const page = () => {
     )
 }
 
-export default page
+export default BussinessDetail
