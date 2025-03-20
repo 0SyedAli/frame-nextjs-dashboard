@@ -5,7 +5,7 @@ const initialState = {
     admin: null,
     token: null,
     services: typeof window !== "undefined" ? JSON.parse(localStorage.getItem("services")) || {} : {},
-    business: typeof window !== "undefined" ? JSON.parse(localStorage.getItem("businessDetails")) || {} : {}, // Added business state
+    businessDetails: {},
     loading: false,
     error: null,
 };
@@ -56,11 +56,9 @@ const authSlice = createSlice({
             state.user = null;
             state.token = null;
             state.error = null;
-            state.business = {};
             // Clear localStorage on logout
             localStorage.removeItem('user');
             localStorage.removeItem('token');
-            localStorage.removeItem('businessDetails');
         },
         resetState: () => initialState,
 
@@ -70,24 +68,28 @@ const authSlice = createSlice({
             state.token = action.payload.token;
         },
 
+        // setServiceData: (state, action) => {
+        //     const { category, serviceId, title, text, image } = action.payload;
+            
+        //     state.services = { 
+        //         ...state.services, 
+        //         [category]: { serviceId, title, text, image } 
+        //     };
+        // },
         setServiceData(state, action) {
             const { category, serviceId, title, text, image } = action.payload;
             if (!state.services) state.services = {};
             state.services[category] = { serviceId, title, text, image };
-
+      
             // Persist to localStorage
             localStorage.setItem("services", JSON.stringify(state.services));
-        },
-        setBusinessData(state, action) {
-            const { businessImage, ...rest } = action.payload;
-        
-            state.business = { ...state.business, ...rest };
-        
-            // Store preview URL instead of the File object
-            if (businessImage instanceof File) {
-                state.business.businessImagePreview = URL.createObjectURL(businessImage);
-            }
-        },
+          },
+
+          setBusinessDetails: (state, action) => {
+            state.businessDetails = action.payload;
+            // Save data to localStorage
+            localStorage.setItem("businessDetails", JSON.stringify(action.payload));
+          },
     },
     extraReducers: (builder) => {
         builder
@@ -107,5 +109,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { logout, setUser, setServiceData, setBusinessData } = authSlice.actions;
+export const { logout, setUser, setServiceData, setBusinessDetails } = authSlice.actions;
 export default authSlice.reducer;

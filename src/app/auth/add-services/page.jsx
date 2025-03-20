@@ -47,6 +47,13 @@ const AddService = () => {
         const storedId = localStorage.getItem(`${category}_serviceId`);
         if (storedId) setServiceId(storedId);
         if (category) setTitle(category);
+
+        const pendingServices = JSON.parse(localStorage.getItem("pendingServices") || "[]");
+        if (pendingServices.length === 0) {
+            router.push("/dashboard"); // Redirect if no pending services
+        } else if (!category || !pendingServices.includes(category)) {
+            router.push(`add-services?service=${pendingServices[0]}`);
+        }
     }, [category]);
 
     const handleServiceSubmit = async (e) => {
@@ -141,6 +148,21 @@ const AddService = () => {
                 setPreviewImages([]);
                 setSubServiceSuccess(true)
 
+                // Remove completed service from pending list
+                const pendingServices = JSON.parse(localStorage.getItem("pendingServices") || "[]");
+                const remainingServices = pendingServices.filter((s) => s !== category);
+                localStorage.setItem("pendingServices", JSON.stringify(remainingServices));
+
+                // Redirect to next service if available
+                if (remainingServices.length > 0) {
+                    setTimeout(() => {
+                        router.push(`/add-service?service=${remainingServices[0]}`);
+                    }, 1500); // Small delay for UX
+                } else {
+                    localStorage.removeItem("pendingServices"); // Cleanup if done
+                    localStorage.removeItem("bussinessDetail"); // Cleanup if done
+                    router.push("/dashboard");
+                }
             }
         } catch (error) {
             console.error("Subservice creation failed", error);

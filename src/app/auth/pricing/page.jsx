@@ -11,7 +11,7 @@ const page = () => {
                 </div>
                 <div className="pricing_container">
                     <div className="pricing_item">
-                        <Link href="biling-details">
+                        <Link href="biling-details" prefetch={true}>
                             <div className="row">
                                 <div className="col-4">
                                     <div className="pi_left">
@@ -38,7 +38,7 @@ const page = () => {
                     </div>
 
                     <div className="pricing_item">
-                        <Link href="biling-details">
+                        <Link href="biling-details" prefetch={true}>
                             <div className="row">
                                 <div className="col-4">
                                     <div className="pi_left">
@@ -64,7 +64,7 @@ const page = () => {
                         </Link>
                     </div>
                     <div className="pricing_item">
-                        <Link href="biling-details">
+                        <Link href="biling-details" prefetch={true}>
                             <div className="row">
                                 <div className="col-4">
                                     <div className="pi_left">

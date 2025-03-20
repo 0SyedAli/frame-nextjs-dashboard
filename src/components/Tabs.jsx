@@ -76,8 +76,31 @@ const Tabs = () => {
           </button>
         </h2>
         <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-          <div className="accordion-body">
-            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          <div className="accordion-body  p-0">
+            <div className="payment1_body">
+              <div className="row gy-4">
+                <div className="col-12">
+                  <input type="text" placeholder='Card number' />
+                </div>
+                <div className="col-6">
+                  <input type="text" placeholder='Expiration date (MM / YY)' />
+                </div>
+                <div className="col-6">
+                  <input type="text" placeholder='Security code' />
+                </div>
+                <div className="col-12">
+                  <input type="text" placeholder='Name on card' />
+                </div>
+                <div className="col-12">
+                  <div className="auth_form_radio pt-1 position-relative">
+                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                    <label className="form-check-label text-start ps-5" htmlFor="flexRadioDefault2">
+                      Use shipping address as billing address
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -103,8 +126,31 @@ const Tabs = () => {
           </button>
         </h2>
         <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-          <div className="accordion-body">
-            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          <div className="accordion-body  p-0">
+            <div className="payment1_body">
+              <div className="row gy-4">
+                <div className="col-12">
+                  <input type="text" placeholder='Card number' />
+                </div>
+                <div className="col-6">
+                  <input type="text" placeholder='Expiration date (MM / YY)' />
+                </div>
+                <div className="col-6">
+                  <input type="text" placeholder='Security code' />
+                </div>
+                <div className="col-12">
+                  <input type="text" placeholder='Name on card' />
+                </div>
+                <div className="col-12">
+                  <div className="auth_form_radio pt-1 position-relative">
+                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                    <label className="form-check-label text-start ps-5" htmlFor="flexRadioDefault2">
+                      Use shipping address as billing address
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

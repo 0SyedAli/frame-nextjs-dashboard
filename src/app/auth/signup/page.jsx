@@ -35,7 +35,11 @@ const Signup = () => {
           name: country.name.common,
           code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : ""),
         }));
-        setCountries(countryList);
+
+        // Remove duplicates
+        const uniqueCountries = Array.from(new Map(countryList.map(c => [c.code, c])).values());
+
+        setCountries(uniqueCountries);
       })
       .catch((error) => console.error("Error fetching country data:", error));
   }, []);
@@ -168,7 +172,9 @@ const Signup = () => {
               <select onChange={(e) => setSelectedCountry(e.target.value)}>
                 <option value="+92">+92</option>
                 {countries.map((country) => (
-                  <option key={country.code} value={country.code}>{country.code}</option>
+                  <option key={`${country.name}-${country.code}`} value={country.code}>
+                    {country.code}
+                  </option>
                 ))}
               </select>
             </div>

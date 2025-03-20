@@ -636,8 +636,12 @@ textarea:focus {
   opacity: 0;
 }
 
-.as_item input:checked+label {
+.as_item input:checked+.shadow_active {
   box-shadow: 0 0 20px 2px #dd2ac1c4;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  height: 100%;
 }
 
 img.aic_cover_img {
@@ -650,13 +654,15 @@ img.aic_cover_img {
   border-radius: 8px;
   object-fit: cover;
 }
+
 .auth_upload_bussiness_logo img {
   width: 144px;
   height: 138px;
   border-radius: 10px;
-  object-fit: cover;
+  object-fit: contain;
 }
+
 .auth_upload_bussiness_logo .pb-icon {
-  width: 16px!important;
-  height: 18px!important;
+  width: 16px !important;
+  height: 18px !important;
 }

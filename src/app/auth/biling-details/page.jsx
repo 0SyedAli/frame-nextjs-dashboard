@@ -161,7 +161,7 @@ const BillingDetails = () => {
                                     <div className="auth_form_check">
                                         <input className="form-check-input" type="checkbox" value="" id="flexCheckChecked" />
                                         <label className="form-check-label" htmlFor="flexCheckChecked">
-                                            Ship to a different address?s
+                                            Ship to a different address?
                                         </label>
                                     </div>
                                 </div>

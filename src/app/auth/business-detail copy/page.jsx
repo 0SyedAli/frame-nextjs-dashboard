@@ -87,14 +87,14 @@ const BusinessDetail = () => {
         if (file) {
             const previewUrl = URL.createObjectURL(file);
             setBusinessImage(previewUrl);
-    
+
             // Update localStorage
             const updatedBusinessData = {
                 ...JSON.parse(localStorage.getItem("businessData") || "{}"),
                 businessImagePreview: previewUrl,
             };
             localStorage.setItem("businessData", JSON.stringify(updatedBusinessData));
-    
+
             // Dispatch Redux action
             dispatch(setBusinessData({ businessImagePreview: previewUrl }));
         }
@@ -186,12 +186,12 @@ const BusinessDetail = () => {
                             />
                             <label>
                                 <div className="aubl_img_container">
-                                <Image
-    src={businessImage || "/default-image.png"}
-    alt="Business Logo"
-    width={100}
-    height={100}
-/>
+                                    <Image
+                                        src={businessImage || "/default-image.png"}
+                                        alt="Business Logo"
+                                        width={100}
+                                        height={100}
+                                    />
                                     <span className="aic_icon">
                                         <Image src="/images/upload-icon.png" width={16} height={18} alt="Upload Icon" />
                                     </span>
