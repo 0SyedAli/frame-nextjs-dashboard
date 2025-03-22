@@ -5,6 +5,7 @@ import "../styles/globals.css";
 import BootstrapClients from "@/components/BootstrapClients";
 import { Provider } from "react-redux";
 import { store } from "../lib/store";
+import ToastProvider from "@/components/ToastProvider";
 
 const interFont = Inter({
   variable: "--font-inter",
@@ -49,6 +50,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${poppins.variable} ${epilogue.variable} ${roboto.variable} ${lato.variable} ${montserrat.variable} ${interFont.variable} ${openSans.variable}`}>
+        <ToastProvider /> {/* Global toast notifications */}
         <Provider store={store}>{children}</Provider>
         <BootstrapClients />
       </body>

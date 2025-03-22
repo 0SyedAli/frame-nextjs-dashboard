@@ -1,16 +1,17 @@
 "use client"
 import MultiRangeSlider2 from '@/components/MultiRangeSlider2'
 import Image from 'next/image'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from 'react-redux';
 import Spinner from '@/components/Spinner';
+import { showErrorToast, showSuccessToast } from '@/lib/toast';
 
 const services = [
     { id: 1, title: "Hair", value: "Hair Services", img: "/images/asi_img1.png", width: 75, height: 79 },
     { id: 2, title: "Nails", value: "Nail Services", img: "/images/asi_img2.png", width: 54, height: 70 },
     { id: 3, title: "Skin", value: "Skin Services", img: "/images/asi_img3.png", width: 71, height: 67 },
-    { id: 4, title: "Other", value: "Other Services", img: "/images/asi_img4.png", width: 46, height: 46 },
+    { id: 4, title: "Others", value: "Others Services", img: "/images/asi_img4.png", width: 46, height: 46 },
 ];
 
 const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -38,7 +39,7 @@ const BussinessDetail = () => {
         }, {})
     );
 
-
+    useEffect(() => { }, [])
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -127,25 +128,29 @@ const BussinessDetail = () => {
 
             const data = await response.json();
             if (response.ok) {
+                showSuccessToast(response?.data?.message || "Business Profile Created!"); //
                 setMessage(data.message || "Form Submitted Successfull");
                 localStorage.setItem('bussinessDetail', JSON.stringify(data));
                 setError("")
 
                 const { availableServices } = data.data;
 
-            if (!availableServices || availableServices.length === 0) {
-                router.push("/dashboard");  // Redirect to the dashboard if no services
-            } else if (availableServices.length === 1) {
-                localStorage.setItem("pendingServices", JSON.stringify(availableServices));
-                router.push(`add-services?service=${availableServices[0]}`);
-
-            } else {
-                // Store services in localStorage for sequential redirection
-                localStorage.setItem("pendingServices", JSON.stringify(availableServices));
-                router.push(`add-services?service=${availableServices[0]}`);
-            }
+                if (!availableServices || availableServices.length === 0) {
+                    router.push("/dashboard");  // Redirect to the dashboard if no services
+                    localStorage.removeItem("services");
+                } else if (availableServices.length === 1) {
+                    localStorage.setItem("pendingServices", JSON.stringify(availableServices));
+                    router.push(`add-services?service=${availableServices[0]}`);
+                    localStorage.removeItem("services");
+                } else {
+                    // Store services in localStorage for sequential redirection
+                    localStorage.setItem("pendingServices", JSON.stringify(availableServices));
+                    router.push(`add-services?service=${availableServices[0]}`);
+                    localStorage.removeItem("services");
+                }
             } else {
                 setError(data.message || "Something went wrong");
+                showErrorToast(error.response?.data?.message || "Error adding employee!");
             }
         } catch (error) {
             setError("Error submitting business details:", error);
@@ -166,7 +171,7 @@ const BussinessDetail = () => {
                 <div className='w-100'>
                     <form onSubmit={handleSubmit}>
                         <div className="auth_upload_bussiness_logo">
-                            <input type="file" required onChange={handleFileChange} />
+                            <input type="file" accept="image/*" required onChange={handleFileChange} />
                             {
                                 formData.businessImage ? (
                                     formData.businessImage && <img src={URL.createObjectURL(formData.businessImage)} alt="Preview" />
@@ -186,12 +191,12 @@ const BussinessDetail = () => {
                         <div className="row pt-4 gy-4">
                             <div className="col-6">
                                 <div className="bd_fields">
-                                    <input type="text" name="businessName" placeholder='Business Name' onChange={handleInputChange} required/>
+                                    <input type="text" name="businessName" placeholder='Business Name' onChange={handleInputChange} required />
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="bd_fields">
-                                    <input type="text" name="userName" placeholder='Username' onChange={handleInputChange} required/>
+                                    <input type="text" name="userName" placeholder='Username' onChange={handleInputChange} required />
                                 </div>
                             </div>
                             <div className="col-12"><div className="bd_fields">
@@ -212,7 +217,7 @@ const BussinessDetail = () => {
                             <div className='avail_serve_container'>
                                 {services.map((service) => (
                                     <label key={service.id} className="as_item">
-                                        <input type="checkbox"  checked={formData.availableServices.includes(service.value)} onChange={() => handleServiceClick(service.value)} />
+                                        <input type="checkbox" checked={formData.availableServices.includes(service.value)} onChange={() => handleServiceClick(service.value)} />
                                         <div className="shadow_active"></div>
                                         <Image src={service.img} width={service.width} height={service.height} alt={service.title} />
                                         <h5>{service.title}</h5>

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { showSuccessToast, showErrorToast } from "@/lib/toast";
 import axios from 'axios';
 
 const initialState = {
@@ -25,6 +26,7 @@ export const adminLogin = createAsyncThunk(
                 }
             );
             // Save necessary data from the response to localStorage
+            showSuccessToast("Login successfully!"); //
             const { data, aceessToken } = response.data;
             const userData = {
                 id: data.id,
@@ -38,6 +40,7 @@ export const adminLogin = createAsyncThunk(
 
             return { user: userData, token: aceessToken }; // Return structured data
         } catch (error) {
+            showErrorToast(error.response?.data?.message || "Login Failed!");
             return rejectWithValue(error.response.data);
         }
     }

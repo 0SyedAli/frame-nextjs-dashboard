@@ -4,6 +4,7 @@ import { IoMdArrowUp } from "react-icons/io";
 import { RxCaretSort } from "react-icons/rx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 const image1 = "/images/user1.png";
 const image2 = "/images/user1.png";
 const image3 = "/images/user1.png";
@@ -17,6 +18,8 @@ const image10 = "/images/user1.png";
 const image11 = "/images/user1.png";
 const image12 = "/images/user1.png";
 
+
+
 export default function Dashboard() {
   const [tab, setTab] = useState();
   const [activeTab, setActiveTab] = useState('complete');
@@ -26,6 +29,9 @@ export default function Dashboard() {
       setTab(activeTab);
     }, 1);
   }, [activeTab])
+  useEffect(() => {
+
+  }, [])
   const orders = [
     {
       cust_id: "PB-001",
@@ -147,7 +153,9 @@ export default function Dashboard() {
               <h5>Statistics</h5>
               <Link href="/" className="dr_btn">Last 7 Days</Link>
             </div>
-            <div className="dr_graph"></div>
+            <div className="dr_graph">
+              <Image src="/images/chart2.png" width={500} height={100} alt />
+            </div>
             <div className="dr_head">
               <h5>Appointments</h5>
               <Link href="/" className="dr_btn">View All</Link>

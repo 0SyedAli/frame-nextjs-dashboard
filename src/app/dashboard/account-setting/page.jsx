@@ -4,7 +4,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 const Marketing = () => {
-    const [active, setActive] = useState('transactions'); // Default active button
+    const [active, setActive] = useState('accountSettings'); // Default active button
 
     return (
         <div className="w-100">

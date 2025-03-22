@@ -30,9 +30,9 @@ const Marketing = () => {
                     </div>
                 </div>
             </MyModal> */}
-            <Chat />
+            {/* <Chat /> */}
 
-            {/* <div className="w-100">
+            <div className="w-100">
                 <div className="d-flex align-items-center justify-content-between">
                     <div className="m_tabs_menu">
                         <button
@@ -436,7 +436,7 @@ const Marketing = () => {
                 {active === "replied" && (
                     <div className="m_tabs_main">
                         <div className="mtm_all_reviews">
-                          
+
                             <div className="mar_item">
                                 <input type="checkbox" id="mar1" />
                                 <label className="mar_label" htmlFor="mar1">
@@ -496,7 +496,7 @@ const Marketing = () => {
                         </div>
                     </div>
                 )}
-            </div> */}
+            </div>
         </>
     );
 };

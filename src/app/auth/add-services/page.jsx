@@ -7,6 +7,7 @@ import Image from "next/image";
 import axios from "axios";
 import { setServiceData } from "../../../lib/slices/authslice";
 import Link from "next/link";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const AddService = () => {
     const router = useRouter();
@@ -25,15 +26,16 @@ const AddService = () => {
 
     // State Variables
     const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const [message, setMessage] = useState(null);
     const [subMessage, setSubMessage] = useState(null);
     const [serviceSuccess, setServiceSuccess] = useState(null);
     const [subServiceSuccess, setSubServiceSuccess] = useState(false);
     const [title, setTitle] = useState(service?.title || category || "");
     const [serviceId, setServiceId] = useState(service?.serviceId || null);
-    const [serviceText, setServiceText] = useState(service?.text || "");
+    const [serviceText, setServiceText] = useState("");
     const [serviceImage, setServiceImage] = useState(null);
-    const [previewImage, setPreviewImage] = useState(service?.image || null);
+    const [previewImage, setPreviewImage] = useState(null);
     const [isServiceCreated, setIsServiceCreated] = useState(!!service?.serviceId);
 
     // Subservice States
@@ -42,6 +44,7 @@ const AddService = () => {
     const [servicePrice, setServicePrice] = useState("");
     const [subServiceImages, setSubServiceImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
+    useEffect(() => { }, [])
 
     useEffect(() => {
         const storedId = localStorage.getItem(`${category}_serviceId`);
@@ -54,7 +57,7 @@ const AddService = () => {
         } else if (!category || !pendingServices.includes(category)) {
             router.push(`add-services?service=${pendingServices[0]}`);
         }
-    }, [category]);
+    }, [category, router]);
 
     const handleServiceSubmit = async (e) => {
         e.preventDefault();
@@ -86,10 +89,11 @@ const AddService = () => {
             if (response.data?.data?._id) {
                 const newServiceId = response.data.data._id;
                 const uploadedImage = `${process.env.NEXT_PUBLIC_IMAGE_URL}/${response.data.data.bannerImage}`;
-
+                showSuccessToast(response?.data?.msg || "Service Created!"); //
                 // Update state
                 setServiceId(newServiceId);
-                setPreviewImage(uploadedImage);
+                setPreviewImage(null);
+                setServiceText("")
                 setIsServiceCreated(true);
                 // Save to Redux with category key
                 dispatch(setServiceData({
@@ -102,6 +106,7 @@ const AddService = () => {
             }
         } catch (error) {
             console.error("Service creation failed", error);
+            showErrorToast(error.response?.data?.message || "Error adding Service!");
         } finally {
             setLoading(false);
         }
@@ -125,7 +130,7 @@ const AddService = () => {
         subServiceImages.forEach((file) => {
             formData.append("subServiceImages", file);
         });
-        setLoading(true);
+        setLoading2(true);
         try {
             const response = await axios.post(
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/addSubService`,
@@ -139,15 +144,17 @@ const AddService = () => {
             );
 
             if (response.data?.success) {
+                showSuccessToast(response?.data?.msg); //
                 setSubMessage("Subservice added successfully!");
                 // Clear form fields
                 setServiceTitle("");
                 setServiceDescription("");
                 setServicePrice("");
                 setSubServiceImages([]);
-                setPreviewImages([]);
+                setPreviewImages("");
                 setSubServiceSuccess(true)
-
+                setServiceSuccess(null)
+                setIsServiceCreated("")
                 // Remove completed service from pending list
                 const pendingServices = JSON.parse(localStorage.getItem("pendingServices") || "[]");
                 const remainingServices = pendingServices.filter((s) => s !== category);
@@ -156,18 +163,21 @@ const AddService = () => {
                 // Redirect to next service if available
                 if (remainingServices.length > 0) {
                     setTimeout(() => {
-                        router.push(`/add-service?service=${remainingServices[0]}`);
+                        router.push(`add-services?service=${remainingServices[0]}`);
+                        localStorage.removeItem("services");
                     }, 1500); // Small delay for UX
                 } else {
                     localStorage.removeItem("pendingServices"); // Cleanup if done
                     localStorage.removeItem("bussinessDetail"); // Cleanup if done
                     router.push("/dashboard");
+                    localStorage.removeItem("services");
                 }
             }
         } catch (error) {
             console.error("Subservice creation failed", error);
+            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
         } finally {
-            setLoading(false);
+            setLoading2(false);
         }
     };
 
@@ -194,7 +204,6 @@ const AddService = () => {
                         <input
                             type="file"
                             accept="image/*"
-                            disabled={isServiceCreated} // Disable file input after service creation
                             onChange={(e) => {
                                 const file = e.target.files[0];
                                 if (file) {
@@ -202,6 +211,7 @@ const AddService = () => {
                                     setPreviewImage(URL.createObjectURL(file)); // Set preview URL
                                 }
                             }}
+                            required
                         />
                         <label>
                             <div className="auhc_img_container">
@@ -211,38 +221,33 @@ const AddService = () => {
                                 {title && <h5>Upload header image for {title} services</h5>}
                                 <h5>800px x 400px</h5>
                             </div>
-
-                            {/* Show uploaded image or preview */}
-                            {previewImage && (
-                                <Image
-                                    src={previewImage || "/images/default-placeholder.png"} // Default image if previewImage is null
-                                    className="aic_cover_img"
-                                    width={300}
-                                    height={100}
-                                    alt="Selected Preview"
-                                />
-                            )}
                         </label>
+                        {previewImage && (
+                            <Image
+                                src={previewImage} // Default image if previewImage is null
+                                className="aic_cover_img"
+                                width={300}
+                                height={100}
+                                alt="Selected Preview"
+                            />
+                        )}
                     </div>
 
                     <div className="bd_fields">
                         <textarea
                             rows="5"
+                            required
                             defaultValue={serviceText}
                             onChange={(e) => setServiceText(e.target.value)}
                             placeholder="Service Introduction text (100 words)"
-                            readOnly={isServiceCreated} // Make textarea read-only after service creation
                         />
                     </div>
-
-                    {!isServiceCreated && (
-                        <button type="submit" disabled={loading} className="btn theme-btn2">
-                            {loading ? "Logging in..." : "Create"}
-                        </button>
-                    )}
+                    <button type="submit" disabled={loading} className="btn theme-btn2">
+                        {loading ? "Logging in..." : "Create"}
+                    </button>
+                    {/* {!isServiceCreated && (
+                    )} */}
                 </form>
-                {message && <p className="success text-success">{message}</p>}
-
                 {/* Subservice Form */}
                 {(isServiceCreated || serviceSuccess === true) && (
                     <form onSubmit={handleSubServiceSubmit}>
@@ -254,6 +259,7 @@ const AddService = () => {
                                     <input
                                         type="file"
                                         multiple
+                                        required
                                         accept="image/*"
                                         onChange={handleFileChange}
                                     />
@@ -287,6 +293,7 @@ const AddService = () => {
                                     <input
                                         type="text"
                                         placeholder="Subservice Title"
+                                        required
                                         value={serviceTitle}
                                         onChange={(e) => setServiceTitle(e.target.value)}
                                     />
@@ -297,6 +304,7 @@ const AddService = () => {
                                     <textarea
                                         rows="4"
                                         placeholder="Subservice Description"
+                                        required
                                         defaultChecked={serviceDescription}
                                         onChange={(e) => setServiceDescription(e.target.value)}
                                     />
@@ -312,6 +320,7 @@ const AddService = () => {
                                             <input
                                                 type="number"
                                                 value={servicePrice}
+                                                required
                                                 onChange={(e) => setServicePrice(e.target.value)}
                                             />
                                             <span>$</span>
@@ -321,8 +330,8 @@ const AddService = () => {
                             </div>
                         </div>
                         <div className="d-flex align-items-center gap-5 justify-content-between">
-                            <button type="submit" disabled={loading} className="btn theme-btn3">
-                                {loading ? "Logging in..." : "Add Subservice"}
+                            <button type="submit" disabled={loading2} className="btn theme-btn3">
+                                {loading2 ? "Logging in..." : "Add Subservice"}
                             </button>
                             {subServiceSuccess &&
                                 <Link href="/auth/business-detail" className="btn theme-btn2">Go back</Link>
@@ -330,7 +339,7 @@ const AddService = () => {
                         </div>
                     </form>
                 )}
-                {subMessage && <p className="success text-success">{subMessage}</p>}
+                {/* {subMessage && <p className="success text-success">{subMessage}</p>} */}
             </div>
         </div>
     );

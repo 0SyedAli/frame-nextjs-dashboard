@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { setUser } from "../../../lib/slices/authslice";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 const Signup = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -25,7 +26,7 @@ const Signup = () => {
     AdminImage: null,
   });
 
-  const cities = ["City1", "City2", "City3"];
+  const cities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose"];
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -108,7 +109,7 @@ const Signup = () => {
         name: data.name,
         profileImage: data.profileImage,
       };
-
+      showSuccessToast("Signup Successfully!"); //
       localStorage.setItem("user", JSON.stringify(userData));
       localStorage.setItem("token", accessToke);
       dispatch(setUser({ user: userData, token: accessToke }));
@@ -117,6 +118,7 @@ const Signup = () => {
     } catch (error) {
       setError("Signup failed:", error.response?.data || error.message);
       setLoading(false)
+      showErrorToast(error.response?.data?.message || "Signup Failed!");
     } finally {
       setLoading(false)
     }

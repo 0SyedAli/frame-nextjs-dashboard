@@ -10,7 +10,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 export default function SidebarDash() {
   const links = [
     { href: '/', name: 'Dashboard', icon: HiOutlineSquares2X2 },
-    { href: '/appointments', name: 'Appointments', icon: IoCalendarOutline },
+    { href: '#!', name: 'Appointments', icon: IoCalendarOutline },
     { href: '/messages', name: 'Messages', icon: BiMessageSquareDots },
     { href: '/account-setting', name: 'Account Setting', icon: MdDisplaySettings },
     { href: '/clients-profile', name: 'Clients Profile', icon: MdDisplaySettings },
