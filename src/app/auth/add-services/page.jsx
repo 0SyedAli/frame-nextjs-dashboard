@@ -8,6 +8,7 @@ import axios from "axios";
 import { setServiceData } from "../../../lib/slices/authslice";
 import Link from "next/link";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
+export const dynamic = 'force-dynamic';
 
 const AddService = () => {
     const router = useRouter();
