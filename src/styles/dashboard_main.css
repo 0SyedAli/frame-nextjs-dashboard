@@ -4,7 +4,7 @@
     min-height: 100vh;
 }
 
-.sidebar {
+.sidebar.sidebar2 {
     width: 30%;
     background: rgb(255, 255, 255);
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(241, 179, 215, 1) 17%, rgba(120, 67, 170, 1) 63%);
@@ -57,7 +57,7 @@
     font-weight: 500;
 }
 
-.main-content {
+.main-content.main-dashboard {
     flex: 1 1;
     background: #FFF;
     display: flex;
@@ -69,7 +69,7 @@
     padding-top: 50px;
 }
 
-.main-content {
+.content.main-content {
     width: 100%;
 }
 
@@ -251,10 +251,12 @@
     width: 100%;
     margin: 15px 0 30px;
 }
+
 .dr_graph img {
     width: 100%;
     height: 100%;
 }
+
 .status_td span {
     background-color: #FFE2EB;
     font-size: 10px;
@@ -1550,9 +1552,10 @@ span.aic_icon g {
     gap: 20px;
 }
 
+
 .at_input {
-    min-width: 170px;
-    min-height: 170px;
+    min-width: 150px;
+    min-height: 150px;
     border-radius: 16px;
     border: 2px solid #51004F;
     position: relative;
@@ -1601,7 +1604,7 @@ span.aic_icon g {
 .aem_input textarea {
     width: 100%;
     border-radius: 8px;
-    height: 56px;
+    height: 45px;
     border: 1px solid #777777;
     padding: 10px 20px;
     font-family: var(--font-open-sans);

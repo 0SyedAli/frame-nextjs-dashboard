@@ -12,29 +12,38 @@ const Employees = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [services, setServices] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // Loading state
   const adminId = useSelector((state) => state.auth.user?.id || "");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  // useEffect(() => {
+  //   fetchServices();
+  // })
   useEffect(() => {
+    // Wait for adminId to initialize
+    if (adminId === undefined) return;
+
     if (!adminId) {
-      router.push("/auth/signin");
+      router.push("/dashboard");
     } else {
       fetchServices();
     }
+    console.log("now",adminId);
   }, [adminId]);
 
   const fetchServices = async () => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
-
       );
       setServices(response.data.data || []);
     } catch (error) {
       console.error("Error fetching services:", error);
+    } finally {
+      setIsLoading(false); // Mark loading as false after fetch
     }
   };
+
 
   const [employeeName, setEmployeeName] = useState("");
   const [about, setAbout] = useState("");
@@ -116,9 +125,9 @@ const Employees = () => {
               <textarea rows="3" value={about} onChange={(e) => setAbout(e.target.value)} placeholder="About the Employee" />
             </div>
           </div>
-          <div className="timings mt-5 mb-4">
+          <div className="timings mt-4 mb-4">
             <h4>Working Days & Hours</h4>
-            <div className="row gx-5 gy-3">
+            <div className="row gx-5 gy-2">
               {workingDays.map((day, index) => (
                 <div className="col-6">
                   <div key={index} className="row align-items-center">
@@ -136,7 +145,7 @@ const Employees = () => {
               ))}
             </div>
           </div>
-          <div className="timings mt-5">
+          <div className="timings mt-4">
             <h4>Available Services</h4>
             <div className="d-flex align-items-center gap-3 mt-4">
               {services.map((service, index) => (

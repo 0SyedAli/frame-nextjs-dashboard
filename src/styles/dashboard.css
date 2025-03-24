@@ -22,10 +22,11 @@
 }
 
 .sidebar .logo img {
-    width: 270px;
+    width: 250px;
     height: 90px;
     object-fit: contain;
 }
+
 
 .sidebar nav ul {
     list-style: none;
@@ -451,7 +452,8 @@
     margin: 0 !important;
 }
 
-.auth_form_radio label, .payment1 .auth_form_radio h5 {
+.auth_form_radio label,
+.payment1 .auth_form_radio h5 {
     font-size: 24px;
     font-weight: 500;
     font-family: var(--font-montserrat);

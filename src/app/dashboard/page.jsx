@@ -24,14 +24,15 @@ export default function Dashboard() {
   const [tab, setTab] = useState();
   const [activeTab, setActiveTab] = useState('complete');
   useEffect(() => {
+
+  }, [])
+  useEffect(() => {
     setTab();
     setTimeout(() => {
       setTab(activeTab);
     }, 1);
   }, [activeTab])
-  useEffect(() => {
 
-  }, [])
   const orders = [
     {
       cust_id: "PB-001",

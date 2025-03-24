@@ -6,9 +6,9 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="dashboard-container">
       <SidebarDash />
-      <div className="main-content">
+      <div className="main-content main-dashboard">
         <Topbar />
-        <div className="content main-content">{children}</div>
+        <div className="content ">{children}</div>
       </div>
     </div>
   );

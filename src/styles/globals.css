@@ -666,3 +666,42 @@ img.aic_cover_img {
   width: 16px !important;
   height: 18px !important;
 }
+
+
+@media only screen and (max-height: 800px) {
+  .sidebar .logo img {
+    width: 210px;
+    height: 70px;
+  }
+
+  .side_menu2 ul {
+    list-style: none;
+    padding: 20px 0 0;
+  }
+
+  .side_menu2 ul li {
+    margin: 12px 0;
+  }
+}
+
+@media only screen and (max-height: 700px) {
+  .add_employee {
+    height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+
+  }
+
+  .sidebar.sidebar2 {
+    padding: 50px 50px 0;
+  }
+}
+
+@media only screen and (max-height: 600px) {
+  .add_employee {
+    height: 450px;
+    overflow: hidden;
+    overflow-y: auto;
+
+  }
+}

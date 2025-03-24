@@ -13,7 +13,10 @@ const AdminLogin = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { loading, error, token, user } = useSelector((state) => state.auth);
-  useEffect(() => { }, [])
+  useEffect(() => { 
+    console.log("signin Rendered");
+    
+  }, [])
   useEffect(() => {
     setIsClient(true); // Mark as client-side rendering
 
