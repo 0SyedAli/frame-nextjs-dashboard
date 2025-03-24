@@ -1,15 +1,21 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense  } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import axios from "axios";
 import { setServiceData } from "../../../lib/slices/authslice";
 import Link from "next/link";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
-export const dynamic = 'force-dynamic';
 
+const AddServiceWrapper = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AddService />
+        </Suspense>
+    );
+};
 const AddService = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -17,6 +23,8 @@ const AddService = () => {
 
     // Get category from URL params
     const category = searchParams.get("service"); // hair, nail, skin, others
+
+
 
     // Retrieve specific service from Redux
     const services = useSelector((state) => state?.auth?.services || {});
@@ -45,7 +53,7 @@ const AddService = () => {
     const [servicePrice, setServicePrice] = useState("");
     const [subServiceImages, setSubServiceImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
-    useEffect(() => { }, [])
+
 
     useEffect(() => {
         const storedId = localStorage.getItem(`${category}_serviceId`);
@@ -86,11 +94,12 @@ const AddService = () => {
             );
             setMessage(response?.data?.msg);
             setServiceSuccess(response?.data?.success);
-            if (response?.data?.success == true) {
-                showSuccessToast(response?.data?.msg || "Service Created!"); //
-            } else if (response.data?.data?._id) {
+            if (response.data?.data?._id) {
                 const newServiceId = response.data.data._id;
                 const uploadedImage = `${process.env.NEXT_PUBLIC_IMAGE_URL}/${response.data.data.bannerImage}`;
+
+                showSuccessToast(response?.data?.msg || "Service Created!"); //
+
                 // Update state
                 setServiceId(newServiceId);
                 setPreviewImage(null);
@@ -354,4 +363,4 @@ const AddService = () => {
     );
 };
 
-export default AddService;
+export default AddServiceWrapper;
