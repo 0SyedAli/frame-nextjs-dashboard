@@ -1561,6 +1561,7 @@ span.aic_icon g {
     justify-content: center;
     flex-direction: column;
     gap: 15px;
+
 }
 
 .at_input input {
@@ -1570,6 +1571,8 @@ span.aic_icon g {
     top: 0;
     left: 0;
     opacity: 0;
+    z-index: 99;
+    cursor: pointer;
 }
 
 .at_input img {

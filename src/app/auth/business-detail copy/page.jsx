@@ -139,7 +139,6 @@ const BusinessDetail = () => {
                 },
             });
 
-            console.log("Response:", response.data);
             localStorage.removeItem("businessDetails");
             router.push("/nextPage");
         } catch (error) {

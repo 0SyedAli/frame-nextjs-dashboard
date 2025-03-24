@@ -85,14 +85,15 @@ const AddService = () => {
             );
             setMessage(response?.data?.msg);
             setServiceSuccess(response?.data?.success);
-
-            if (response.data?.data?._id) {
+            if (response?.data?.success == true) {
+                showSuccessToast(response?.data?.msg || "Service Created!"); //
+            } else if (response.data?.data?._id) {
                 const newServiceId = response.data.data._id;
                 const uploadedImage = `${process.env.NEXT_PUBLIC_IMAGE_URL}/${response.data.data.bannerImage}`;
-                showSuccessToast(response?.data?.msg || "Service Created!"); //
                 // Update state
                 setServiceId(newServiceId);
                 setPreviewImage(null);
+                setServiceImage(null);
                 setServiceText("")
                 setIsServiceCreated(true);
                 // Save to Redux with category key
@@ -281,7 +282,14 @@ const AddService = () => {
                                     ) : (
                                         <div className="d-flex align-items-center gap-2 flex-wrap">
                                             {previewImages.map((src, index) => (
-                                                <img key={index} src={src} alt={`Preview ${index}`} />
+                                                <Image
+                                                    key={index}
+                                                    src={src}
+                                                    width={100}
+                                                    height={100}
+                                                    alt={`Preview ${index + 1}`}
+                                                    className="preview-thumbnail"
+                                                />
                                             ))}
                                         </div>
                                     )}
@@ -303,9 +311,9 @@ const AddService = () => {
                                 <div className="bd_fields">
                                     <textarea
                                         rows="4"
-                                        placeholder="Subservice Description"
+                                        placeholder="Service Description (100 words)"
                                         required
-                                        defaultChecked={serviceDescription}
+                                        value={serviceDescription}
                                         onChange={(e) => setServiceDescription(e.target.value)}
                                     />
                                 </div>
@@ -322,6 +330,7 @@ const AddService = () => {
                                                 value={servicePrice}
                                                 required
                                                 onChange={(e) => setServicePrice(e.target.value)}
+                                                placeholder=""
                                             />
                                             <span>$</span>
                                         </div>
@@ -331,7 +340,7 @@ const AddService = () => {
                         </div>
                         <div className="d-flex align-items-center gap-5 justify-content-between">
                             <button type="submit" disabled={loading2} className="btn theme-btn3">
-                                {loading2 ? "Logging in..." : "Add Subservice"}
+                                {loading2 ? "Adding..." : "Add Subservice"}
                             </button>
                             {subServiceSuccess &&
                                 <Link href="/auth/business-detail" className="btn theme-btn2">Go back</Link>
@@ -339,7 +348,6 @@ const AddService = () => {
                         </div>
                     </form>
                 )}
-                {/* {subMessage && <p className="success text-success">{subMessage}</p>} */}
             </div>
         </div>
     );

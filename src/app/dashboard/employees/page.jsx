@@ -35,7 +35,6 @@ const Employees = () => {
       console.error("Error fetching services:", error);
     }
   };
-  console.log(services)
 
   const [employeeName, setEmployeeName] = useState("");
   const [about, setAbout] = useState("");
@@ -77,7 +76,6 @@ const Employees = () => {
     if (EmployeeImage) formData.append("EmployeeImage", EmployeeImage);
     formData.append("workingDays", JSON.stringify(workingDays.filter(d => d.isActive)));
     formData.append("availableServices", JSON.stringify(availableServices));
-    console.log(EmployeeImage);
 
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/addEmployee`, formData, {

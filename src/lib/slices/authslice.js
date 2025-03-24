@@ -25,8 +25,11 @@ export const adminLogin = createAsyncThunk(
                     },
                 }
             );
+
+            if(response?.data?.sucess === true) {
+                showSuccessToast("Login successfully!"); //
+            }
             // Save necessary data from the response to localStorage
-            showSuccessToast("Login successfully!"); //
             const { data, aceessToken } = response.data;
             const userData = {
                 id: data.id,

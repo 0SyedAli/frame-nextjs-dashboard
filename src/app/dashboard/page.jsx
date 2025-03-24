@@ -154,7 +154,7 @@ export default function Dashboard() {
               <Link href="/" className="dr_btn">Last 7 Days</Link>
             </div>
             <div className="dr_graph">
-              <Image src="/images/chart2.png" width={500} height={100} alt />
+              <Image src="/images/chart2.png" width={500} height={100} alt="chart" />
             </div>
             <div className="dr_head">
               <h5>Appointments</h5>
