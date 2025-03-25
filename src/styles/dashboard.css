@@ -973,7 +973,6 @@ span.aic_icon g {
 
 @media screen and (max-width:1444px) {
     .sidebar {
-
-        padding: 130px 50px 0 50px;
+        padding: 130px 50px 0 50px !important;
     }
 }
