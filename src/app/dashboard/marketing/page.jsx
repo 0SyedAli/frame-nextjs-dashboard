@@ -5,7 +5,7 @@ import { useState } from "react";
 import MyModal from "@/components/MyModal";
 
 const Marketing = () => {
-    const [active, setActive] = useState('allReviews'); // Default active button
+    const [active, setActive] = useState('marketing'); // Default active button
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const openModal = () => setIsModalOpen(true);
@@ -149,7 +149,7 @@ const Marketing = () => {
                             </div>
                             <div className="mp_table row">
                                 <div className="mpt_chart col-4">
-
+                                    <Image src="/images/chart32.svg" width={300} height={400} alt="chart2" />
                                 </div>
                                 <div className="mpt_table col-8">
                                     <table>
