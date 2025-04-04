@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllServices, fetchSubServices } from "../../../lib/slices/servicesSlice";
 import Image from "next/image";
@@ -10,11 +10,18 @@ import { useRouter } from "next/navigation";
 
 const ServicesDashboard = () => {
   const dispatch = useDispatch();
-  const router = useRouter()
-  const token = localStorage.getItem("token");
+  const router = useRouter();
+  const [token, setToken] = useState(null);
+
   const { servicesData, serviceIds, loading } = useSelector((state) => state.services);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // Ensure this runs only on the client
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
+
+  useEffect(() => {
     if (token && !Object.keys(serviceIds).length) {
       dispatch(fetchAllServices(token));
     }
@@ -29,7 +36,6 @@ const ServicesDashboard = () => {
   }, [dispatch, serviceIds]);
 
   const handleEdit = (service) => {
-    // Navigate to edit page with service ID (Alternative: Open Modal)
     router.push(`/dashboard/services/edit/${service._id}`);
   };
 
@@ -58,7 +64,6 @@ const ServicesDashboard = () => {
                 className="emp_img"
                 alt={service.title || "Service Image"}
               />
-
             </div>
             <div className="sd_item_content">
               <h4>{service.title}</h4>
@@ -79,10 +84,6 @@ const ServicesDashboard = () => {
         <>
           <div className="d-flex align-items-center gap-4">
             <h3 className="mb-0">Hair Services</h3>
-            {/* <div className="add_service_btn5">
-              Add Subservice
-              <span>+</span>
-            </div> */}
           </div>
           <div className="row mt-3 mb-5">{renderServices("hairservices")}</div>
 
