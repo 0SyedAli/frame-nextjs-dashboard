@@ -8,42 +8,16 @@ import { CiCirclePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import MultiRangeSlider3 from "@/components/MultiRangeSlider3";
 const Employees = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [services, setServices] = useState([]);
+  const [adminId, setAdminId] = useState(null); // State to store adminId
   const [isLoading, setIsLoading] = useState(true); // Loading state
-  const adminId = useSelector((state) => state.auth.user?.id || "");
+  const [isLoading2, setIsLoading2] = useState(false); // Loading state
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  // useEffect(() => {
-  //   fetchServices();
-  // })
-  useEffect(() => {
-    // Wait for adminId to initialize
-    if (adminId === undefined) return;
-
-    if (!adminId) {
-      router.push("/dashboard");
-    } else {
-      fetchServices();
-    }
-    console.log("now",adminId);
-  }, [adminId]);
-
-  const fetchServices = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
-      );
-      setServices(response.data.data || []);
-    } catch (error) {
-      console.error("Error fetching services:", error);
-    } finally {
-      setIsLoading(false); // Mark loading as false after fetch
-    }
-  };
-
 
   const [employeeName, setEmployeeName] = useState("");
   const [about, setAbout] = useState("");
@@ -53,6 +27,61 @@ const Employees = () => {
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
   ].map(day => ({ day, isActive: false, startTime: "09:00", endTime: "18:00" })));
   const [availableServices, setAvailableServices] = useState(services);
+
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateFields = () => {
+    const errors = {};
+  
+    // Check each field for emptiness
+    if (!employeeName.trim()) errors.employeeName = "Employee name is required.";
+    if (!about.trim()) errors.about = "About is required.";
+    if (availableServices.length === 0) errors.availableServices = "Please select at least one service.";
+    if (workingDays.filter(day => day.isActive).length === 0) errors.workingDays = "Please activate at least one working day.";
+    if (!EmployeeImage) errors.EmployeeImage = "Employee image is required.";
+  
+    return errors;
+  };
+
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")); // Parse user from localStorage
+    if (user && user.id) {
+      setAdminId(user.id); // Set adminId if available
+    } else {
+      console.error("User not found or missing 'id' property");
+      router.push("/auth/add-services"); // Redirect to add services if user is invalid
+    }
+  }, [router]); // Runs once on mount
+
+  useEffect(() => {
+    if (adminId) {
+      // Fetch services once adminId is available
+      const timer = setTimeout(() => {
+        fetchServices();
+      }, 1000);
+      return () => clearTimeout(timer); // Clean up timeout on component unmount
+    }
+  }, [adminId]); // Runs when adminId changes
+
+  const fetchServices = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+      );
+      setServices(response.data.data || []); // Update services state
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Loading state
+  }
+
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -68,9 +97,13 @@ const Employees = () => {
   };
 
   const handleTimeChange = (day, { openingTime, closingTime }) => {
-    setWorkingDays(prevDays => prevDays.map(d =>
-      d.day === day ? { ...d, startTime: openingTime, endTime: closingTime, isActive: true } : d
-    ));
+    setWorkingDays((prevDays) =>
+      prevDays.map((d) =>
+        d.day === day
+          ? { ...d, startTime: openingTime, endTime: closingTime, isActive: true }
+          : d
+      )
+    );
   };
 
   const handleServiceChange = (_id) => {
@@ -78,6 +111,16 @@ const Employees = () => {
   };
 
   const handleSubmit = async () => {
+    const errors = validateFields();
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors); // Store the errors in state
+      showErrorToast("Please fill in all required fields.");
+      return; // Stop submission if there are errors
+    }
+    
+    setIsLoading2(true);
+
     const formData = new FormData();
     formData.append("createdBy", adminId);
     formData.append("employeeName", employeeName);
@@ -85,11 +128,15 @@ const Employees = () => {
     if (EmployeeImage) formData.append("EmployeeImage", EmployeeImage);
     formData.append("workingDays", JSON.stringify(workingDays.filter(d => d.isActive)));
     formData.append("availableServices", JSON.stringify(availableServices));
-
+    // if (availableServices.length === 0) {
+    //   showErrorToast("Please select at least one service.");
+    //   return; // Prevent form submission
+    // }
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/addEmployee`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+  
       showSuccessToast("Employee added successfully!"); //
       console.log("Employee added successfully", response.data);
       closeModal();
@@ -97,9 +144,13 @@ const Employees = () => {
       setEmployeeName("");
       setAbout("");
       setEmployeeImage(null);
+      setPreview(null)
+      setValidationErrors({});
     } catch (error) {
       console.error("Error adding employee", error);
       showErrorToast(error.response?.data?.message || "Error adding employee!");
+    } finally {
+      setIsLoading2(false);
     }
   };
 
@@ -138,7 +189,7 @@ const Employees = () => {
                       </div>
                     </div>
                     <div className="col-8">
-                      <MultiRangeSlider2 onSubmit={(time) => handleTimeChange(day.day, time)} />
+                      <MultiRangeSlider3 onSubmit={(time) => handleTimeChange(day.day, time)} />
                     </div>
                   </div>
                 </div>
@@ -158,7 +209,8 @@ const Employees = () => {
               ))}
             </div>
           </div>
-          <button className="btn btn-primary mt-4" onClick={handleSubmit}>Add Employee</button>
+          <button className="btn det_ins mt-4" disabled={isLoading2} onClick={handleSubmit}>
+            {isLoading2 ? "Loading..." : "Add Employee"}</button>
         </div>
       </MyModal>
       <div className='employees_dash'>

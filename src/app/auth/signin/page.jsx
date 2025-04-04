@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminLogin, clearAuthState } from "../../../lib/slices/authslice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Spinner from "@/components/Spinner";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -64,7 +65,7 @@ const AdminLogin = () => {
           />
           <div className="text-center">
             <button type="submit" disabled={loading} className="theme-btn2">
-              {loading ? "Logging in..." : "Login"}
+              {loading ? <Spinner /> : "Login"}
             </button>
             <div className="mt-4">
               {user && <p className="success  text-success">Welcome, {user.name}!</p>}

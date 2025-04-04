@@ -8,6 +8,7 @@ import Link from "next/link";
 import Tabs from "@/components/Tabs";
 import { IoLockOpenOutline } from "react-icons/io5";
 import Image from "next/image";
+import Spinner from "@/components/Spinner";
 
 const BillingDetails = () => {
     // modal 
@@ -308,7 +309,7 @@ const BillingDetails = () => {
                                 </div>
                                 <div className="col-12">
                                     <button type="submit" className="btn gradient_btn" disabled={loading}>
-                                        {loading ? "Processing..." : "Pay now"}
+                                        {loading ? <Spinner /> : "Pay now"}
                                     </button>
                                 </div>
                             </div>

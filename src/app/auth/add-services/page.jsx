@@ -8,6 +8,7 @@ import axios from "axios";
 import { setServiceData } from "../../../lib/slices/authslice";
 import Link from "next/link";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import Spinner from "@/components/Spinner";
 
 const AddServiceWrapper = () => {
     return (
@@ -254,7 +255,7 @@ const AddService = () => {
                         />
                     </div>
                     <button type="submit" disabled={loading} className="btn theme-btn2">
-                        {loading ? "Logging in..." : "Create"}
+                        {loading ? <Spinner /> : "Create"}
                     </button>
                     {/* {!isServiceCreated && (
                     )} */}
@@ -287,7 +288,7 @@ const AddService = () => {
                                                     />
                                                 </span>
                                             </div>
-                                            <h5>Upload business logo</h5>
+                                            <h5>Upload Subservices Pictures</h5>
                                         </label>
                                     ) : (
                                         <div className="d-flex align-items-center gap-2 flex-wrap">
@@ -350,7 +351,7 @@ const AddService = () => {
                         </div>
                         <div className="d-flex align-items-center gap-5 justify-content-between">
                             <button type="submit" disabled={loading2} className="btn theme-btn3">
-                                {loading2 ? "Adding..." : "Add Subservice"}
+                                {loading2 ? <Spinner /> : "Add Subservice"}
                             </button>
                             {subServiceSuccess &&
                                 <Link href="/auth/business-detail" className="btn theme-btn2">Go back</Link>

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { setUser } from "../../../lib/slices/authslice";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import Spinner from "@/components/Spinner";
 const Signup = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -110,9 +111,9 @@ const Signup = () => {
         profileImage: data.profileImage,
       };
       showSuccessToast("Signup Successfully!"); //
-      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(response?.data?.data));
       localStorage.setItem("token", accessToke);
-      dispatch(setUser({ user: userData, token: accessToke }));
+      dispatch(setUser({ user: data, token: accessToke }));
 
       router.replace("/auth/pricing");
     } catch (error) {
@@ -196,7 +197,7 @@ const Signup = () => {
           </div>
           <div className='text-center'>
             <button type="submit" disabled={loading} className="theme-btn2">
-              {loading ? "Logging in..." : "Login"}
+              {loading ? <Spinner /> : "Sign Up"}
             </button>
             {error && <p className="error text-danger">{error}</p>}
             <div className='register_link'>

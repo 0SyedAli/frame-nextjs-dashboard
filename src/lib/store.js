@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './slices/authslice';
-
+import servicesReducer from "./slices/servicesSlice";
 // Initialize preloadedState based on the environment (only on client-side)
 const preloadedState = {
   auth: {
@@ -20,6 +20,7 @@ if (typeof window !== 'undefined') {
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    services: servicesReducer,
   },
   preloadedState,
 });

@@ -386,6 +386,10 @@ textarea:focus {
   font-family: var(--font-inter);
 }
 
+.myModal-content.emp_content {
+  height: 90vh !important;
+}
+
 .myModal-close span {
   line-height: 12px;
 }
@@ -667,51 +671,92 @@ img.aic_cover_img {
   height: 18px !important;
 }
 
+.add_employee {
+  height: 100% !important;
+  overflow: hidden !important;
+  overflow-y: auto !important;
+
+}
+
+.add_service_btn5 {
+  border: 1px solid #000;
+  border-radius: 30px;
+  width: 155px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  font-family: '__Open_Sans_9c011f';
+}
+
+.add_service_btn5 span {
+  font-size: 20px;
+
+}
+
+button.am_submit .spinner-border {
+  width: 20px !important;
+  height: 20px !important;
+  border-width: 2px;
+  --bs-spinner-vertical-align: -5px;
+}
 
 @media only screen and (max-height: 800px) {
   .sidebar .logo img {
-    width: 210px!important;
-    height: 70px!important;
+    width: 210px !important;
+    height: 70px !important;
   }
 
   .side_menu2 ul {
-    padding: 20px 0 0!important;
+    padding: 20px 0 0 !important;
   }
 
   .side_menu2 ul li {
-    margin: 12px 0!important;
+    margin: 12px 0 !important;
   }
+
+  /* .add_employee {
+    height: 100% !important;
+    overflow: hidden !important;
+    overflow-y: auto !important;
+
+  } */
 }
 
 @media only screen and (max-height: 700px) {
-  .add_employee {
-    height: 500px!important;
-    overflow: hidden!important;
-    overflow-y: auto!important;
+  /* .add_employee {
+    height: 500px !important;
+    overflow: hidden !important;
+    overflow-y: auto !important;
 
-  }
+  } */
 
   .sidebar.sidebar2 {
-    padding: 50px 50px 0!important;
+    padding: 50px 50px 0 !important;
   }
 }
 
 @media only screen and (max-height: 600px) {
-  .add_employee {
-    height: 450px!important;
-    overflow: hidden!important;
-    overflow-y: auto!important;
+  /* .add_employee {
+    height: 450px !important;
+    overflow: hidden !important;
+    overflow-y: auto !important;
 
-  }
+  } */
 }
+
 @media only screen and (max-width: 1299px) {
   .mpt_table table td {
-    padding: 10px!important;
+    padding: 10px !important;
   }
 }
 
 .mpt_chart img {
-  width: 100%!important;
-  height: 100%!important;
-  object-fit: contain!important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
 }

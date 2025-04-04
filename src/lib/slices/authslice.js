@@ -38,7 +38,7 @@ export const adminLogin = createAsyncThunk(
                 profileImage: data.profileImage,
             };
 
-            localStorage.setItem('user', JSON.stringify(userData)); // Save user info
+            localStorage.setItem('user', JSON.stringify(response?.data?.data)); // Save user info
             localStorage.setItem('token', aceessToken); // Save token
 
             return { user: userData, token: aceessToken }; // Return structured data
@@ -67,6 +67,7 @@ const authSlice = createSlice({
             localStorage.removeItem('user');
             localStorage.removeItem('token');
             localStorage.removeItem('businessDetails');
+            localStorage.removeItem('services');
         },
         resetState: () => initialState,
 
