@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense  } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import axios from "axios";
@@ -52,6 +52,7 @@ const AddService = () => {
     const [serviceTitle, setServiceTitle] = useState("");
     const [serviceDescription, setServiceDescription] = useState("");
     const [servicePrice, setServicePrice] = useState("");
+    const [servicePoints, setServicePoints] = useState("");
     const [subServiceImages, setSubServiceImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
 
@@ -137,6 +138,7 @@ const AddService = () => {
         formData.append("title", serviceTitle);
         formData.append("text", serviceDescription);
         formData.append("price", servicePrice);
+        formData.append("servicePoints", servicePoints);
 
         // Append all images
         subServiceImages.forEach((file) => {
@@ -162,6 +164,7 @@ const AddService = () => {
                 setServiceTitle("");
                 setServiceDescription("");
                 setServicePrice("");
+                setServicePoints("");
                 setSubServiceImages([]);
                 setPreviewImages("");
                 setSubServiceSuccess(true)
@@ -263,7 +266,7 @@ const AddService = () => {
                 {/* Subservice Form */}
                 {(isServiceCreated || serviceSuccess === true) && (
                     <form onSubmit={handleSubServiceSubmit}>
-                        <h4 className='bd_h4'>Add Service</h4>
+                        <h4 className='bd_h4'>Add Sub Service</h4>
                         <div className="row gy-4">
                             <div className="col-12">
                                 <div className="auth_upload_bussiness_logo">
@@ -344,6 +347,24 @@ const AddService = () => {
                                                 placeholder=""
                                             />
                                             <span>$</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-12">
+                                <div className="row align-items-center">
+                                    <div className="col-2">
+                                        <h4 className='sp_h4'>Service Points</h4>
+                                    </div>
+                                    <div className="col-4">
+                                        <div className="bd_fields sp_input2">
+                                            <input
+                                                type="number"
+                                                value={servicePoints}
+                                                onChange={(e) => setServicePoints(e.target.value)}
+                                                placeholder=""
+                                            />
+                                            {/* <span>$</span> */}
                                         </div>
                                     </div>
                                 </div>

@@ -7,17 +7,19 @@ import { useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
+import AuthGuard from "@/components/AuthGuard";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const EditProfile = () => {
     const router = useRouter();
     const [active, setActive] = useState('accountSettings');
     const [loading, setLoading] = useState(false);
-    const adminId = useSelector((state) => state.auth.user?.id || "");
+    const adminId = useSelector((state) => state.auth.user?._id || "");
     const [formData, setFormData] = useState({
         id: "",
         firstName: "",
         lastName: "",
-        pHnumber: "",
+        phNumber: "",
         city: "",
         address: "",
         gender: "",
@@ -37,10 +39,10 @@ const EditProfile = () => {
                 city: storedUser.city || "",
                 address: storedUser.address || "",
                 gender: storedUser.gender || "",
-                pHnumber: storedUser.pHnumber || "",
+                phNumber: storedUser.phNumber || "",
                 about: storedUser.about || "",
-                firstName: storedUser.name?.split(" ")[0] || "",
-                lastName: storedUser.name?.split(" ")[1] || "",
+                firstName: storedUser.firstName || "",
+                lastName: storedUser.lastName || "",
                 profileImage: storedUser.profileImage || "",
                 AdminImage: null,
 
@@ -57,10 +59,10 @@ const EditProfile = () => {
         if (file) {
             // Clean filename: replace spaces, ( and ) with underscores
             const cleanedFileName = file.name.replace(/\s|\(|\)/g, "_");
-    
+
             // Create a new file object with the cleaned filename
             const sanitizedFile = new File([file], cleanedFileName, { type: file.type });
-    
+
             // Set sanitized file in formData
             setFormData({ ...formData, AdminImage: sanitizedFile });
         }
@@ -69,17 +71,41 @@ const EditProfile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            setLoading(true)
+            setLoading(true);
             const token = localStorage.getItem("token");
             const formDataToSend = new FormData();
-            formDataToSend.append("id", adminId);
-            if (formData.firstName) formDataToSend.append("firstName", formData.firstName);
-            if (formData.lastName) formDataToSend.append("lastName", formData.lastName);
-            if (formData.pHnumber) formDataToSend.append("pHnumber", formData.pHnumber);
-            if (formData.address) formDataToSend.append("address", formData.address);
-            if (formData.gender) formDataToSend.append("gender", formData.gender);
-            if (formData.email) formDataToSend.append("email", formData.email);
-            if (formData.about) formDataToSend.append("about", formData.about);
+
+            // Compare initial data with updated data
+            const initialUser = JSON.parse(localStorage.getItem("user"));
+
+            if (adminId) formDataToSend.append("id", adminId);
+            // if (formData.firstName && formData.firstName !== initialUser?.name?.split(" ")[0]) {
+            //     formDataToSend.append("firstName", formData.firstName);
+            // }
+            // if (formData.lastName && formData.lastName !== initialUser?.name?.split(" ")[1]) {
+            //     formDataToSend.append("lastName", formData.lastName);
+            // }
+            if (formData.firstName && formData.firstName !== initialUser?.firstName) {
+                formDataToSend.append("firstName", formData.firstName);
+            }
+            if (formData.lastName && formData.lastName !== initialUser?.lastName) {
+                formDataToSend.append("lastName", formData.lastName);
+            }
+            if (formData.phNumber && formData.phNumber !== initialUser?.phNumber) {
+                formDataToSend.append("phNumber", formData.phNumber);
+            }
+            if (formData.address && formData.address !== initialUser?.address) {
+                formDataToSend.append("address", formData.address);
+            }
+            if (formData.gender && formData.gender !== initialUser?.gender) {
+                formDataToSend.append("gender", formData.gender);
+            }
+            if (formData.email && formData.email !== initialUser?.email) {
+                formDataToSend.append("email", formData.email);
+            }
+            if (formData.about && formData.about !== initialUser?.about) {
+                formDataToSend.append("about", formData.about);
+            }
             if (formData.AdminImage) {
                 formDataToSend.append("AdminImage", formData.AdminImage);
             }
@@ -94,25 +120,37 @@ const EditProfile = () => {
                     },
                 }
             );
-            const updatedUser = {
-                ...JSON.parse(localStorage.getItem("user")),
-                email: formData.email,
-                city: formData.city,
-                address: formData.address,
-                gender: formData.gender,
-                pHnumber: formData.pHnumber,
-                about: formData.about,
-                name: `${formData.firstName} ${formData.lastName}`,
-                profileImage: formData.AdminImage ? formData.AdminImage.name : user.profileImage, // depends on backend return
-            };
 
-            localStorage.setItem("user", JSON.stringify(updatedUser));
+            // // Update local storage with new user data
+            // const updatedUser = {
+            //     ...initialUser,
+            //     name: `${formData.firstName} ${formData.lastName}`,
+            //     email: formData.email,
+            //     city: formData.city,
+            //     address: formData.address,
+            //     gender: formData.gender,
+            //     phNumber: formData.phNumber,
+            //     about: formData.about,
+            //     profileImage: formData.AdminImage
+            //         ? formData.AdminImage.name.replace(/^\d+-/, '') // Removes any leading numbers followed by a dash
+            //         : initialUser.profileImage,// Assuming backend stores the image by its filename
+            // };
 
-            alert("Profile updated successfully!");
+            // localStorage.setItem("user", JSON.stringify(updatedUser));
+
+            if (response.status === 200 && response.data) {
+                // Update local storage with the new user data
+                localStorage.setItem("user", JSON.stringify(response?.data?.data));
+            } else {
+                console.error("Failed to update admin: ", response);
+                // Handle error, maybe show a notification to the user
+            }
+            showSuccessToast("Profile updated successfully!");
             router.push("/dashboard");
         } catch (error) {
             console.error("Error updating profile:", error);
-            setLoading(false)
+            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
+            setLoading(false);
         }
     };
     // const storedUser = JSON.parse(localStorage.getItem("user")); // add this before return if not already
@@ -125,7 +163,7 @@ const EditProfile = () => {
                 {["accountSettings", "transactions", "planSelection"].map(tab => (
                     <button
                         key={tab}
-                        className={`theme-btn3 ${active === tab ? 'active' : ''}`}
+                        className={`btn ${active === tab ? 'active' : ''}`}
                         onClick={() => setActive(tab)}
                     >
                         {tab === "accountSettings" && "Account Settings"}
@@ -221,8 +259,8 @@ const EditProfile = () => {
                                         <label>Phone Number</label>
                                         <input
                                             type="tel"
-                                            name="pHnumber"
-                                            value={formData.pHnumber}
+                                            name="phNumber"
+                                            value={formData.phNumber}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -304,4 +342,10 @@ const EditProfile = () => {
     );
 };
 
-export default EditProfile;
+const ProtectedEditProfileDashboard = () => (
+    <AuthGuard>
+        <EditProfile />
+    </AuthGuard>
+);
+
+export default ProtectedEditProfileDashboard;

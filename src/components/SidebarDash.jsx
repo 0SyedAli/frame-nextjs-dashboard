@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BiMessageSquareDots } from "react-icons/bi";
-import { MdDisplaySettings, MdMiscellaneousServices  } from "react-icons/md";
+import { MdDisplaySettings, MdMiscellaneousServices } from "react-icons/md";
 import { FaRegStar } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
-
+import { useDispatch } from "react-redux";
+import { logout } from "@/lib/slices/authslice";
 export default function SidebarDash() {
+  const dispatch = useDispatch();
   const links = [
     { href: '/', name: 'Dashboard', icon: HiOutlineSquares2X2 },
     { href: '#!', name: 'Appointments', icon: IoCalendarOutline },
@@ -19,7 +21,9 @@ export default function SidebarDash() {
     { href: '/marketing', name: 'Marketing', icon: FaRegStar },
     { href: '/refer-friend', name: 'Refer a Friend', icon: MdDisplaySettings },
   ];
-
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch the logout action
+  };
   return (
     <div className="sidebar sidebar2">
       <div className="logo">
@@ -39,7 +43,7 @@ export default function SidebarDash() {
         <ul className='pt-0 m-0'>
           <li className='pt-0 m-0'>
             <span><RiLogoutBoxLine /></span>
-            <Link href="/auth/signin">Logout</Link>
+            <Link href="/auth/signin" onClick={handleLogout} >Logout</Link>
           </li>
         </ul>
       </div>

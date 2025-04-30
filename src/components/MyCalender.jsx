@@ -19,8 +19,11 @@ export default function CalendarPage() {
         headerToolbar={{
           left: 'prev,next today',
           center: 'title',
-          right: 'resourceTimelineWeek,dayGridMonth,timeGridWeek',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay',
         }}
+        expandRows={true} 
+        height={600}
+        schedulerLicenseKey='GPL-My-Project-Is-Open-Source'
         initialView='resourceTimelineWeek'
         nowIndicator={true}
         editable={true}
@@ -32,7 +35,7 @@ export default function CalendarPage() {
           { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
         ]}
         initialEvents={[
-          { title: 'nice event', start: new Date(), resourceId: 'a' },
+          { title: 'nice event', start: new Date()},
         ]}
       />
     </div>

@@ -63,7 +63,7 @@ const SplashScreens = () => {
                     {slides.map((slide, index) => (
                         <div key={index} className="slide" style={{ backgroundImage: `url(${slide.bg})` }}>
                             <div className="container content">
-                                {slide.logo && <Image src={slide.logo} width={450} height={150}  priority={index === 0} alt="logo" />}
+                                {slide.logo && <Image src={slide.logo} width={450} height={150} priority={index === 0} alt="logo" />}
                                 <div className="content_inner">
                                     <h2>{slide.title}</h2>
                                     <p>{slide.text}</p>

@@ -22,7 +22,7 @@ const Signup = () => {
     lastName: "",
     email: "",
     password: "",
-    pHnumber: "",
+    phNumber: "",
     city: "",
     AdminImage: null,
   });
@@ -182,7 +182,7 @@ const Signup = () => {
               </select>
             </div>
             <div className="col-10">
-              <input type="tel" name="pHnumber" placeholder="Phone number" onChange={handleChange} required />
+              <input type="tel" name="phNumber" placeholder="Phone number" onChange={handleChange} required />
             </div>
           </div>
           <div className="row">

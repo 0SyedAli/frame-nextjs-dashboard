@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Spinner = () => {
+const Spinner = ({borderWidth}) => {
     return (
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
+        <div className={`spinner-border ${borderWidth}`} role="status">
+            <span className="visually-hidden">Loading...</span>
         </div>
     )
 }

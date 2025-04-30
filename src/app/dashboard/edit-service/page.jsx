@@ -1,8 +1,9 @@
+import AuthGuard from '@/components/AuthGuard';
 import Image from 'next/image';
 import React from 'react'
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { PiPencilSimpleLineBold } from 'react-icons/pi';
-const AddService = () => {
+const EditService = () => {
   return (
     <div className='add_service2_dash'>
       <form>
@@ -88,4 +89,10 @@ const AddService = () => {
   )
 }
 
-export default AddService
+const ProtectedEditServiceDashboard = () => (
+  <AuthGuard>
+    <EditService />
+  </AuthGuard>
+);
+
+export default ProtectedEditServiceDashboard;

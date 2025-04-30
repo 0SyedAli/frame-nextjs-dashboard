@@ -21,7 +21,7 @@ const BussinessDetail = () => {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
-    const adminId = useSelector((state) => state.auth.user?.id || "");
+    const adminId = useSelector((state) => state.auth.user?._id || "");
 
     const token = useSelector(state => state.auth.token);
     const [formData, setFormData] = useState({
@@ -29,6 +29,7 @@ const BussinessDetail = () => {
         userName: "",
         city: "",
         address: "",
+        royalityPoints: "",
         availableServices: [],
         businessImage: null,
     });
@@ -102,6 +103,7 @@ const BussinessDetail = () => {
         formDataToSend.append("userName", formData.userName);
         formDataToSend.append("city", formData.city);
         formDataToSend.append("address", formData.address);
+        formDataToSend.append("royalityPoints", formData.royalityPoints);
 
         // Filter workingDays to include only selected days
         const workingDaysArray = Object.entries(workingDays)
@@ -183,7 +185,7 @@ const BussinessDetail = () => {
                                                 <Image src="/images/upload-icon.png" width={16} height={18} className="pb-icon" alt="Frame" />
                                             </span>
                                         </div>
-                                        <h5>Upload business logo</h5>
+                                        <h5>Upload business logo *</h5>
                                     </label>
                                 )
                             }
@@ -191,24 +193,29 @@ const BussinessDetail = () => {
                         <div className="row pt-4 gy-4">
                             <div className="col-6">
                                 <div className="bd_fields">
-                                    <input type="text" name="businessName" placeholder='Business Name' onChange={handleInputChange} required />
+                                    <input type="text" name="businessName" placeholder='Business Name *' onChange={handleInputChange} required />
                                 </div>
                             </div>
                             <div className="col-6">
                                 <div className="bd_fields">
-                                    <input type="text" name="userName" placeholder='Username' onChange={handleInputChange} required />
+                                    <input type="text" name="userName" placeholder='Username *' onChange={handleInputChange} required />
                                 </div>
                             </div>
                             <div className="col-12"><div className="bd_fields">
                                 <select name="city" onChange={handleInputChange} required>
-                                    <option value="">Select City</option>
+                                    <option value="">Select City *</option>
                                     <option value="Florida">Florida</option>
                                     <option value="New York">New York</option>
                                 </select>
                             </div></div>
                             <div className="col-12">
                                 <div className="bd_fields">
-                                    <textarea name="address" placeholder='Address' onChange={handleInputChange} required></textarea>
+                                    <textarea name="address" placeholder='Address *' onChange={handleInputChange} required></textarea>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <div className="bd_fields">
+                                    <input type="text" name="royalityPoints" placeholder='Add Royality Points' onChange={handleInputChange} />
                                 </div>
                             </div>
                         </div>

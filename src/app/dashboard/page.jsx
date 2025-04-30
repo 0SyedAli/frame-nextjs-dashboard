@@ -5,6 +5,10 @@ import { RxCaretSort } from "react-icons/rx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import Spinner from "@/components/Spinner";
+import AuthGuard from "@/components/AuthGuard";
 const image1 = "/images/user1.png";
 const image2 = "/images/user1.png";
 const image3 = "/images/user1.png";
@@ -18,14 +22,47 @@ const image10 = "/images/user1.png";
 const image11 = "/images/user1.png";
 const image12 = "/images/user1.png";
 
-
-
-export default function Dashboard() {
+const Dashboard = () => {
   const [tab, setTab] = useState();
+  const [userData, setUserData] = useState();
+  const [adminId, setadminId] = useState();
+  const [statistics, setStatistics] = useState("");
   const [activeTab, setActiveTab] = useState('complete');
-  useEffect(() => {
+  const router = useRouter();
 
+  const fetchStates = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getCustomers?adminId=${adminId}`
+      )
+      setStatistics(response?.data?.data || "");
+    }
+    catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user && (!user?.id || !user?._id)) {
+      router.push('/auth/signin')
+    }
+    else {
+      setUserData(user)
+      setadminId(user?.id || user?._id)
+    }
   }, [])
+
+  useEffect(() => {
+    if (adminId) {
+      // Fetch services once adminId is available
+      const timer = setTimeout(() => {
+        fetchStates();
+      }, 1000);
+      return () => clearTimeout(timer); // Clean up timeout on component unmount
+    }
+  }, [adminId]); // Runs when adminId changes
+
   useEffect(() => {
     setTab();
     setTimeout(() => {
@@ -71,6 +108,7 @@ export default function Dashboard() {
     }
   ];
 
+
   if (!tab) {
     return <></>;
   }
@@ -79,11 +117,19 @@ export default function Dashboard() {
       <div className="row gx-5 w-100">
         <div className="col-4 pe-1">
           <div className="dash_profile1">
-            <div className="dp_img mb-4"></div>
-            <h5>Jazy Dewo Beauty</h5>
+            <div className="dp_img mb-4">
+              <Image
+                src={userData?.profileImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${userData?.profileImage}` : "/images/emp_img1.png"}
+                width={135}
+                height={135}
+                className="pb-icon"
+                alt="Frame"
+              />
+            </div>
+            <h5>{userData && userData.name}</h5>
             <div className="d-flex align-items-center justify-content-center  flex-wrap gap-2">
-              <h6><span>DB-001</span></h6>
-              <div className="dp_dot"></div>
+              {/* <h6><span>DB-001</span></h6>
+              <div className="dp_dot"></div> */}
               <h6>Beauty Saloon</h6>
             </div>
           </div>
@@ -96,7 +142,7 @@ export default function Dashboard() {
                     <h5>Total<br />
                       Customers</h5>
                   </div>
-                  <h3>2,150</h3>
+                  <h3>{!statistics ? <Spinner borderWidth="border-2" /> : statistics.totalCustomers}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
                     <h5>2.45%</h5>
@@ -107,10 +153,9 @@ export default function Dashboard() {
                 <div className="dp2_item">
                   <div className="tc">
                     <span><LuUsersRound /></span>
-                    <h5>Total<br />
-                      Customers</h5>
+                    <h5>Income</h5>
                   </div>
-                  <h3>2,150</h3>
+                  <h3>{!statistics ? <Spinner borderWidth="border-2" /> : statistics.totalIncome}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
                     <h5>2.45%</h5>
@@ -121,10 +166,9 @@ export default function Dashboard() {
                 <div className="dp2_item">
                   <div className="tc">
                     <span><LuUsersRound /></span>
-                    <h5>Total<br />
-                      Customers</h5>
+                    <h5>Profits</h5>
                   </div>
-                  <h3>2,150</h3>
+                  <h3>{!statistics ? <Spinner borderWidth="border-2" /> : (statistics.profits ? statistics.profits : "0")}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
                     <h5>2.45%</h5>
@@ -135,10 +179,9 @@ export default function Dashboard() {
                 <div className="dp2_item">
                   <div className="tc">
                     <span><LuUsersRound /></span>
-                    <h5>Total<br />
-                      Customers</h5>
+                    <h5>Insights</h5>
                   </div>
-                  <h3>2,150</h3>
+                  <h3>{!statistics ? <Spinner borderWidth="border-2" /> : (statistics.insights ? statistics.insights : "0")}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
                     <h5>2.45%</h5>
@@ -211,3 +254,12 @@ export default function Dashboard() {
     </div>
   );
 }
+
+
+const ProtectedDashboard = () => (
+  <AuthGuard>
+    <Dashboard />
+  </AuthGuard>
+);
+
+export default ProtectedDashboard;

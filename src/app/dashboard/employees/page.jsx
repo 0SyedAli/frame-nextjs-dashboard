@@ -9,11 +9,14 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import MultiRangeSlider3 from "@/components/MultiRangeSlider3";
+import Spinner from "@/components/Spinner";
+import AuthGuard from "@/components/AuthGuard";
 const Employees = () => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [adminId, setAdminId] = useState(null); // State to store adminId
+  const [loading, setLoading] = useState(true); // Loading state
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const [isLoading2, setIsLoading2] = useState(false); // Loading state
   const openModal = () => setIsModalOpen(true);
@@ -27,27 +30,30 @@ const Employees = () => {
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
   ].map(day => ({ day, isActive: false, startTime: "09:00", endTime: "18:00" })));
   const [availableServices, setAvailableServices] = useState(services);
-
+  const [refreshKey, setRefreshKey] = useState(0);
   const [validationErrors, setValidationErrors] = useState({});
 
+  const [employees, setEmployees] = useState([]); // Init
+  const [groupedEmployees, setGroupedEmployees] = useState({});
+  const [groupedEmployees2, setGroupedEmployees2] = useState({});
   const validateFields = () => {
     const errors = {};
-  
+
     // Check each field for emptiness
     if (!employeeName.trim()) errors.employeeName = "Employee name is required.";
     if (!about.trim()) errors.about = "About is required.";
     if (availableServices.length === 0) errors.availableServices = "Please select at least one service.";
     if (workingDays.filter(day => day.isActive).length === 0) errors.workingDays = "Please activate at least one working day.";
     if (!EmployeeImage) errors.EmployeeImage = "Employee image is required.";
-  
+
     return errors;
   };
 
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")); // Parse user from localStorage
-    if (user && user.id) {
-      setAdminId(user.id); // Set adminId if available
+    if (user && (user.id || user._id)) {
+      setAdminId(user.id || user._id); // Set adminId if available
     } else {
       console.error("User not found or missing 'id' property");
       router.push("/auth/add-services"); // Redirect to add services if user is invalid
@@ -59,10 +65,42 @@ const Employees = () => {
       // Fetch services once adminId is available
       const timer = setTimeout(() => {
         fetchServices();
+        fetchEmployees();
       }, 1000);
       return () => clearTimeout(timer); // Clean up timeout on component unmount
     }
-  }, [adminId]); // Runs when adminId changes
+  }, [adminId, refreshKey]); // Runs when adminId changes
+
+  const fetchEmployees = async () => {
+    try {
+      setLoading(true); // Start loading
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllEmployees?adminId=${adminId}`
+      );
+
+      if (response.data.success) {
+        const employees = response.data.data;
+        setEmployees(employees); // Update employees state
+        groupByCategory(employees); // Group employees by category
+      } else {
+        console.error("Failed to fetch employees:", response.data.msg);
+      }
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+  const groupByCategory = (data) => {
+    const grouped = data.reduce((acc, employee) => {
+      employee.availableServices.forEach((service) => {
+        if (!acc[service.Title]) acc[service.Title] = [];
+        acc[service.Title].push(employee);
+      });
+      return acc;
+    }, {});
+    setGroupedEmployees(grouped);
+  };
 
   const fetchServices = async () => {
     try {
@@ -118,7 +156,7 @@ const Employees = () => {
       showErrorToast("Please fill in all required fields.");
       return; // Stop submission if there are errors
     }
-    
+
     setIsLoading2(true);
 
     const formData = new FormData();
@@ -136,8 +174,9 @@ const Employees = () => {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/addEmployee`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       showSuccessToast("Employee added successfully!"); //
+      setRefreshKey(prev => prev + 1);
       console.log("Employee added successfully", response.data);
       closeModal();
       setAvailableServices([]);
@@ -153,7 +192,9 @@ const Employees = () => {
       setIsLoading2(false);
     }
   };
-
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
       <MyModal isOpen={isModalOpen} onClose={closeModal} myModalContent="emp_content">
@@ -210,121 +251,71 @@ const Employees = () => {
             </div>
           </div>
           <button className="btn det_ins mt-4" disabled={isLoading2} onClick={handleSubmit}>
-            {isLoading2 ? "Loading..." : "Add Employee"}</button>
+            {isLoading2 ? <Spinner /> : "Add Employee"}</button>
         </div>
       </MyModal>
-      <div className='employees_dash'>
-        <h3>Hair Services</h3>
-        <div className="row mt-3 mb-4">
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
+      <div className="employees_dash">
+        {!groupedEmployees2.length ? (
+          Object.keys(groupedEmployees).map((category) => (
+            <div key={category}>
+              <h3>{category}</h3>
+              <div className="row mt-3 mb-4">
+                <div className="col-10 pe-4">
+                  <div className="row emp_row">
+                    {groupedEmployees[category].map((employee) => (
+                      <div className="col-3" key={employee._id}>
+                        <div className="ed_item">
+                          <Image
+                            src={employee.employeeImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${employee.employeeImage}` : "/images/default.png"}
+                            width={144}
+                            height={144}
+                            className="emp_img"
+                            alt={employee.employeeName}
+                          />
+                          <h5>{employee.employeeName}</h5>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="col-2">
+                  <div className="ed_item">
+                    <div className="ed_item_border" onClick={openModal}>
+                      <span>
+                        <CiCirclePlus />
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div >
+            <h3>Pls add sub services</h3>
+            <div className="row mt-3 mb-4">
+              <div className="col-12">
+                <div className="ed_item">
+                  <div className="ed_item_border" onClick={openModal}>
+                    <span>
+                      <CiCirclePlus />
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <div className="ed_item_border" onClick={openModal}><span><CiCirclePlus /></span></div>
-            </div>
-          </div>
-        </div>
-        <h3>Nails Services</h3>
-        <div className="row mt-3 mb-4">
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <div className="ed_item_border" onClick={openModal}><span><CiCirclePlus /></span></div>
-            </div>
-          </div>
-        </div>
-        <h3>Skin Services</h3>
-        <div className="row mt-3 mb-4">
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <Image
-                src="/images/emp_img1.png"
-                width={144}
-                height={144}
-                className="emp_img"
-                alt="Frame"
-              />
-              <h5>Ann Merry</h5>
-            </div>
-          </div>
-          <div className="col-3">
-            <div className="ed_item">
-              <div className="ed_item_border" onClick={openModal}><span><CiCirclePlus /></span></div>
-            </div>
-          </div>
-        </div>
+        )
+        }
       </div>
     </>
   )
 }
 
-export default Employees
+const ProtectedEmployeesDashboard = () => (
+  <AuthGuard>
+    <Employees />
+  </AuthGuard>
+);
+
+export default ProtectedEmployeesDashboard;

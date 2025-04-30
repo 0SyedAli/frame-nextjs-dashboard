@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from "react";
 import Image from "next/image";
+import AuthGuard from "@/components/AuthGuard";
 
 const OnboardingSlides = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -77,4 +78,10 @@ const OnboardingSlides = () => {
   );
 };
 
-export default OnboardingSlides;
+const ProtectedOnboardingSlidesDashboard = () => (
+  <AuthGuard>
+    <OnboardingSlides />
+  </AuthGuard>
+);
+
+export default ProtectedOnboardingSlidesDashboard;

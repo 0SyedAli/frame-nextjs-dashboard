@@ -1,5 +1,5 @@
 "use client";
-
+import AuthGuard from "@/components/AuthGuard"
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllServices, fetchSubServices } from "../../../lib/slices/servicesSlice";
@@ -24,6 +24,7 @@ const ServicesDashboard = () => {
   useEffect(() => {
     if (token && !Object.keys(serviceIds).length) {
       dispatch(fetchAllServices(token));
+      console.log(token);
     }
   }, [dispatch, token, serviceIds]);
 
@@ -57,7 +58,7 @@ const ServicesDashboard = () => {
                 src={
                   service.subServiceImage?.[0]
                     ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${service.subServiceImage[0]}`
-                    : "/images/default_service.png"
+                    : ""
                 }
                 width={144}
                 height={144}
@@ -77,28 +78,35 @@ const ServicesDashboard = () => {
   };
 
   return (
-    <div className="services_dash w-100">
+    <div className="services_dash w-100 position-relative">
       {loading ? (
         <p>Loading services...</p>
       ) : (
         <>
+          <Link className="btn add_appointment" href="/dashboard/add-subservice">Add Sub-service</Link>
           <div className="d-flex align-items-center gap-4">
             <h3 className="mb-0">Hair Services</h3>
           </div>
-          <div className="row mt-3 mb-5">{renderServices("hairservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("hairservices")}</div>
 
           <h3>Nails Services</h3>
-          <div className="row mt-3 mb-5">{renderServices("nailservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("nailservices")}</div>
 
           <h3>Skin Services</h3>
-          <div className="row mt-3 mb-5">{renderServices("skinservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("skinservices")}</div>
 
           <h3>Other Services</h3>
-          <div className="row mt-3 mb-5">{renderServices("othersservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("othersservices")}</div>
         </>
       )}
     </div>
   );
 };
 
-export default ServicesDashboard;
+const ProtectedServicesDashboard = () => (
+  <AuthGuard>
+    <ServicesDashboard />
+  </AuthGuard>
+);
+
+export default ProtectedServicesDashboard;

@@ -21,7 +21,7 @@ const BusinessDetail = () => {
     const dispatch = useDispatch();
 
     const storedBusiness = useSelector((state) => state.auth.business || {});
-    const adminId = useSelector((state) => state.auth.user?.id || "");
+    const adminId = useSelector((state) => state.auth.user?._id || "");
     const token = useSelector((state) => state.auth.token || "");
 
     const [businessName, setBusinessName] = useState(storedBusiness.businessName || "");

@@ -12,7 +12,7 @@ const Employees = () => {
   const [active, setActive] = useState('allReviews'); // Default active button
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [services, setServices] = useState([]);
-  const adminId = useSelector((state) => state.auth.user?.id || "");
+  const adminId = useSelector((state) => state.auth.user?._id || "");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 

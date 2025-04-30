@@ -103,8 +103,14 @@
 .dp_img {
     width: 135px;
     height: 135px;
-    background-color: #51004F;
+    background-color: #51004f1c;
     border-radius: 16px;
+    overflow: hidden;
+}
+
+.dp_img img {
+    width: 100%;
+    height: 100%;
 }
 
 .dash_profile1 {
@@ -277,8 +283,24 @@
     font-family: var(--font-lato);
     letter-spacing: 1px;
     padding: 10px 20px;
+    min-width: 150px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.det_ins:hover {
+    border-color: #51004F;
 }
 
+.det_ins .spinner-border {
+    width: 25px;
+    height: 25px;
+}
+.row.emp_row {
+    flex-wrap: nowrap;
+    overflow: auto;
+}
 .employees_dash {
     padding: 40px;
     width: 100%;
@@ -311,7 +333,7 @@
     width: 144px;
     object-fit: cover;
     height: 144px;
-    border-radius: 18px;
+    border-radius: 19px;
 }
 
 .ed_item .ed_item_border {
@@ -695,6 +717,7 @@ span.aic_icon g {
 }
 
 .as_form input::placeholder,
+.as_form textarea::placeholder,
 .as_form select {
     font-family: var(--font-open-sans);
     font-size: 15px;
@@ -948,6 +971,11 @@ span.aic_icon g {
     display: flex;
     align-items: center;
     gap: 15px;
+    width: 100%;
+}
+
+.mar_label .mar_content {
+    width: 60%;
 }
 
 .mar_label .mar_profile {

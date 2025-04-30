@@ -6,6 +6,8 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PiPencilSimpleLineBold } from 'react-icons/pi';
+import Spinner from '@/components/Spinner';
+import AuthGuard from '@/components/AuthGuard';
 
 const ServiceDetail = () => {
   const { subServiceId } = useParams();// Extract the serviceId from the URL
@@ -31,7 +33,7 @@ const ServiceDetail = () => {
     fetchData();
   }, [subServiceId]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>{error}</p>;
 
   if (!serviceDetails) return <p>No service details found.</p>;
@@ -72,7 +74,7 @@ const ServiceDetail = () => {
           </div>
           <div className='ab_se'>
             <h5>About</h5>
-            <Link href="/dashboard/add-service"><h5 style={{ color: '#51004F' }}><span><PiPencilSimpleLineBold /></span>Edit details</h5></Link>
+            <Link href={`/dashboard/services/edit/${subServiceId}`}><h5 style={{ color: '#51004F' }}><span><PiPencilSimpleLineBold /></span>Edit details</h5></Link>
           </div>
           <p>
             {serviceDetails.text}
@@ -89,12 +91,18 @@ const ServiceDetail = () => {
           </ul> */}
         </div>
         <div className='d-flex align-items-center gap-5'>
-          <button className="btn theme-btn2" >Go back</button>
-          <button className="btn theme-btn2">Add Sub-service</button>
+        <Link className="btn theme-btn2" href="/dashboard/services">Go back</Link>
+          <Link className="btn theme-btn2" href="/dashboard/add-subservice">Add Sub-service</Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default ServiceDetail;
+const ProtectedServiceDetailDashboard = () => (
+  <AuthGuard>
+    <ServiceDetail />
+  </AuthGuard>
+);
+
+export default ProtectedServiceDetailDashboard;

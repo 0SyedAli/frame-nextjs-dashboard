@@ -4,7 +4,8 @@ import { FaStar } from "react-icons/fa";
 import { useState } from "react";
 import MyModal from "@/components/MyModal";
 import Chat from "@/components/Chat";
-const Marketing = () => {
+import AuthGuard from "@/components/AuthGuard";
+const Message = () => {
     const [active, setActive] = useState('allMessages'); // Default active button
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -36,19 +37,19 @@ const Marketing = () => {
                 <div className="d-flex align-items-center justify-content-between">
                     <div className="m_tabs_menu">
                         <button
-                            className={`theme-btn3 ${active === 'allMessages' ? 'active' : ''}`}
+                            className={`btn ${active === 'allMessages' ? 'active' : ''}`}
                             onClick={() => setActive('allMessages')}
                         >
                             All Messages
                         </button>
                         <button
-                            className={`theme-btn3 ${active === 'newest' ? 'active' : ''}`}
+                            className={`btn ${active === 'newest' ? 'active' : ''}`}
                             onClick={() => setActive('newest')}
                         >
                             Newest
                         </button>
                         <button
-                            className={`theme-btn3 ${active === 'replied' ? 'active' : ''}`}
+                            className={`btn ${active === 'replied' ? 'active' : ''}`}
                             onClick={() => setActive('replied')}
                         >
                             Replied
@@ -501,4 +502,10 @@ const Marketing = () => {
     );
 };
 
-export default Marketing;
+const ProtectedMessageDashboard = () => (
+    <AuthGuard>
+      <Message />
+    </AuthGuard>
+  );
+  
+  export default ProtectedMessageDashboard;

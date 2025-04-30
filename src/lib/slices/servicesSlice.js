@@ -24,9 +24,12 @@ export const fetchAllServices = createAsyncThunk(
         {
           headers: {
             Authorization: `Bearer ${token}`,
+
           },
         }
+
       );
+      console.log(token);
       return response.data.data; // Returns the array of services
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error fetching services");

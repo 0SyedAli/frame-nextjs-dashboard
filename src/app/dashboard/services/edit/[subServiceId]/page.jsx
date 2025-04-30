@@ -3,14 +3,19 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Image from 'next/image';
 import axios from "axios";
-const AddService = () => {
+import Spinner from "@/components/Spinner";
+import AuthGuard from "@/components/AuthGuard";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
+const EditServieDashboard = () => {
 
     const router = useRouter();
     const { subServiceId } = useParams();
     const [previewImages, setPreviewImages] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         title: "",
         text: "",
+        servicePoints: "",
         price: "",
         subServiceImage: [], // ✅ Make it an array
     });
@@ -26,6 +31,7 @@ const AddService = () => {
                 setFormData({
                     title: data.title || "",
                     text: data.text || "",
+                    servicePoints: data.servicePoints || "",
                     price: data.price || "",
                     subServiceImage: data.subServiceImage || [], // ✅ Assuming array from API
                 });
@@ -60,11 +66,13 @@ const AddService = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true)
             const token = localStorage.getItem("token");
             const formDataToSend = new FormData();
             formDataToSend.append("subServiceId", subServiceId);
             formDataToSend.append("title", formData.title);
             formDataToSend.append("text", formData.text);
+            formDataToSend.append("servicePoints", formData.servicePoints);
             formDataToSend.append("price", formData.price);
             // ✅ Append each image file
             formData.subServiceImage.forEach((image, index) => {
@@ -83,9 +91,12 @@ const AddService = () => {
                 }
             );
             const updated = response.data.data;
+            showSuccessToast(response?.data?.msg); //
+
             setFormData({
                 title: updated.title,
                 text: updated.text,
+                servicePoints: updated.servicePoints,
                 price: updated.price,
                 subServiceImage: updated.subServiceImage || [],
             });
@@ -94,11 +105,12 @@ const AddService = () => {
                     `${process.env.NEXT_PUBLIC_IMAGE_URL}/${img}`
                 )
             );
-            alert("Service updated successfully!");
             router.push("/dashboard/services");
         }
         catch (error) {
             console.error("Error updating service:", error);
+            setLoading(false)
+            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
         }
     };
 
@@ -174,6 +186,15 @@ const AddService = () => {
                             rows="10">Description</textarea>
                     </div>
                     <div className="col-12">
+                        <label htmlFor="" className="pb-2" style={{ fontWeight: "bolder", fontSize: "20px", textTransform: "capitalize" }}>Service Point</label>
+                        <input
+                            type="number"
+                            name="servicePoints"
+                            value={formData.servicePoints}
+                            onChange={handleChange}
+                            placeholder="Add Points" />
+                    </div>
+                    <div className="col-12">
                         <label htmlFor="" className="pb-2" style={{ fontWeight: "bolder", fontSize: "20px", textTransform: "capitalize" }}>Price</label>
                         <div className="dollar_input ps-0">
                             <span>$</span>
@@ -186,7 +207,9 @@ const AddService = () => {
                         </div>
                     </div>
                     <div className='col-12 pt-4'>
-                        <button className="btn theme-btn2">Continue</button>
+                        <button disabled={loading} className="btn theme-btn2">
+                            {loading ? <Spinner /> : "Continue"}
+                        </button>
                     </div>
                 </div>
             </form>
@@ -194,4 +217,11 @@ const AddService = () => {
     )
 }
 
-export default AddService
+
+const ProtectedEditServieDashboard = () => (
+    <AuthGuard>
+        <EditServieDashboard />
+    </AuthGuard>
+);
+
+export default ProtectedEditServieDashboard;
