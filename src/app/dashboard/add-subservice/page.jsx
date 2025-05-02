@@ -8,7 +8,7 @@ import Spinner from '@/components/Spinner';
 import AuthGuard from '@/components/AuthGuard';
 import Link from 'next/link';
 
-const AddService = () => {
+const AddSubService = () => {
   const [services, setServices] = useState([]); // Initialize as an empty array
   const [employees, setEmployees] = useState([]); // Initialize as an empty array
   const [loading, setLoading] = useState(false);
@@ -242,9 +242,8 @@ const AddService = () => {
             <textarea
               rows="5"
               placeholder='Description'
-              value={serviceDescription}
               onChange={(e) => setServiceDescription(e.target.value)}
-            >Description</textarea>
+            >{serviceDescription}</textarea>
           </div>
           <div className="col-12">
             <input
@@ -279,10 +278,10 @@ const AddService = () => {
 
 
 
-// const ProtectedAddServiceDashboard = () => (
-//   <AuthGuard>
-//     <AddService />
-//   </AuthGuard>
-// );
+const ProtectedAddSubServiceDashboard = () => (
+  <AuthGuard>
+    <AddSubService />
+  </AuthGuard>
+);
 
-export default AddService;
+export default ProtectedAddSubServiceDashboard;
