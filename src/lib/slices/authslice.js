@@ -26,7 +26,7 @@ export const adminLogin = createAsyncThunk(
                 }
             );
 
-            if(response?.data?.sucess === true) {
+            if (response?.data?.sucess === true) {
                 showSuccessToast("Login successfully!"); //
             }
             // Save necessary data from the response to localStorage
@@ -43,8 +43,9 @@ export const adminLogin = createAsyncThunk(
 
             return { user: userData, token: aceessToken }; // Return structured data
         } catch (error) {
-            showErrorToast(error.response?.data?.message || "Login Failed!");
-            return rejectWithValue(error.response.data);
+            const errorMessage = error.response?.data?.msg || "Login Failed!";
+            showErrorToast(errorMessage); // Show API error message
+            return rejectWithValue(errorMessage);
         }
     }
 );
@@ -87,9 +88,9 @@ const authSlice = createSlice({
         },
         setBusinessData(state, action) {
             const { businessImage, ...rest } = action.payload;
-        
+
             state.business = { ...state.business, ...rest };
-        
+
             // Store preview URL instead of the File object
             if (businessImage instanceof File) {
                 state.business.businessImagePreview = URL.createObjectURL(businessImage);

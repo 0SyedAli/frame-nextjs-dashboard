@@ -289,6 +289,7 @@
     align-items: center;
     justify-content: center;
 }
+
 .det_ins:hover {
     border-color: #51004F;
 }
@@ -297,10 +298,12 @@
     width: 25px;
     height: 25px;
 }
+
 .row.emp_row {
     flex-wrap: nowrap;
     overflow: auto;
 }
+
 .employees_dash {
     padding: 40px;
     width: 100%;
@@ -1567,6 +1570,21 @@ span.aic_icon g {
     border-radius: 16px;
 }
 
+.galary_modal2 .gm2-close-btn {
+    border: 1px solid #ccc;
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.myModal-content.royality_modal {
+    max-width: 450px;
+    padding: 40px 30px;
+}
+
 .gm_text h5 {
     font-size: 12px;
     font-family: var(--font-lato);
@@ -1577,6 +1595,7 @@ span.aic_icon g {
     font-size: 19px;
     font-family: var(--font-lato);
     color: #1A1615;
+    font-weight: 600;
 }
 
 .gm_text p {

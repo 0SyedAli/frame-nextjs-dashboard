@@ -7,21 +7,65 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import AuthGuard from "@/components/AuthGuard";
 import Spinner from "@/components/Spinner";
+import { useRouter } from "next/navigation";
+import { RxCross2 } from "react-icons/rx";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const Marketing = () => {
     const [active, setActive] = useState('marketing'); // Default active button
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSubModalOpen, setIsSubModalOpen] = useState(false);
+    const [isSubModalOpen2, setIsSubModalOpen2] = useState(false);
     const [allReviews, setAllReviews] = useState(false);
     const [royalityData, setRoyalityData] = useState(false);
+    const [subServices, setSubServices] = useState(false);
+    const [subServiceId, setSubServiceId] = useState(false);
+    const [bussinessPoints, setBussinessPoints] = useState(null);
+    const [servicePoints, setServicePoints] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loading2, setLoading2] = useState(false);
+    const [loading3, setLoading3] = useState(false);
+    const [loading4, setLoading4] = useState(false);
+    const [adminId, setadminId] = useState();
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
-    const adminId = useSelector((state) => state.auth.user?._id || "");
+    const router = useRouter();
+    const openSubModal = (id) => {
+        setIsSubModalOpen(true)
+    }
+    const closeSubModal = () => {
+        setIsSubModalOpen(false)
+    }
+    const openSubModal2 = (id) => {
+        setIsSubModalOpen2(true)
+    }
+    const closeSubModal2 = () => {
+        setIsSubModalOpen2(false)
+    }
+
 
     useEffect(() => {
-        fetchReviews();
-        fetchMart();
-    }, [adminId]);
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user && (!user?.id || !user?._id)) {
+            router.push('/auth/signin')
+        }
+        else {
+            setadminId(user?.id || user?._id)
+        }
+    }, [])
+
+    useEffect(() => {
+        if (adminId) {
+            // Fetch services once adminId is available
+            const timer = setTimeout(() => {
+                fetchReviews();
+                fetchMart();
+                fetchSubServices();
+            }, 1000);
+            return () => clearTimeout(timer); // Clean up timeout on component unmount
+        }
+    }, [adminId]); // Runs when adminId changes
+
 
     const fetchReviews = async () => {
         try {
@@ -47,25 +91,91 @@ const Marketing = () => {
         }
     }
 
-    const formatDate = (isoString) => {
+    const fetchSubServices = async () => {
         try {
-            const date = new Date(isoString);
-            if (isNaN(date.getTime())) {
-                throw new Error("Invalid Date");
-            }
-            const options = {
-                weekday: "long", // e.g., Wednesday
-                day: "2-digit",  // e.g., 20
-                month: "short",  // e.g., Sep
-                year: "numeric", // e.g., 2028
-                hour: "numeric", // e.g., 11
-                minute: "numeric", // e.g., 45
-                hour12: true,     // 12-hour format
-            };
-            return new Intl.DateTimeFormat("en-US", options).format(date);
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdmin?adminId=${adminId}`
+            )
+            setSubServices(response?.data?.data || []);
         } catch (error) {
-            console.error("Error formatting date:", error);
-            return "";
+            console.error("Error fetching sub services data", error);
+        }
+    }
+
+    const handleBussinessPointSubmit = async (e) => {
+        e.preventDefault();
+        if (
+            !bussinessPoints
+        ) {
+            alert("Please add points.");
+            return;
+        }
+
+
+        setLoading2(true);
+        try {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/addBusinessPoints?adminId=${adminId}&points=${bussinessPoints}`
+            );
+
+            if (response?.data?.success) {
+                // Clear form fields
+                showSuccessToast(response?.data?.msg); //
+                setIsModalOpen(false);
+                setIsSubModalOpen(false);
+            }
+        } catch (error) {
+            console.error("Subservice creation failed", error);
+            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
+        } finally {
+            setLoading2(false);
+        }
+    };
+    const handleServicePointSubmit = async (e) => {
+        e.preventDefault();
+        if (
+            !servicePoints
+        ) {
+            alert("Please add points.");
+            return;
+        }
+
+        setLoading3(true);
+        try {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/addSubservicePoints?subserviceId=${subServiceId}&points=${servicePoints}`
+            );
+
+            if (response?.data?.success) {
+                // Clear form fields
+                showSuccessToast(response?.data?.msg); //
+                setIsModalOpen(false);
+                setIsSubModalOpen2(false);
+            }
+        } catch (error) {
+            console.error("Subservice creation failed", error);
+            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
+        } finally {
+            setLoading3(false);
+        }
+    };
+    const handlePointsDelete = async (e) => {
+        e.preventDefault();
+        setLoading4(true);
+        try {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/deleteRoyality?adminId=${adminId}`
+            );
+
+            if (response?.data?.success) {
+                // Clear form fields
+                showSuccessToast(response?.data?.msg); //
+            }
+        } catch (error) {
+            console.error("Subservice creation failed", error);
+            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
+        } finally {
+            setLoading4(false);
         }
     };
     if (loading) {
@@ -73,9 +183,9 @@ const Marketing = () => {
     }
     return (
         <>
-            <MyModal isOpen={isModalOpen} onClose={closeModal}>
-                <div className="galary_modal">
-                    <Image
+            <MyModal isOpen={isModalOpen} onClose={closeModal} myModalContent="royality_modal">
+                <div className="galary_modal2">
+                    {/* <Image
                         src="/images/mg_1.png"
                         width={170}
                         height={240}
@@ -88,7 +198,66 @@ const Marketing = () => {
                         <p>A minimally invasive procedure to reduce wrinkles and fine lines by temporarily paralyzing facial muscles.</p>
                         <h6>Emily Ross, David Carter</h6>
                         <button className="theme-btn6">Share</button>
+                    </div> */}
+                    <button onClick={closeModal} className="gm2-close-btn">
+                        <RxCross2 />
+                    </button>
+                    <div className="gm_text">
+                        <h4>Select any one:</h4>
+                        <div className="d-flex align-items-center gap-3">
+                            <button className="theme-btn7" onClick={openSubModal}>Bussiness Points</button>
+                            <button className="theme-btn7" onClick={openSubModal2}>Service Points</button>
+                        </div>
                     </div>
+                </div>
+            </MyModal>
+            <MyModal isOpen={isSubModalOpen} onClose={closeSubModal} myModalContent="royality_modal">
+                <div className="galary_modal2">
+                    <button onClick={closeSubModal} className="gm2-close-btn">
+                        <RxCross2 />
+                    </button>
+                    <form className="gm_text" onSubmit={handleBussinessPointSubmit}>
+                        <h4>Add Bussiness Points:</h4>
+                        <input
+                            type="number"
+                            placeholder="10"
+                            required
+                            value={bussinessPoints}
+                            onChange={(e) => setBussinessPoints(e.target.value)}
+                        />
+                        <button className="btn royality_btn  px-5" disabled={loading2} >
+                            {loading2 ? <Spinner /> : "Add"}
+                        </button>
+                    </form>
+                </div>
+            </MyModal>
+            <MyModal isOpen={isSubModalOpen2} onClose={closeSubModal2} myModalContent="royality_modal">
+                <div className="galary_modal2">
+                    <button onClick={closeSubModal2} className="gm2-close-btn">
+                        <RxCross2 />
+                    </button>
+                    <form className="gm_text" onSubmit={handleServicePointSubmit}>
+                        <h4>Add Service Points:</h4>
+                        <select
+                            value={subServiceId}
+                            required
+                            onChange={(e) => setSubServiceId(e.target.value)}
+                        >
+                            <option value="">Select Service Type *</option>
+                            {subServices.map((service, index) => (
+                                <option key={index} value={service._id}>{service.title}</option>
+                            ))}
+                        </select>
+                        <input
+                            type="text"
+                            placeholder="10"
+                            value={servicePoints}
+                            onChange={(e) => setServicePoints(e.target.value)}
+                        />
+                        <button className="btn royality_btn  px-5" disabled={loading3}>
+                            {loading3 ? <Spinner /> : "Sumbit"}
+                        </button>
+                    </form>
                 </div>
             </MyModal>
             <div className="w-100">
@@ -185,7 +354,16 @@ const Marketing = () => {
                             </div>
                         </div>
                         <div className="mtm_performance">
-                            <h3>Loyalty program performance</h3>
+                            <div className="d-flex align-items-center justify-content-between">
+                                <h3>Loyalty program performance</h3>
+                                <div className="d-flex align-items-center gap-2">
+                                    <button className="btn royality_btn" onClick={openModal}>Add Points</button>
+                                    <button className="btn royality_btn" onClick={openModal}>Edit Points</button>
+                                    <button className="btn royality_btn" onClick={handlePointsDelete} disabled={loading4}>
+                                        {loading4 ? <Spinner /> : "Delete Points"}
+                                    </button>
+                                </div>
+                            </div>
                             <div className="mp_cards">
                                 <div className="mp_card_item active">
                                     <h3>587</h3>
@@ -269,7 +447,7 @@ const Marketing = () => {
                                                 <p>{review?.review || "No review text provided."}</p>
                                             </div>
                                             <div className="px-3">
-                                                <h6 className="pb-1">{review?.onService?.serviceId?.Title || "No Service"}</h6>
+                                                <h6 className="pb-1">{review?.onService?.subServiceId?.Title || "No Service"}</h6>
                                                 <p>{review?.onService?.title || "No Service"}</p>
                                             </div>
                                             <div className="mar_stars d-flex align-items-center gap-1 ps-4 pe-2">
