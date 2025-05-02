@@ -18,7 +18,7 @@ const Marketing = () => {
     const [isSubModalOpen2, setIsSubModalOpen2] = useState(false);
     const [allReviews, setAllReviews] = useState(false);
     const [royalityData, setRoyalityData] = useState(false);
-    const [subServices, setSubServices] = useState(false);
+    const [subServices, setSubServices] = useState([]);
     const [subServiceId, setSubServiceId] = useState(false);
     const [bussinessPoints, setBussinessPoints] = useState(null);
     const [servicePoints, setServicePoints] = useState(null);

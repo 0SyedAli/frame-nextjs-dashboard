@@ -31,8 +31,8 @@ const AddService = () => {
     const services = useSelector((state) => state?.auth?.services || {});
     const service = services[category] || {};
 
-    const adminId = useSelector((state) => state?.auth?.user?.id || "");
-    const token = useSelector((state) => state?.auth?.token || "");
+    // const adminId = useSelector((state) => state?.auth?.user?._id || "");
+    // const token = useSelector((state) => state?.auth?.token || "");
 
     // State Variables
     const [loading, setLoading] = useState(false);
@@ -47,7 +47,20 @@ const AddService = () => {
     const [serviceImage, setServiceImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
     const [isServiceCreated, setIsServiceCreated] = useState(!!service?.serviceId);
+    const [adminId, setadminId] = useState(null);
+    const [token, setToken] = useState(null);
 
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user && (!user?.id || !user?._id) && !storedToken) {
+            router.push('/auth/signin')
+        }
+        else {
+            setadminId(user?.id || user?._id)
+            setToken(storedToken)
+        }
+    }, [])
     // Subservice States
     const [serviceTitle, setServiceTitle] = useState("");
     const [serviceDescription, setServiceDescription] = useState("");

@@ -35,7 +35,7 @@ const BussinessDetail = () => {
     });
     const [workingDays, setWorkingDays] = useState(
         daysOfWeek.reduce((acc, day) => {
-            acc[day] = { isActive: false, open: "09:00", close: "18:00" };
+            acc[day] = { isActive: true, open: "09:00", close: "18:00" };
             return acc;
         }, {})
     );
@@ -215,7 +215,7 @@ const BussinessDetail = () => {
                             </div>
                             <div className="col-6">
                                 <div className="bd_fields">
-                                    <input type="text" name="royalityPoints" placeholder='Add Royality Points' onChange={handleInputChange} />
+                                    <input type="number" name="royalityPoints" placeholder='Add Royality Points' onChange={handleInputChange} />
                                 </div>
                             </div>
                         </div>

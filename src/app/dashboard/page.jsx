@@ -126,7 +126,7 @@ const Dashboard = () => {
                 alt="Frame"
               />
             </div>
-            <h5>{userData && userData.name}</h5>
+            <h5>{userData && (userData.name || (userData.firstName + " " + userData.lastName))}</h5>
             <div className="d-flex align-items-center justify-content-center  flex-wrap gap-2">
               {/* <h6><span>DB-001</span></h6>
               <div className="dp_dot"></div> */}

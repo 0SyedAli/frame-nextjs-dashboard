@@ -18,7 +18,7 @@ const BillingDetails = () => {
     // modal 
 
 
-    const adminId = useSelector((state) => state.auth.user?.id || ""); // Get adminId from Redux
+    const adminId = useSelector((state) => state.auth.user?._id || ""); // Get adminId from Redux
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",

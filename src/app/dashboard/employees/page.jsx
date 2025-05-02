@@ -254,8 +254,10 @@ const Employees = () => {
             {isLoading2 ? <Spinner /> : "Add Employee"}</button>
         </div>
       </MyModal>
+      {console.log(employees.length)}
+
       <div className="employees_dash">
-        {!groupedEmployees2.length ? (
+        {employees.length ? (
           Object.keys(groupedEmployees).map((category) => (
             <div key={category}>
               <h3>{category}</h3>
@@ -295,7 +297,7 @@ const Employees = () => {
             <h3>Pls add sub services</h3>
             <div className="row mt-3 mb-4">
               <div className="col-12">
-                <div className="ed_item">
+                <div className="ed_item align-items-start">
                   <div className="ed_item_border" onClick={openModal}>
                     <span>
                       <CiCirclePlus />

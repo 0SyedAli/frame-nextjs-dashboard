@@ -222,48 +222,48 @@ const Appointment = () => {
                     <div className='col-3'>
                         <div className="time_slot">
                             <h3>Time Slot</h3>
-                            <div class="form-check mt-3">
-                                <input class="form-check-input" type="checkbox" value="" id="Booked" />
-                                <label class="form-check-label" htmlFor="Booked">
+                            <div className="form-check mt-3">
+                                <input className="form-check-input" type="checkbox" value="" id="Booked" />
+                                <label className="form-check-label" htmlFor="Booked">
                                     Booked
                                 </label>
                             </div>
-                            <div class="form-check mt-3">
-                                <input class="form-check-input" type="checkbox" value="" id="Available" />
-                                <label class="form-check-label" htmlFor="Available">
+                            <div className="form-check mt-3">
+                                <input className="form-check-input" type="checkbox" value="" id="Available" />
+                                <label className="form-check-label" htmlFor="Available">
                                     Available
                                 </label>
                             </div>
                         </div>
                         <div className="stylist">
                             <h3>Stylists</h3>
-                            <div class="form-check mt-3">
-                                <input class="form-check-input" type="checkbox" value="" id="Booked" />
-                                <label class="form-check-label" htmlFor="Booked">
+                            <div className="form-check mt-3">
+                                <input className="form-check-input" type="checkbox" value="" id="Booked" />
+                                <label className="form-check-label" htmlFor="Booked">
                                     Sara Jackal
                                 </label>
                             </div>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="" id="Available" />
-                                <label class="form-check-label" htmlFor="Available">
+                            <div className="form-check mt-2">
+                                <input className="form-check-input" type="checkbox" value="" id="Available" />
+                                <label className="form-check-label" htmlFor="Available">
                                     June Smith
                                 </label>
                             </div>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="" id="Available" />
-                                <label class="form-check-label" htmlFor="Available">
+                            <div className="form-check mt-2">
+                                <input className="form-check-input" type="checkbox" value="" id="Available" />
+                                <label className="form-check-label" htmlFor="Available">
                                     Mark William
                                 </label>
                             </div>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="" id="Available" />
-                                <label class="form-check-label" htmlFor="Available">
+                            <div className="form-check mt-2">
+                                <input className="form-check-input" type="checkbox" value="" id="Available" />
+                                <label className="form-check-label" htmlFor="Available">
                                     Abby Jin
                                 </label>
                             </div>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" value="" id="Available" />
-                                <label class="form-check-label" htmlFor="Available">
+                            <div className="form-check mt-2">
+                                <input className="form-check-input" type="checkbox" value="" id="Available" />
+                                <label className="form-check-label" htmlFor="Available">
                                     Jack Banner
                                 </label>
                             </div>

@@ -13,8 +13,8 @@ const AddSubService = () => {
   const [employees, setEmployees] = useState([]); // Initialize as an empty array
   const [loading, setLoading] = useState(false);
   const [loading2, setLoading2] = useState(false);
-  const adminId = useSelector((state) => state.auth.user?._id || "");
-  const token = useSelector((state) => state?.auth?.token || "");
+  // const adminId = useSelector((state) => state.auth.user?._id || "");
+  // const token = useSelector((state) => state?.auth?.token || "");
   const [serviceTitle, setServiceTitle] = useState("");
   const [serviceDescription, setServiceDescription] = useState("");
   const [servicePrice, setServicePrice] = useState("");
@@ -23,6 +23,20 @@ const AddSubService = () => {
   const [previewImages, setPreviewImages] = useState([]);
   const [serviceId, setServiceId] = useState("");
   const [employeeId, setEmployeeId] = useState("");
+  const [adminId, setadminId] = useState(null);
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user && (!user?.id || !user?._id) && !storedToken) {
+      router.push('/auth/signin')
+    }
+    else {
+      setadminId(user?.id || user?._id)
+      setToken(storedToken)
+    }
+  }, [])
+
 
   useEffect(() => {
     if (adminId) {
@@ -268,7 +282,7 @@ const AddSubService = () => {
             <button type="submit" disabled={loading} className="theme-btn2">
               {loading2 ? <Spinner /> : "Sumbit"}
             </button>
-            <Link href="/dashboard/services" className="btn theme-btn3" style={{width:"240px"}}>Go back</Link>
+            <Link href="/dashboard/services" className="btn theme-btn3" style={{ width: "240px" }}>Go back</Link>
           </div>
         </div>
       </form>

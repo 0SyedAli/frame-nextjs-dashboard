@@ -24,7 +24,7 @@ export default function CalendarPage() {
         expandRows={true} 
         height={600}
         schedulerLicenseKey='GPL-My-Project-Is-Open-Source'
-        initialView='resourceTimelineWeek'
+        initialView='dayGridMonth'
         nowIndicator={true}
         editable={true}
         selectable={true}
