@@ -3,17 +3,21 @@ import React, { useEffect } from 'react';
 import MyCalender from '@/components/MyCalender';
 import MyModal from '@/components/MyModal';
 import { useState } from 'react';
-import { RxCross2 } from "react-icons/rx";
+import { RxCaretSort, RxCross2 } from "react-icons/rx";
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import AuthGuard from '@/components/AuthGuard';
 import { showErrorToast } from '@/lib/toast';
+import Link from 'next/link';
 
 const Appointment = () => {
     const [activeSlot, setActiveSlot] = useState("");
     const [services, setServices] = useState([]); // Initialize as an empty array
     const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const [employees, setEmployees] = useState([]); // Initialize as an empty array
+    const [appointments, setAppointments] = useState([]); // Initialize as an empty array
+    const [subservices, setSubservices] = useState([]); // Initialize as an empty array
     const [serviceId, setServiceId] = useState(null); // Initialize as an empty array
     const [employeeId, setEmployeeId] = useState(null); // Initialize as an empty array
     const adminId = useSelector((state) => state.auth.user?._id || "");
@@ -23,6 +27,7 @@ const Appointment = () => {
     const [timeSlot, setTimeSlot] = useState("");
     const [price, setPrice] = useState("");
     const [notes, setNotes] = useState("");
+    const [activeTab, setActiveTab] = useState('complete');
 
     const handleSlotClick = (slot) => {
         setActiveSlot(slot);
@@ -58,12 +63,6 @@ const Appointment = () => {
     };
 
 
-
-
-    // const handleSlotClick = (slot) => {
-    //     setActiveSlot(slot);
-    // };
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -77,6 +76,8 @@ const Appointment = () => {
             const timer = setTimeout(() => {
                 fetchServices();
                 fetchEmployees();
+                fetchAllAppointments();
+                fetchAllSubServices();
             }, 1000);
             return () => clearTimeout(timer); // Clean up timeout on component unmount
         }
@@ -107,7 +108,33 @@ const Appointment = () => {
             setLoading(false); // Stop loading
         }
     };
+    const fetchAllAppointments = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAppointmentByAdmin?adminId=${adminId}&status=All`
+            );
+            setLoading2(true)
+            setAppointments(response.data.data || []); // Update employees state
+        } catch (error) {
+            console.error("Error fetching employees:", error);
+        } finally {
+            setLoading2(false); // Stop loading
+        }
+    };
+    const fetchAllSubServices = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdmin?adminId=${adminId}&status=All`
+            );
+            setSubservices(response.data.data || []); // Update employees state
+        } catch (error) {
+            console.error("Error fetching employees:", error);
+        }
+    };
 
+    if (loading2) {
+        return <div>Loading...</div>; // Loading state
+    }
     return (
         <>
             <MyModal isOpen={isModalOpen} onClose={closeModal} myModalContent="add_appointment_modal">
@@ -271,6 +298,55 @@ const Appointment = () => {
                     </div>
                     <div className='col-9'>
                         <MyCalender />
+                    </div>
+                    <div className="col-12">
+                        <div className="dr_head">
+                            <h5>Appointments</h5>
+                            <Link href="/" className="dr_btn">View All</Link>
+                        </div>
+                        <div className="dr_table">
+                            <div className="pt-2 dash_list page">
+                                <div className="table-responsive">
+                                    <table className="table caption-top">
+                                        <thead>
+                                            <tr className="borderless">
+                                                <th scope="col">Customer ID <span><RxCaretSort /></span></th>
+                                                <th scope="col">Name <span><RxCaretSort /></span></th>
+                                                <th scope="col">Date & Time <span><RxCaretSort /></span></th>
+                                                <th scope="col">Treatment <span><RxCaretSort /></span></th>
+                                                <th scope="col">Status <span><RxCaretSort /></span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {appointments.map((order, index) => {
+                                                // Map service IDs to their titles
+                                                const serviceTitles = order.services
+                                                    .map((serviceId) => {
+                                                        const service = subservices.find((s) => s._id === serviceId);
+                                                        return service ? service.title : "Unknown Service";
+                                                    })
+                                                    .join(", "); // Join multiple service titles with a comma
+
+                                                return (
+                                                    <tr key={index}>
+                                                        <td scope="row">{order._id}</td>
+                                                        <td className="user_td">{order.clientName}</td>
+                                                        <td>{`${order.date} ${order.timeSlot}`}</td>
+                                                        <td>{serviceTitles}</td> {/* Display service titles here */}
+                                                        <td className={`status_td ${order.status.toLowerCase()}`}>
+                                                            <span>{order.status}</span>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <div className="text-end pt-3">
+                            <button className="btn det_ins">DETAILED INSIGHTS</button>
+                        </div> */}
                     </div>
                 </div>
             </div>

@@ -5,15 +5,14 @@ import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
-import { useSelector } from "react-redux";
 import { GrThreeDEffects } from "react-icons/gr";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import AuthGuard from "@/components/AuthGuard";
 import { useRouter } from "next/navigation";
 
 const ClientsProfile = () => {
-    const adminId = useSelector((state) => state.auth.user?._id || "");
-    const token = useSelector((state) => state.auth.token || "");
+    // const adminId = useSelector((state) => state.auth.user?._id || "");
+    // const token = useSelector((state) => state.auth.token || "");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubModalOpen, setIsSubModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -24,8 +23,21 @@ const ClientsProfile = () => {
     const [userId, setUserId] = useState(null);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [noteText, setNoteText] = useState("");
-
+    const [adminId, setadminId] = useState(null);
+    const [token, setToken] = useState(null);
     const router = useRouter()
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user && (!user?.id || !user?._id) && !storedToken) {
+            router.push('/auth/signin')
+        }
+        else {
+            setadminId(user?.id || user?._id)
+            setToken(storedToken)
+        }
+    }, [])
 
     const addStylist = async () => {
         if (!selectedEmployee) {

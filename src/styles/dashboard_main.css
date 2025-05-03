@@ -896,6 +896,11 @@ span.aic_icon g {
 
 .mpt_table table {
     width: 100%;
+    margin-bottom: 0;
+}
+
+.mpt_table table tr {
+    cursor: pointer;
 }
 
 .mpt_table table th {
@@ -1581,7 +1586,7 @@ span.aic_icon g {
 }
 
 .myModal-content.royality_modal {
-    max-width: 450px;
+    max-width: 550px;
     padding: 40px 30px;
 }
 
@@ -1592,10 +1597,16 @@ span.aic_icon g {
 }
 
 .gm_text h4 {
-    font-size: 19px;
+    font-size: 25px;
     font-family: var(--font-lato);
     color: #1A1615;
     font-weight: 600;
+}
+
+.gm_text label {
+    font-weight: 600;
+    padding-top: 20px;
+
 }
 
 .gm_text p {

@@ -16,8 +16,10 @@ const Marketing = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubModalOpen, setIsSubModalOpen] = useState(false);
     const [isSubModalOpen2, setIsSubModalOpen2] = useState(false);
+    const [isSubModalOpen3, setIsSubModalOpen3] = useState(false);
     const [allReviews, setAllReviews] = useState(false);
     const [royalityData, setRoyalityData] = useState(false);
+    const [totalServices, setTotalServices] = useState([]);
     const [subServices, setSubServices] = useState([]);
     const [subServiceId, setSubServiceId] = useState(false);
     const [bussinessPoints, setBussinessPoints] = useState(null);
@@ -42,6 +44,12 @@ const Marketing = () => {
     const closeSubModal2 = () => {
         setIsSubModalOpen2(false)
     }
+    const openSubModal3 = (id) => {
+        setIsSubModalOpen3(true)
+    }
+    const closeSubModal3 = () => {
+        setIsSubModalOpen3(false)
+    }
 
 
     useEffect(() => {
@@ -61,6 +69,7 @@ const Marketing = () => {
                 fetchReviews();
                 fetchMart();
                 fetchSubServices();
+                fetchTotalServices();
             }, 1000);
             return () => clearTimeout(timer); // Clean up timeout on component unmount
         }
@@ -86,6 +95,16 @@ const Marketing = () => {
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/royalityDashboard?adminId=${adminId}`
             )
             setRoyalityData(response?.data?.data || []);
+        } catch (error) {
+            console.error("Error fetching marketing data", error);
+        }
+    }
+    const fetchTotalServices = async () => {
+        try {
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/totalServices?adminId=${adminId}`
+            )
+            setTotalServices(response?.data?.data || []);
         } catch (error) {
             console.error("Error fetching marketing data", error);
         }
@@ -205,8 +224,9 @@ const Marketing = () => {
                     <div className="gm_text">
                         <h4>Select any one:</h4>
                         <div className="d-flex align-items-center gap-3">
-                            <button className="theme-btn7" onClick={openSubModal}>Bussiness Points</button>
-                            <button className="theme-btn7" onClick={openSubModal2}>Service Points</button>
+                            <button className="theme-btn7" onClick={openSubModal}>Add Compaign</button>
+                            <button className="theme-btn7" onClick={openSubModal2}>All Campaings</button>
+                            <button className="theme-btn7" onClick={openSubModal3}>Edit Compaign</button>
                         </div>
                     </div>
                 </div>
@@ -216,15 +236,38 @@ const Marketing = () => {
                     <button onClick={closeSubModal} className="gm2-close-btn">
                         <RxCross2 />
                     </button>
-                    <form className="gm_text" onSubmit={handleBussinessPointSubmit}>
-                        <h4>Add Bussiness Points:</h4>
-                        <input
-                            type="number"
-                            placeholder="10"
-                            required
-                            value={bussinessPoints}
-                            onChange={(e) => setBussinessPoints(e.target.value)}
-                        />
+                    <form className="gm_text"
+                    //  onSubmit={handleBussinessPointSubmit}
+                    >
+                        <h4>Add Compaign:</h4>
+                        <div>
+                            <label htmlFor="">Start Date:</label>
+                            <input
+                                type="date"
+                                required
+                            // value={bussinessPoints}
+                            // onChange={(e) => setBussinessPoints(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="">End Date:</label>
+                            <input
+                                type="date"
+                                required
+                            // value={bussinessPoints}
+                            // onChange={(e) => setBussinessPoints(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="">Points</label>
+                            <input
+                                type="number"
+                                placeholder="10"
+                                required
+                            // value={bussinessPoints}
+                            // onChange={(e) => setBussinessPoints(e.target.value)}
+                            />
+                        </div>
                         <button className="btn royality_btn  px-5" disabled={loading2} >
                             {loading2 ? <Spinner /> : "Add"}
                         </button>
@@ -237,26 +280,56 @@ const Marketing = () => {
                         <RxCross2 />
                     </button>
                     <form className="gm_text" onSubmit={handleServicePointSubmit}>
-                        <h4>Add Service Points:</h4>
-                        <select
-                            value={subServiceId}
-                            required
-                            onChange={(e) => setSubServiceId(e.target.value)}
-                        >
-                            <option value="">Select Service Type *</option>
-                            {subServices.map((service, index) => (
-                                <option key={index} value={service._id}>{service.title}</option>
-                            ))}
-                        </select>
-                        <input
-                            type="text"
-                            placeholder="10"
-                            value={servicePoints}
-                            onChange={(e) => setServicePoints(e.target.value)}
-                        />
-                        <button className="btn royality_btn  px-5" disabled={loading3}>
-                            {loading3 ? <Spinner /> : "Sumbit"}
-                        </button>
+                        <h4>All Compaigns:</h4>
+                        <p style={{ fontSize: '18px', paddingTop: '10px' }}>No compaign found</p>
+                    </form>
+                </div>
+            </MyModal>
+            <MyModal isOpen={isSubModalOpen3} onClose={closeSubModal3} myModalContent="royality_modal">
+                <div className="galary_modal2">
+                    <button onClick={closeSubModal3} className="gm2-close-btn">
+                        <RxCross2 />
+                    </button>
+                    <form className="gm_text"
+                    //  onSubmit={handleBussinessPointSubmit}
+                    >
+                        <h4>Edit Compaign:</h4>
+                        <div>
+                            <label htmlFor="">Start Date:</label>
+                            <input
+                                type="date"
+                                required
+                            // value={bussinessPoints}
+                            // onChange={(e) => setBussinessPoints(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="">End Date:</label>
+                            <input
+                                type="date"
+                                required
+                            // value={bussinessPoints}
+                            // onChange={(e) => setBussinessPoints(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="">Points</label>
+                            <input
+                                type="number"
+                                placeholder="10"
+                                required
+                            // value={bussinessPoints}
+                            // onChange={(e) => setBussinessPoints(e.target.value)}
+                            />
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between">
+                            <button className="btn royality_btn  px-5" disabled={loading2} >
+                                {loading2 ? <Spinner /> : "Edit"}
+                            </button>
+                            <button className="btn royality_btn royality_btn2">
+                                Pause Compaign
+                            </button>
+                        </div>
                     </form>
                 </div>
             </MyModal>
@@ -356,13 +429,13 @@ const Marketing = () => {
                         <div className="mtm_performance">
                             <div className="d-flex align-items-center justify-content-between">
                                 <h3>Loyalty program performance</h3>
-                                <div className="d-flex align-items-center gap-2">
+                                {/* <div className="d-flex align-items-center gap-2">
                                     <button className="btn royality_btn" onClick={openModal}>Add Points</button>
                                     <button className="btn royality_btn" onClick={openModal}>Edit Points</button>
                                     <button className="btn royality_btn" onClick={handlePointsDelete} disabled={loading4}>
                                         {loading4 ? <Spinner /> : "Delete Points"}
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="mp_cards">
                                 <div className="mp_card_item active">
@@ -396,26 +469,28 @@ const Marketing = () => {
                                     </div>
                                 </div>
                                 <div className="mpt_table col-8">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>Services</th>
-                                                <th>Total Services</th>
-                                                <th>Loyal Customer</th>
-                                                <th>Earned Points</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {Array(8).fill().map((_, index) => (
-                                                <tr key={index}>
-                                                    <td>Skin Treatment</td>
-                                                    <td>202</td>
-                                                    <td>202</td>
-                                                    <td>202</td>
+                                    <div className=" table-container">
+                                        <table className="table caption-top">
+                                            <thead>
+                                                <tr>
+                                                    <th>Services</th>
+                                                    <th>Total Services</th>
+                                                    <th>Loyal Customer</th>
+                                                    <th>Earned Points</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                {totalServices.map((service, index) => (
+                                                    <tr key={index} onClick={openModal}>
+                                                        <td>{service.subServiceName || "N/A"}</td> {/* Service name */}
+                                                        <td>{service.appointments || 0}</td>      {/* Number of appointments */}
+                                                        <td>{service.appointments || 0}</td> {/* Placeholder for additional data */}
+                                                        <td>{service.appointments || 0}</td>  {/* Placeholder for additional data */}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

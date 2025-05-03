@@ -1184,6 +1184,17 @@ li.add_stylist_btn .add_note_btn:hover {
   height: 40px;
 }
 
+.royality_btn.royality_btn2 {
+  background-color: #8D57B2!important;
+  color: #FFF!important;
+  /* border: 1px solid #A83F98!important; */
+}
+
+.royality_btn.royality_btn2:hover {
+  background-color: transparent!important;
+  color: #000!important;
+}
+
 .royality_btn .spinner-border {
   width: 25px;
   height: 25px;
@@ -1221,7 +1232,7 @@ li.add_stylist_btn .add_note_btn:hover {
   padding: 10px 20px;
   border-radius: 10px;
   border: 1px solid #6d6d6d;
-  margin-top: 10px;
+  margin-top: 5px;
   height: 50px;
 }
 
@@ -1244,6 +1255,16 @@ li.add_stylist_btn .add_note_btn:hover {
   background-color: transparent;
 }
 
+.cal_container .dash_list th {
+  border: none;
+}
+
+.mpt_table .table-container {
+  max-height: 316px;
+  /* Maximum height before scroll is applied */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+}
 
 @media only screen and (max-height: 800px) {
   .sidebar .logo img {
