@@ -20,7 +20,7 @@ const Appointment = () => {
     const [subservices, setSubservices] = useState([]); // Initialize as an empty array
     const [serviceId, setServiceId] = useState(null); // Initialize as an empty array
     const [employeeId, setEmployeeId] = useState(null); // Initialize as an empty array
-    const adminId = useSelector((state) => state.auth.user?._id || "");
+    const [adminId, setadminId] = useState(null);
 
     const [clientName, setClientName] = useState("");
     const [date, setDate] = useState("");
@@ -28,6 +28,16 @@ const Appointment = () => {
     const [price, setPrice] = useState("");
     const [notes, setNotes] = useState("");
     const [activeTab, setActiveTab] = useState('complete');
+
+ useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user && (!user?.id || !user?._id)) {
+      router.push('/auth/signin')
+    }
+    else {
+      setadminId(user?.id || user?._id)
+    }
+  }, [])
 
     const handleSlotClick = (slot) => {
         setActiveSlot(slot);
