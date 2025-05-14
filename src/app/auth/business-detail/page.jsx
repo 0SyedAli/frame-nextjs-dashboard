@@ -28,7 +28,6 @@ const BussinessDetail = () => {
         businessName: "",
         city: "",
         address: "",
-        royalityPoints: "",
         availableServices: [],
         businessImage: null,
     });
@@ -101,7 +100,6 @@ const BussinessDetail = () => {
         formDataToSend.append("businessName", formData.businessName);
         formDataToSend.append("city", formData.city);
         formDataToSend.append("address", formData.address);
-        formDataToSend.append("royalityPoints", formData.royalityPoints);
 
         // Filter workingDays to include only selected days
         const workingDaysArray = Object.entries(workingDays)
@@ -207,11 +205,6 @@ const BussinessDetail = () => {
                                     <textarea name="address" placeholder='Address *' onChange={handleInputChange} required></textarea>
                                 </div>
                             </div>
-                            <div className="col-6">
-                                <div className="bd_fields">
-                                    <input type="number" name="royalityPoints" placeholder='Add Royality Points' onChange={handleInputChange} />
-                                </div>
-                            </div>
                         </div>
                         <div className="avail_serv pt-3">
                             <h4>Available Services</h4>
@@ -263,10 +256,10 @@ const BussinessDetail = () => {
                                                 step={0.0167}
                                                 minValue={timeToNumber(workingDays[day].open)}
                                                 maxValue={timeToNumber(workingDays[day].close)}
-                                                onInput={(e) =>
+                                                onSubmit={(e) =>
                                                     updateWorkingHours(day, {
-                                                        open: numberToTime(e.minValue),
-                                                        close: numberToTime(e.maxValue),
+                                                        open: e.openingTime,
+                                                        close: e.closingTime,
                                                     })
                                                 }
                                             />

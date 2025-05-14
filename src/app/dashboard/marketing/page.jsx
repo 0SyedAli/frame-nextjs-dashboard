@@ -95,9 +95,8 @@ const Marketing = () => {
             // Fetch services once adminId is available
             const timer = setTimeout(() => {
                 fetchReviews();
-                fetchMart();
                 fetchSubServices();
-                fetchTotalServices();
+                // fetchTotalServices();
             }, 1000);
             return () => clearTimeout(timer); // Clean up timeout on component unmount
         }
@@ -117,26 +116,16 @@ const Marketing = () => {
         }
     }
 
-    const fetchMart = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/royalityDashboard?adminId=${adminId}`
-            )
-            setRoyalityData(response?.data?.data || []);
-        } catch (error) {
-            console.error("Error fetching marketing data", error);
-        }
-    }
-    const fetchTotalServices = async () => {
-        try {
-            const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/totalServices?adminId=${adminId}`
-            )
-            setTotalServices(response?.data?.data || []);
-        } catch (error) {
-            console.error("Error fetching marketing data", error);
-        }
-    }
+    // const fetchTotalServices = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             `${process.env.NEXT_PUBLIC_API_URL}/admin/totalServices?adminId=${adminId}`
+    //         )
+    //         setTotalServices(response?.data?.data || []);
+    //     } catch (error) {
+    //         console.error("Error fetching marketing data", error);
+    //     }
+    // }
 
     const fetchSubServices = async () => {
         try {
@@ -149,82 +138,6 @@ const Marketing = () => {
         }
     }
 
-    const handleBussinessPointSubmit = async (e) => {
-        e.preventDefault();
-        if (
-            !bussinessPoints
-        ) {
-            alert("Please add points.");
-            return;
-        }
-
-
-        setLoading2(true);
-        try {
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/addBusinessPoints?adminId=${adminId}&points=${bussinessPoints}`
-            );
-
-            if (response?.data?.success) {
-                // Clear form fields
-                showSuccessToast(response?.data?.msg); //
-                setIsModalOpen(false);
-                setIsSubModalOpen(false);
-            }
-        } catch (error) {
-            console.error("Subservice creation failed", error);
-            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
-        } finally {
-            setLoading2(false);
-        }
-    };
-    const handleServicePointSubmit = async (e) => {
-        e.preventDefault();
-        if (
-            !servicePoints
-        ) {
-            alert("Please add points.");
-            return;
-        }
-
-        setLoading3(true);
-        try {
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/addSubservicePoints?subserviceId=${subServiceId}&points=${servicePoints}`
-            );
-
-            if (response?.data?.success) {
-                // Clear form fields
-                showSuccessToast(response?.data?.msg); //
-                setIsModalOpen(false);
-                setIsSubModalOpen2(false);
-            }
-        } catch (error) {
-            console.error("Subservice creation failed", error);
-            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
-        } finally {
-            setLoading3(false);
-        }
-    };
-    const handlePointsDelete = async (e) => {
-        e.preventDefault();
-        setLoading4(true);
-        try {
-            const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/deleteRoyality?adminId=${adminId}`
-            );
-
-            if (response?.data?.success) {
-                // Clear form fields
-                showSuccessToast(response?.data?.msg); //
-            }
-        } catch (error) {
-            console.error("Subservice creation failed", error);
-            showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
-        } finally {
-            setLoading4(false);
-        }
-    };
     if (loading) {
         return <Spinner />
     }
@@ -307,7 +220,7 @@ const Marketing = () => {
                     <button onClick={closeSubModal2} className="gm2-close-btn">
                         <RxCross2 />
                     </button>
-                    <form className="gm_text" onSubmit={handleServicePointSubmit}>
+                    <form className="gm_text" >
                         <h4>All Compaigns:</h4>
                         <p style={{ fontSize: '18px', paddingTop: '10px' }}>No compaign found</p>
                     </form>
@@ -388,7 +301,7 @@ const Marketing = () => {
                     </div>
                 </div>
 
-                {active === "marketing" && royalityData && (
+                {active === "marketing" && (
                     <div className="m_tabs_main">
                         <h3>Loyalty rewards</h3>
                         <p>Create ways for your customer to earn and redeem points.</p>

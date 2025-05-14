@@ -1,5 +1,4 @@
-"use client";
-import AuthGuard from "@/components/AuthGuard"
+"use client"
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllServices, fetchSubServices } from "../../../lib/slices/servicesSlice";
@@ -7,11 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { PiPencilSimpleLineBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
+import AuthGuard from "@/components/AuthGuard";
 
 const ServicesDashboard = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [token, setToken] = useState(null);
+  const [hasFetchedServices, setHasFetchedServices] = useState(false); // New state to track API call
 
   const { servicesData, serviceIds, loading } = useSelector((state) => state.services);
 
@@ -22,11 +23,11 @@ const ServicesDashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (token && !Object.keys(serviceIds).length) {
+    if (token && !hasFetchedServices && !Object.keys(serviceIds).length) {
       dispatch(fetchAllServices(token));
-      console.log(token);
+      setHasFetchedServices(true); // Mark that the API call has been made
     }
-  }, [dispatch, token, serviceIds]);
+  }, [dispatch, token, hasFetchedServices, serviceIds]);
 
   useEffect(() => {
     if (Object.keys(serviceIds).length) {

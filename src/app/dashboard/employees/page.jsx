@@ -218,8 +218,8 @@ const Employees = () => {
             <h4>Working Days & Hours</h4>
             <div className="row gx-5 gy-2">
               {workingDays.map((day, index) => (
-                <div className="col-6">
-                  <div key={index} className="row align-items-center">
+                <div key={index} className="col-6">
+                  <div className="row align-items-center">
                     <div className="col-4">
                       <div className="auth_form_check auth_form_check2">
                         <input type="checkbox" className="form-check-input" name="auth_form_check2" id={`work_id=${index}`} defaultChecked={day.isActive} onChange={() => handleTimeChange(day.day, { openingTime: day.startTime, closingTime: day.endTime })} />
@@ -254,7 +254,7 @@ const Employees = () => {
       {console.log(employees.length)}
 
       <div className="employees_dash">
-        {employees.length ? (
+       {employees.length && Object.keys(groupedEmployees).length ? (
           Object.keys(groupedEmployees).map((category) => (
             <div key={category}>
               <h3>{category}</h3>

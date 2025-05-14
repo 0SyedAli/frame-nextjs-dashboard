@@ -2731,13 +2731,35 @@ form.s4_form .dt_select_location select {
   gap: 10px;
 }
 
-.dr_graph h4 {
+
+.dg_income {
+  padding-left: 15px;
+  position: relative;
+}
+.dg_income h4 {
   font-family: var(--font-open-sans);
   font-size: 16px;
   font-weight: 600;
   color: #7e7e7e;
+      margin: 0 0 3px;
 }
-
+.dg_income h5 {
+  font-family: var(--font-lato);
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+.dg_income::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+  border-radius: 12px;
+  background-color: #A83F98;
+}
 /* basket css */
 
 @media only screen and (max-height: 800px) {

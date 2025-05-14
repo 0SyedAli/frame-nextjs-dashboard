@@ -82,8 +82,7 @@ const AddSubService = () => {
       !serviceTitle ||
       !serviceDescription ||
       !servicePrice ||
-      !serviceId ||
-      subServiceImages.length === 0
+      !serviceId
     ) {
       alert("Please fill all fields.");
       return;
@@ -95,6 +94,7 @@ const AddSubService = () => {
     formData.append("title", serviceTitle);
     formData.append("text", serviceDescription);
     formData.append("price", servicePrice);
+    // formData.append("employeeId", employeeId);
     // formData.append("servicePoints", servicePoints);
 
     // Append all images
@@ -178,7 +178,6 @@ const AddSubService = () => {
                   <input
                     type="file"
                     multiple
-                    required
                     accept="image/*"
                     onChange={handleFileChange}
                   />

@@ -2,13 +2,13 @@
 import { LuUsersRound } from "react-icons/lu";
 import { IoMdArrowUp } from "react-icons/io";
 import { RxCaretSort } from "react-icons/rx";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import AuthGuard from "@/components/AuthGuard";
+import IncomeChart from "@/components/IncomeChart";
 const image1 = "/images/user1.png";
 const image2 = "/images/user1.png";
 const image3 = "/images/user1.png";
@@ -54,6 +54,7 @@ const Dashboard = () => {
       console.error("Error fetching services:", error);
     }
   };
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user && (!user?.id || !user?._id)) {
@@ -120,7 +121,48 @@ const Dashboard = () => {
       status: activeTab,
     }
   ];
-
+  const response23 = {
+    success: true,
+    msg: "Yearly Revenue!",
+    data: [
+      {
+        totalRevenue: 400,
+        appointmentsCount: 4,
+        year: 2025,
+        month: 2,
+      },
+      {
+        totalRevenue: 100,
+        appointmentsCount: 4,
+        year: 2025,
+        month: 3,
+      },
+      {
+        totalRevenue: 100,
+        appointmentsCount: 4,
+        year: 2025,
+        month: 4,
+      },
+      {
+        totalRevenue: 100,
+        appointmentsCount: 4,
+        year: 2025,
+        month: 5,
+      },
+      {
+        totalRevenue: 100,
+        appointmentsCount: 4,
+        year: 2025,
+        month: 6,
+      },
+      {
+        totalRevenue: 100,
+        appointmentsCount: 4,
+        year: 2025,
+        month: 7,
+      },
+    ],
+  };
   if (!tab) {
     return <></>;
   }
@@ -210,9 +252,12 @@ const Dashboard = () => {
               {/* <Link href="/" className="dr_btn">Last 7 Days</Link> */}
             </div>
             <div className="dr_graph">
-              <Image src="/images/chart2.svg" width={500} height={100} alt="chart" />
-              {/* <h4>Income</h4> 
-              <span>{revenue.totalRevenue ? revenue.totalRevenue : "0"}</span> */}
+              {/* <Image src="/images/chart2.svg" width={500} height={100} alt="chart" /> */}
+              <div className="dg_income">
+                <h4>Income</h4>
+                <h5>{revenue.totalRevenue ? revenue.totalRevenue : "2000"}</h5>
+              </div>
+              <IncomeChart data={response23.data} />
             </div>
             <div className="dr_head">
               <h5>Appointments</h5>
