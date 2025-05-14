@@ -130,8 +130,9 @@
 }
 
 .register_link h5 {
-    color: #5e5e5e;
+    color: #2A2A2A;
     font-size: 17px;
+    font-family: var(--font-open-sans);
 }
 
 .register_link h5 a {
@@ -909,6 +910,7 @@ span.aic_icon g {
     font-weight: 700;
     font-family: var(--font-open-sans);
 }
+
 .sp_input2 input {
     padding-left: 20px;
     color: #000;
@@ -916,6 +918,7 @@ span.aic_icon g {
     font-weight: 700;
     font-family: var(--font-open-sans);
 }
+
 .hs_btns {
     display: flex;
     align-items: center;
@@ -946,6 +949,209 @@ span.aic_icon g {
     font-size: 40px;
     font-weight: 700;
 }
+
+button.lwb_btn {
+    width: 100%;
+    height: 51px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    border: 1px solid #6689C9;
+    background-color: transparent;
+    font-weight: 500;
+    font-family: var(--font-open-sans);
+    font-size: 15px;
+    color: #3B4C68;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+button.lwb_btn:nth-child(2) {
+    margin: 12px 0;
+    background-color: #000;
+    color: #FFF;
+    border-color: #000;
+}
+
+button.lwb_btn:nth-child(3) span {
+    color: #1977F3;
+}
+
+button.lwb_btn span {
+    font-size: 24px;
+    line-height: 17px;
+}
+
+/* Range Slider as a Single Thumb Slider */
+.single-thumb {
+    background: #D9D9D9 !important;
+    height: 5px !important;
+    width: 435px !important;
+}
+
+.single-thumb .range-slider__thumb {
+    background: rgb(245, 183, 202) !important;
+    background: linear-gradient(335deg, rgba(245, 183, 202, 1) 0%, rgba(168, 63, 152, 1) 70%, rgba(129, 1, 127, 1) 100%) !important;
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.single-thumb .range-slider__thumb[data-lower] {
+    width: 0 !important;
+}
+
+.single-thumb .range-slider__range {
+    background-color: #D9D9D9 !important;
+    border-radius: 6px;
+}
+
+.next_appointment {
+    align-items: flex-start;
+    gap: 55px !important;
+}
+
+.next_appointment h5 {
+    font-size: 16px;
+    color: #2A2A2A;
+    font-family: var(--font-open-sans);
+    display: flex;
+    align-items: start;
+    margin: 0;
+    gap: 9px;
+}
+
+.next_appointment h5 span {
+    line-height: 14px;
+    color: #51004F;
+}
+
+form.next_appointment input {
+    width: 300px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    font-size: 24px;
+    font-family: var(--font-open-sans);
+    color: #000;
+    padding: 0;
+
+}
+
+form.next_appointment .form-check-input:checked {
+    background-color: #A83F98;
+    box-shadow: none;
+}
+
+form.next_appointment input::placeholder {
+    font-size: 24px;
+    font-family: var(--font-open-sans);
+    color: #777777;
+}
+
+.next_appointment .form-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 0 0 0;
+}
+
+.next_appointment .form-switch input {
+    width: 60px !important;
+    height: 30px !important;
+    border: 1px solid #A83F98;
+    margin-left: 0;
+    box-shadow: none;
+}
+
+.next_appointment .form-switch label {
+    padding-top: 7px;
+    font-size: 15px;
+    font-family: var(--font-open-sans);
+    color: #A83F98;
+    font-weight: 500;
+}
+
+.skip_btn {
+    text-decoration: none;
+    color: #51004F;
+    font-size: 24px;
+    font-family: var(--font-open-sans);
+    font-weight: 700;
+    position: absolute;
+    bottom: 100px;
+    right: 100px;
+
+}
+
+.next_confirm {
+    gap: 20px !important;
+}
+
+.next_confirm select,
+.next_confirm input {
+    padding: 10px 15px;
+    color: #000;
+}
+
+.next_confirm select {
+    color: #777777;
+}
+
+.next_confirm select::placeholder,
+.next_confirm input::placeholder {
+    color: #777777;
+}
+
+.next_confirm h3 {
+    text-align: left;
+    font-size: 24px;
+    font-family: var(--font-open-sans);
+    color: #2A2A2A;
+    font-weight: 600;
+    margin: 0;
+}
+
+.auth_container.bussiness.confirm_address {
+    padding: 70px !important;
+}
+
+.ca_map h3 {
+    font-size: 16px;
+    font-family: var(--font-inter);
+    color: #FFF;
+    padding: 23px;
+    text-align: left;
+    background-color: #81017F;
+    font-weight: 400;
+}
+
+.still_working .auth_head h2 {
+    font-size: 32px;
+    font-weight: 800;
+    font-family: var(--font-open-sans);
+}
+
+.still_working .auth_head p {
+    color: #2A2A2A;
+    font-size: 18px;
+}
+
+.still_working .auth_head span {
+    width: 40px;
+    height: 40px;
+    background-color: #51004F;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+
 
 @media screen and (max-width:1444px) {
     .sidebar {

@@ -15,7 +15,7 @@ const EditServieDashboard = () => {
     const [formData, setFormData] = useState({
         title: "",
         text: "",
-        servicePoints: "",
+        // servicePoints: "",
         price: "",
         subServiceImage: [], // ✅ Make it an array
     });
@@ -31,7 +31,7 @@ const EditServieDashboard = () => {
                 setFormData({
                     title: data.title || "",
                     text: data.text || "",
-                    servicePoints: data.servicePoints || "",
+                    // servicePoints: data.servicePoints || "",
                     price: data.price || "",
                     subServiceImage: data.subServiceImage || [], // ✅ Assuming array from API
                 });
@@ -72,7 +72,7 @@ const EditServieDashboard = () => {
             formDataToSend.append("subServiceId", subServiceId);
             formDataToSend.append("title", formData.title);
             formDataToSend.append("text", formData.text);
-            formDataToSend.append("servicePoints", formData.servicePoints);
+            // formDataToSend.append("servicePoints", formData.servicePoints);
             formDataToSend.append("price", formData.price);
             // ✅ Append each image file
             formData.subServiceImage.forEach((image, index) => {
@@ -96,7 +96,7 @@ const EditServieDashboard = () => {
             setFormData({
                 title: updated.title,
                 text: updated.text,
-                servicePoints: updated.servicePoints,
+                // servicePoints: updated.servicePoints,
                 price: updated.price,
                 subServiceImage: updated.subServiceImage || [],
             });
@@ -185,7 +185,7 @@ const EditServieDashboard = () => {
                             onChange={handleChange}
                             rows="10">Description</textarea>
                     </div>
-                    <div className="col-12">
+                    {/* <div className="col-12">
                         <label htmlFor="" className="pb-2" style={{ fontWeight: "bolder", fontSize: "20px", textTransform: "capitalize" }}>Service Point</label>
                         <input
                             type="number"
@@ -193,7 +193,7 @@ const EditServieDashboard = () => {
                             value={formData.servicePoints}
                             onChange={handleChange}
                             placeholder="Add Points" />
-                    </div>
+                    </div> */}
                     <div className="col-12">
                         <label htmlFor="" className="pb-2" style={{ fontWeight: "bolder", fontSize: "20px", textTransform: "capitalize" }}>Price</label>
                         <div className="dollar_input ps-0">

@@ -27,6 +27,7 @@ const Dashboard = () => {
   const [userData, setUserData] = useState();
   const [adminId, setadminId] = useState();
   const [statistics, setStatistics] = useState("");
+  const [revenue, setRevenue] = useState("");
   const [activeTab, setActiveTab] = useState('complete');
   const router = useRouter();
 
@@ -42,6 +43,17 @@ const Dashboard = () => {
     }
   };
 
+  const fetchYearlyRevenue = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/yearlyRevenue?adminId=${adminId}`
+      )
+      setRevenue(response?.data?.data || "");
+    }
+    catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user && (!user?.id || !user?._id)) {
@@ -58,6 +70,7 @@ const Dashboard = () => {
       // Fetch services once adminId is available
       const timer = setTimeout(() => {
         fetchStates();
+        fetchYearlyRevenue();
       }, 1000);
       return () => clearTimeout(timer); // Clean up timeout on component unmount
     }
@@ -108,7 +121,6 @@ const Dashboard = () => {
     }
   ];
 
-
   if (!tab) {
     return <></>;
   }
@@ -119,11 +131,11 @@ const Dashboard = () => {
           <div className="dash_profile1">
             <div className="dp_img mb-4">
               <Image
-                src={userData?.profileImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${userData?.profileImage}` : "/images/emp_img1.png"}
+                src={
+                  `https://predemo.site/Framie/1747156600261-book-jessie-jones.jpg`
+                }// : "/images/placeholder.jpg"}
                 width={135}
                 height={135}
-                className="pb-icon"
-                alt="Frame"
               />
             </div>
             <h5>{userData && (userData.name || (userData.firstName + " " + userData.lastName))}</h5>
@@ -153,7 +165,7 @@ const Dashboard = () => {
                 <div className="dp2_item">
                   <div className="tc">
                     <span><LuUsersRound /></span>
-                    <h5>Income</h5>
+                    <h5>Total Sales ($)</h5>
                   </div>
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : statistics.totalIncome}</h3>
                   <div className="profit_perc">
@@ -166,7 +178,7 @@ const Dashboard = () => {
                 <div className="dp2_item">
                   <div className="tc">
                     <span><LuUsersRound /></span>
-                    <h5>Profits</h5>
+                    <h5>Appts. Booked</h5>
                   </div>
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : (statistics.profits ? statistics.profits : "0")}</h3>
                   <div className="profit_perc">
@@ -179,7 +191,7 @@ const Dashboard = () => {
                 <div className="dp2_item">
                   <div className="tc">
                     <span><LuUsersRound /></span>
-                    <h5>Insights</h5>
+                    <h5>Average Sale Value</h5>
                   </div>
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : (statistics.insights ? statistics.insights : "0")}</h3>
                   <div className="profit_perc">
@@ -195,14 +207,16 @@ const Dashboard = () => {
           <div className="dash-right">
             <div className="dr_head">
               <h5>Statistics</h5>
-              <Link href="/" className="dr_btn">Last 7 Days</Link>
+              {/* <Link href="/" className="dr_btn">Last 7 Days</Link> */}
             </div>
             <div className="dr_graph">
               <Image src="/images/chart2.svg" width={500} height={100} alt="chart" />
+              {/* <h4>Income</h4> 
+              <span>{revenue.totalRevenue ? revenue.totalRevenue : "0"}</span> */}
             </div>
             <div className="dr_head">
               <h5>Appointments</h5>
-              <Link href="/" className="dr_btn">View All</Link>
+              {/* <Link href="/" className="dr_btn">View All</Link> */}
             </div>
             <div className="dr_table">
               <div className="pt-2 dash_list page">

@@ -18,7 +18,7 @@ const AddSubService = () => {
   const [serviceTitle, setServiceTitle] = useState("");
   const [serviceDescription, setServiceDescription] = useState("");
   const [servicePrice, setServicePrice] = useState("");
-  const [servicePoints, setServicePoints] = useState("");
+  // const [servicePoints, setServicePoints] = useState("");
   const [subServiceImages, setSubServiceImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [serviceId, setServiceId] = useState("");
@@ -95,7 +95,7 @@ const AddSubService = () => {
     formData.append("title", serviceTitle);
     formData.append("text", serviceDescription);
     formData.append("price", servicePrice);
-    formData.append("servicePoints", servicePoints);
+    // formData.append("servicePoints", servicePoints);
 
     // Append all images
     subServiceImages.forEach((file) => {
@@ -119,7 +119,7 @@ const AddSubService = () => {
         setServiceTitle("");
         setServiceDescription("");
         setServicePrice("");
-        setServicePoints("");
+        // setServicePoints("");
         setSubServiceImages([]);
         setPreviewImages([]);
         setServiceId("");
@@ -259,14 +259,14 @@ const AddSubService = () => {
               onChange={(e) => setServiceDescription(e.target.value)}
             >{serviceDescription}</textarea>
           </div>
-          <div className="col-12">
+          {/* <div className="col-12">
             <input
               type="number"
               placeholder="Service Point"
               value={servicePoints}
               onChange={(e) => setServicePoints(e.target.value)}
             />
-          </div>
+          </div> */}
           <div className="col-12">
             <div className="dollar_input">
               <span>$</span>

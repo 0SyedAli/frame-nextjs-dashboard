@@ -13,6 +13,7 @@ import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const Marketing = () => {
     const [active, setActive] = useState('marketing'); // Default active button
+    const [active2, setActive2] = useState('message');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubModalOpen, setIsSubModalOpen] = useState(false);
     const [isSubModalOpen2, setIsSubModalOpen2] = useState(false);
@@ -28,6 +29,8 @@ const Marketing = () => {
     const [loading2, setLoading2] = useState(false);
     const [loading3, setLoading3] = useState(false);
     const [loading4, setLoading4] = useState(false);
+    const [previewImage, setPreviewImage] = useState("/images/grey_upload_img.png");
+    const [fileError, setFileError] = useState("");
     const [adminId, setadminId] = useState();
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -51,6 +54,31 @@ const Marketing = () => {
         setIsSubModalOpen3(false)
     }
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+
+        if (!file) return;
+
+        // Validate file type (only images)
+        if (!file.type.startsWith("image/")) {
+            setFileError("Only image files are allowed.");
+            return;
+        }
+
+        // Validate file size (2MB limit)
+        if (file.size > 2 * 1024 * 1024) {
+            setFileError("File size should be less than 2MB.");
+            return;
+        }
+
+        setFileError(""); // Clear error if validation passes
+
+        // Preview the selected image
+        const imageUrl = URL.createObjectURL(file);
+        setPreviewImage(imageUrl);
+
+        // setFormData((prev) => ({ ...prev, AdminImage: file }));
+    };
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -364,71 +392,45 @@ const Marketing = () => {
                     <div className="m_tabs_main">
                         <h3>Loyalty rewards</h3>
                         <p>Create ways for your customer to earn and redeem points.</p>
-                        <div className="mtm_cards">
-                            <div className="mtm_card_item">
-                                <span>
-                                    <Image
-                                        src="/images/multi_user.png"
-                                        width={39}
-                                        height={21}
-                                        className="cal-icon"
-                                        alt="Frame"
-                                    />
-                                </span>
-                                <div>
-                                    <h4>{royalityData.loyalCustomer}</h4>
-                                    <p>Loyalty Customers</p>
+                        <div className="mtm_cards mtm_cards2">
+                            <div className="mc_new">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault1" />
+                                    <label class="form-check-label" htmlFor="radioDefault1">
+                                        By Visits
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radioDefault" id="radioDefault2" />
+                                    <label class="form-check-label" htmlFor="radioDefault2">
+                                        By amount spend
+                                    </label>
                                 </div>
                             </div>
-                            <div className="mtm_card_item">
-                                <span>
-                                    <Image
-                                        src="/images/pp.png"
-                                        width={31}
-                                        height={31}
-                                        className="cal-icon"
-                                        alt="Frame"
-                                    />
-                                </span>
-                                <div>
-                                    <h4>4,421</h4>
-                                    <p>Points Earned</p>
+                            <div className="mc_new1">
+                                <h4>Threshold</h4>
+                                <div className="mcn1">
+                                    <input type="number" />
+                                    <h5>Visits</h5>
                                 </div>
                             </div>
-                            <div className="mtm_card_item">
-                                <span>
-                                    <Image
-                                        src="/images/pp.png"
-                                        width={31}
-                                        height={31}
-                                        className="cal-icon"
-                                        alt="Frame"
-                                    />
-                                </span>
-                                <div>
-                                    <h4>4,421</h4>
-                                    <p>Points redeemed</p>
+                            <div className="mc_new1">
+                                <h4>Reward Value</h4>
+                                <div className="mcn1">
+                                    <input type="number" />
+                                    <h5>%</h5>
                                 </div>
                             </div>
-                            <div className="mtm_card_item">
-                                <span>
-                                    <Image
-                                        src="/images/calender.png"
-                                        width={29}
-                                        height={30}
-                                        className="cal-icon"
-                                        alt="Frame"
-                                    />
-                                </span>
-                                <div>
-                                    <h4>{royalityData.totalAppointments}</h4>
-                                    <p>Total appointments</p>
-                                </div>
+                            <div className="mc_new2 d-flex flex-column align-items-center gap-3 justify-content-center text-center">
+                                <h6>Customers will received x% off after x visits</h6>
+                                <button className="theme-btn2">
+                                    Save
+                                </button>
                             </div>
                         </div>
                         <div className="mtm_performance">
                             <div className="d-flex align-items-center justify-content-between">
-                                <h3>Loyalty program performance</h3>
+                                <h3>Email Marketing Compaign</h3>
                                 {/* <div className="d-flex align-items-center gap-2">
                                     <button className="btn royality_btn" onClick={openModal}>Add Points</button>
                                     <button className="btn royality_btn" onClick={openModal}>Edit Points</button>
@@ -436,63 +438,49 @@ const Marketing = () => {
                                         {loading4 ? <Spinner /> : "Delete Points"}
                                     </button>
                                 </div> */}
-                            </div>
-                            <div className="mp_cards">
-                                <div className="mp_card_item active">
-                                    <h3>587</h3>
-                                    <h6>Activity performance</h6>
-                                </div>
-                                <div className="mp_card_item">
-                                    <h3>587</h3>
-                                    <h6>Engaged Customers</h6>
-                                </div>
-                                <div className="mp_card_item">
-                                    <h3>{royalityData.recuringCustomers}</h3>
-                                    <h6>Recurring Customers</h6>
-                                </div>
-                                <div className="mp_card_item">
-                                    <h3>{royalityData.appointmentCompleted}</h3>
-                                    <h6>Appointments completed</h6>
-                                </div>
-                                <div className="mp_card_item">
-                                    <h3>587</h3>
-                                    <h6>Loyalty purchases</h6>
+                                <div className="m_tabs_menu">
+                                    <button
+                                        className={`btn ${active2 === 'message' ? 'active' : ''}`}
+                                        onClick={() => setActive2('message')}
+                                    >
+                                        Message
+                                    </button>
+                                    <button
+                                        className={`btn ${active2 === 'clients' ? 'active' : ''}`}
+                                        onClick={() => setActive2('clients')}
+                                    >
+                                        Clients
+                                    </button>
                                 </div>
                             </div>
-                            <div className="mp_table row">
-                                <div className=" col-4 ">
-                                    <div className="h-100 d-flex align-items-end justify-content-center ">
-                                        <div className="mpt_chart">
-                                            <Image src="/images/chart32.svg" width={300} height={400} alt="chart2" />
-                                        </div>
+                            <form className="emc_form">
+                                <input type="text" placeholder="Subject" />
+                                <textarea name="" placeholder="Hi there! Write you message here!" rows="7"></textarea>
+                                <div className="d-flex align-items-end justify-content-between">
+                                    <div className="upload_user_image text-start">
+                                        <label htmlFor="imageUpload" style={{ cursor: "pointer" }}>
+                                            <Image src={previewImage} width={118} height={118} alt="Profile Preview" />
 
+                                            <p>Attach Image</p>
+                                        </label>
+                                        <input
+                                            id="imageUpload"
+                                            type="file"
+                                            accept="image/*" // Restrict file selection to images only
+                                            onChange={handleFileChange}
+                                            style={{ display: "none" }} // Hide default file input UI
+                                        />
+                                    </div>
+                                    <div className="emc_btn">
+                                        <button className="theme-btn3">
+                                            Send me a Text
+                                        </button>
+                                        <button className="theme-btn2">
+                                            Send Now
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="mpt_table col-8">
-                                    <div className=" table-container">
-                                        <table className="table caption-top">
-                                            <thead>
-                                                <tr>
-                                                    <th>Services</th>
-                                                    <th>Total Services</th>
-                                                    <th>Loyal Customer</th>
-                                                    <th>Earned Points</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {totalServices.map((service, index) => (
-                                                    <tr key={index} onClick={openModal}>
-                                                        <td>{service.subServiceName || "N/A"}</td> {/* Service name */}
-                                                        <td>{service.appointments || 0}</td>      {/* Number of appointments */}
-                                                        <td>{service.appointments || 0}</td> {/* Placeholder for additional data */}
-                                                        <td>{service.appointments || 0}</td>  {/* Placeholder for additional data */}
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 )}

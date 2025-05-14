@@ -4,10 +4,8 @@ import MyCalender from '@/components/MyCalender';
 import MyModal from '@/components/MyModal';
 import { useState } from 'react';
 import { RxCaretSort, RxCross2 } from "react-icons/rx";
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import AuthGuard from '@/components/AuthGuard';
-import { showErrorToast } from '@/lib/toast';
 import Link from 'next/link';
 
 const Appointment = () => {

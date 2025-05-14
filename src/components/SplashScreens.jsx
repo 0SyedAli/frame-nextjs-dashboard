@@ -28,8 +28,8 @@ const SplashScreens = () => {
             title: "Your Client Playbook",
             text: "Turn every client into a loyal regular with detailed profiles, service history, and tailored experiences that keep them coming back.",
             buttons: [
-                { label: "Sign in", action: () => router.push("/auth/signin") },
-                { label: "Sign up", action: () => router.push("/auth/signup") },
+                { label: "Sign In", action: () => router.push("/auth/signin") },
+                { label: "Sign Up", action: () => router.push("/auth/signup") },
             ],
         },
     ];
@@ -84,7 +84,7 @@ const SplashScreens = () => {
                 {slides.map((_, index) => (
                     <span key={index} className={`dot ${currentSlide === index ? "active" : ""}`} onClick={() => setCurrentSlide(index)} />
                 ))}
-                <a href="auth/signin">Skip</a>
+                <a href="/auth/signup">Skip</a>
             </div>
             <div className="navigation-buttons">
                 <button onClick={goToPreviousSlide} disabled={currentSlide === 0}>

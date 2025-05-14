@@ -26,7 +26,6 @@ const BussinessDetail = () => {
     const token = useSelector(state => state.auth.token);
     const [formData, setFormData] = useState({
         businessName: "",
-        userName: "",
         city: "",
         address: "",
         royalityPoints: "",
@@ -35,7 +34,7 @@ const BussinessDetail = () => {
     });
     const [workingDays, setWorkingDays] = useState(
         daysOfWeek.reduce((acc, day) => {
-            acc[day] = { isActive: true, open: "09:00", close: "18:00" };
+            acc[day] = { isActive: false, open: "09:00", close: "18:00" };
             return acc;
         }, {})
     );
@@ -100,7 +99,6 @@ const BussinessDetail = () => {
         const formDataToSend = new FormData();
         formDataToSend.append("adminId", adminId);
         formDataToSend.append("businessName", formData.businessName);
-        formDataToSend.append("userName", formData.userName);
         formDataToSend.append("city", formData.city);
         formDataToSend.append("address", formData.address);
         formDataToSend.append("royalityPoints", formData.royalityPoints);
@@ -191,16 +189,12 @@ const BussinessDetail = () => {
                             }
                         </div>
                         <div className="row pt-4 gy-4">
-                            <div className="col-6">
+                            <div className="col-12">
                                 <div className="bd_fields">
                                     <input type="text" name="businessName" placeholder='Business Name *' onChange={handleInputChange} required />
                                 </div>
                             </div>
-                            <div className="col-6">
-                                <div className="bd_fields">
-                                    <input type="text" name="userName" placeholder='Username *' onChange={handleInputChange} required />
-                                </div>
-                            </div>
+
                             <div className="col-12"><div className="bd_fields">
                                 <select name="city" onChange={handleInputChange} required>
                                     <option value="">Select City *</option>
@@ -265,8 +259,8 @@ const BussinessDetail = () => {
                                             <MultiRangeSlider2
                                                 baseClassName="multi-range-slider-black"
                                                 min={0}
-                                                max={24}
-                                                step={0.25}
+                                                max={23.99} // 23:59 in decimal form
+                                                step={0.0167}
                                                 minValue={timeToNumber(workingDays[day].open)}
                                                 maxValue={timeToNumber(workingDays[day].close)}
                                                 onInput={(e) =>
@@ -297,4 +291,3 @@ const BussinessDetail = () => {
 };
 
 export default BussinessDetail;
-

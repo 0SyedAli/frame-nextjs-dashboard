@@ -1,12 +1,10 @@
 "use client"
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import MultiRangeSlider2 from '@/components/MultiRangeSlider2'
 import { showSuccessToast, showErrorToast } from "@/lib/toast";
 import MyModal from "@/components/MyModal";
 import { CiCirclePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import axios from "axios";
 import MultiRangeSlider3 from "@/components/MultiRangeSlider3";
 import Spinner from "@/components/Spinner";
@@ -35,7 +33,6 @@ const Employees = () => {
 
   const [employees, setEmployees] = useState([]); // Init
   const [groupedEmployees, setGroupedEmployees] = useState({});
-  const [groupedEmployees2, setGroupedEmployees2] = useState({});
   const validateFields = () => {
     const errors = {};
 

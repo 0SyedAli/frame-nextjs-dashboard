@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, useRef  } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import axios from "axios";
@@ -44,7 +44,7 @@ const AddService = () => {
     const [title, setTitle] = useState(service?.title || category || "");
     const [serviceId, setServiceId] = useState(service?.serviceId || null);
     const [serviceText, setServiceText] = useState("");
-    const [serviceImage, setServiceImage] = useState(null);
+    const [serviceImage, setServiceImage] = useState("");
     const [previewImage, setPreviewImage] = useState(null);
     const [isServiceCreated, setIsServiceCreated] = useState(!!service?.serviceId);
     const [adminId, setadminId] = useState(null);
@@ -65,10 +65,10 @@ const AddService = () => {
     const [serviceTitle, setServiceTitle] = useState("");
     const [serviceDescription, setServiceDescription] = useState("");
     const [servicePrice, setServicePrice] = useState("");
-    const [servicePoints, setServicePoints] = useState("");
+    // const [servicePoints, setServicePoints] = useState("");
     const [subServiceImages, setSubServiceImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
-
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         const storedId = localStorage.getItem(`${category}_serviceId`);
@@ -85,7 +85,7 @@ const AddService = () => {
 
     const handleServiceSubmit = async (e) => {
         e.preventDefault();
-        if (!serviceText || !serviceImage) {
+        if (!serviceText) {
             alert("Please fill all fields.");
             return;
         }
@@ -121,6 +121,9 @@ const AddService = () => {
                 setServiceImage(null);
                 setServiceText("")
                 setIsServiceCreated(true);
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = ""; // Reset the file input value
+                }
                 // Save to Redux with category key
                 dispatch(setServiceData({
                     category,
@@ -140,7 +143,7 @@ const AddService = () => {
 
     const handleSubServiceSubmit = async (e) => {
         e.preventDefault();
-        if (!serviceTitle || !serviceDescription || !servicePrice || subServiceImages.length === 0) {
+        if (!serviceTitle || !serviceDescription || !servicePrice) {
             alert("Please fill all subservice fields.");
             return;
         }
@@ -151,7 +154,7 @@ const AddService = () => {
         formData.append("title", serviceTitle);
         formData.append("text", serviceDescription);
         formData.append("price", servicePrice);
-        formData.append("servicePoints", servicePoints);
+        // formData.append("servicePoints", servicePoints);
 
         // Append all images
         subServiceImages.forEach((file) => {
@@ -177,7 +180,7 @@ const AddService = () => {
                 setServiceTitle("");
                 setServiceDescription("");
                 setServicePrice("");
-                setServicePoints("");
+                // setServicePoints("");
                 setSubServiceImages([]);
                 setPreviewImages("");
                 setSubServiceSuccess(true)
@@ -232,6 +235,7 @@ const AddService = () => {
                         <input
                             type="file"
                             accept="image/*"
+                            ref={fileInputRef}
                             onChange={(e) => {
                                 const file = e.target.files[0];
                                 if (file) {
@@ -239,14 +243,13 @@ const AddService = () => {
                                     setPreviewImage(URL.createObjectURL(file)); // Set preview URL
                                 }
                             }}
-                            required
                         />
                         <label>
                             <div className="auhc_img_container">
                                 <span className="aic_icon">
                                     <Image src="/images/upload-icon.png" width={16} height={18} alt="Upload" />
                                 </span>
-                                {title && <h5>Upload header image for {title} services</h5>}
+                                {title && <h5>Upload header image for {title}</h5>}
                                 <h5>800px x 400px</h5>
                             </div>
                         </label>
@@ -270,9 +273,14 @@ const AddService = () => {
                             placeholder="Service Introduction text (100 words)"
                         />
                     </div>
-                    <button type="submit" disabled={loading} className="btn theme-btn2">
-                        {loading ? <Spinner /> : "Create"}
-                    </button>
+                    <div className="d-flex align-items-center gap-4">
+                        <button type="submit" disabled={loading} className="btn theme-btn2">
+                            {loading ? <Spinner /> : "Create"}
+                        </button>
+                        <Link href="/dashboard" className="btn theme-btn3">
+                            Skip
+                        </Link>
+                    </div>
                     {/* {!isServiceCreated && (
                     )} */}
                 </form>
@@ -287,7 +295,6 @@ const AddService = () => {
                                     <input
                                         type="file"
                                         multiple
-                                        required
                                         accept="image/*"
                                         onChange={handleFileChange}
                                     />
@@ -364,7 +371,7 @@ const AddService = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12">
+                            {/* <div className="col-12">
                                 <div className="row align-items-center">
                                     <div className="col-2">
                                         <h4 className='sp_h4'>Service Points</h4>
@@ -377,11 +384,10 @@ const AddService = () => {
                                                 onChange={(e) => setServicePoints(e.target.value)}
                                                 placeholder=""
                                             />
-                                            {/* <span>$</span> */}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="d-flex align-items-center gap-5 justify-content-between">
                             <button type="submit" disabled={loading2} className="btn theme-btn3">

@@ -75,6 +75,7 @@
 
 .dash_top_header {
     width: 100%;
+    margin-bottom: 30px;
 }
 
 .dth_content {
@@ -164,8 +165,8 @@
 }
 
 .dp2_item .tc span {
-    width: 26px;
-    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
     background-color: #FFF;
     border-radius: 8px;
     display: flex;
@@ -750,6 +751,12 @@ span.aic_icon g {
     padding: 10px 0 0;
 }
 
+.dollar_input input:focus {
+    outline: none;
+    border: none;
+    border-bottom: 3px double #000000;
+}
+
 .as_form .theme-btn2 {
     width: 240px;
 }
@@ -784,6 +791,7 @@ span.aic_icon g {
     gap: 10px;
     justify-content: space-between;
     padding: 20px 0;
+    align-items: center;
 }
 
 .m_tabs_main h3 {
@@ -798,6 +806,7 @@ span.aic_icon g {
     font-size: 12px;
     font-family: var(--font-lato);
     font-weight: 400;
+    margin: 0;
 }
 
 .m_tabs_main {
@@ -1024,6 +1033,120 @@ span.aic_icon g {
     color: #E4E2DD
 }
 
+.mc_new {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 190px;
+}
+
+.mc_new2 .theme-btn2 {
+    height: 45px;
+    width: 75%;
+}
+
+.mc_new .form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 0 0 10px;
+}
+
+.mc_new .form-check-input {
+    width: 23px;
+    height: 23px;
+    margin: 0;
+}
+
+.mc_new .form-check-input:checked {
+    background-color: #7a2b8e;
+    border-color: #7a2b8e;
+}
+
+.mc_new .form-check-input:focus {
+    box-shadow: none;
+}
+
+.mc_new label {
+    font-size: 15px;
+    font-family: var(--font-inter);
+    font-weight: 700;
+    color: #7a2b8e;
+}
+
+.mc_new2 {
+    width: 230px;
+}
+
+.mc_new2 h6 {
+    font-size: 15px;
+    font-family: var(--font-inter);
+    font-weight: 700;
+    color: #7a2b8e;
+    margin: 0;
+}
+
+.mc_new1 {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 175px;
+}
+
+.mc_new1 h4 {
+    font-size: 19px;
+    font-family: var(--font-inter);
+    font-weight: 700;
+    color: #7a2b8e;
+    margin: 0;
+}
+
+.mcn1 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.mcn1 h5 {
+    font-size: 19px;
+    font-family: var(--font-inter);
+    font-weight: 400;
+    color: #858585;
+    margin: 0;
+}
+
+.mcn1 h5 {
+    margin: 0;
+}
+
+.mtm_cards2 {
+    width: 850px;
+}
+
+.mcn1 input {
+    width: 85px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    height: 30px;
+    padding: 0 10px;
+}
+
+.mcn1 input::-webkit-outer-spin-button,
+.mcn1 input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.mcn1 input[type=number] {
+    -moz-appearance: textfield;
+}
+
 .mar_label .mar_stars {
     color: #FFCB65;
     font-size: 18px;
@@ -1033,6 +1156,44 @@ span.aic_icon g {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.emc_form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.emc_form input,
+.emc_form textarea {
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    font-family: var(--font-inter);
+    font-weight: 400;
+    color: #000;
+    margin: 0;
+}
+
+.emc_form input:focus-visible,
+.emc_form textarea:focus {
+    border: 1px solid #6F1785;
+    outline: none;
+}
+
+.emc_btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.emc_btn button {
+    width: 180px;
+    height: 50px;
+    font-size: 14px;
 }
 
 .search_input input {
@@ -1088,6 +1249,7 @@ span.aic_icon g {
     gap: 10px;
 }
 
+
 .ast_item .ast_file {
     background-color: #FFF;
     border: 1px solid #6F1785;
@@ -1140,6 +1302,19 @@ span.aic_icon g {
     font-weight: 700;
     font-size: 13px;
     color: #606060;
+}
+
+.emc_form .upload_user_image.text-start label {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.emc_form .upload_user_image.text-start label p {
+    font-size: 14px;
+    font-family: var(--font-inter);
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 5px;
 }
 
 .am_submit {

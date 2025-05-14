@@ -8,6 +8,7 @@ import axios from "axios";
 import { setUser } from "../../../lib/slices/authslice";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 import Spinner from "@/components/Spinner";
+import countriesData from "../../../../data/allcountries.json";
 const Signup = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -15,8 +16,8 @@ const Signup = () => {
   const [fileError, setFileError] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [previewImage, setPreviewImage] = useState("/images/emp_img1.png"); // Default image
-  const [selectedCountry, setSelectedCountry] = useState("+92");
+  const [previewImage, setPreviewImage] = useState("/images/unknown_user.jpg"); // Default image
+  const [selectedCountryCode, setSelectedCountryCode] = useState(""); // Store selected country code
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,30 +27,46 @@ const Signup = () => {
     city: "",
     AdminImage: null,
   });
-
-  const cities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose"];
-
-  useEffect(() => {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((response) => response.json())
-      .then((data) => {
-        const countryList = data.map((country) => ({
-          name: country.name.common,
-          code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : ""),
-        }));
-
-        // Remove duplicates
-        const uniqueCountries = Array.from(new Map(countryList.map(c => [c.code, c])).values());
-
-        setCountries(uniqueCountries);
-      })
-      .catch((error) => console.error("Error fetching country data:", error));
-  }, []);
+  const handleCountryChange = (e) => {
+    setSelectedCountryCode(e.target.value); // Update selected country code
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "phNumber") {
+      const sanitizedValue = value.replace(/[^0-9]/g, ""); // Only allow numbers
+      setFormData((prev) => ({
+        ...prev,
+        [name]: sanitizedValue, // Store the plain phone number
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
+
+  useEffect(() => {
+    const processCountries = () => {
+      const countryList = countriesData
+        .filter((country) => country.name && country.idd)
+        .map((country) => ({
+          name: country.name.common,
+          code: parseInt(
+            `${country.idd.root || ""}${country.idd.suffixes ? country.idd.suffixes[0] : ""}`.replace("+", "").trim()
+          ),
+        }))
+        .filter((c) => !isNaN(c.code)); // Ensure code is a valid number
+
+      // Sort numerically by country code
+      countryList.sort((a, b) => a.code - b.code);
+
+      setCountries(countryList);
+    };
+
+    processCountries();
+  }, [countriesData]);
+
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -85,15 +102,19 @@ const Signup = () => {
       return;
     }
 
+    // Prepend selected country code to phone number before sending data
     const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
+    Object.entries({
+      ...formData,
+      phNumber: `${selectedCountryCode}${formData.phNumber}`, // Combine country code and phone number
+    }).forEach(([key, value]) => {
       if (value !== null) {
         formDataToSend.append(key, value);
       }
     });
 
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/signup`,
         formDataToSend,
@@ -110,18 +131,18 @@ const Signup = () => {
         name: data.name,
         profileImage: data.profileImage,
       };
-      showSuccessToast("Signup Successfully!"); //
-      localStorage.setItem('user', JSON.stringify(response?.data?.data));
+      showSuccessToast("Signup Successfully!");
+      localStorage.setItem("user", JSON.stringify(response?.data?.data));
       localStorage.setItem("token", accessToke);
       dispatch(setUser({ user: data, token: accessToke }));
 
       router.replace("/auth/pricing");
     } catch (error) {
       setError("Signup failed:", error.response?.data || error.message);
-      setLoading(false)
+      setLoading(false);
       showErrorToast(error.response?.data?.message || "Signup Failed!");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -147,7 +168,7 @@ const Signup = () => {
                   style={{ display: "none" }} // Hide default file input UI
                 />
               </div>
-              <div className="file_error d-inline text-start">
+              <div className="file_error d-inline text-start pb-2">
                 {fileError ? (
                   <p className="text-danger m-0 h6">{fileError}</p>
                 ) : (
@@ -171,26 +192,43 @@ const Signup = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-2">
-              <select onChange={(e) => setSelectedCountry(e.target.value)}>
-                <option value="+92">+92</option>
-                {countries.map((country) => (
-                  <option key={`${country.name}-${country.code}`} value={country.code}>
-                    {country.code}
+            <div className="col-3">
+              {/* <select onChange={handleCountryChange}>
+                {countries.map((country, index) => (
+                  <option key={index} value={country.code}>
+                    (+{country.code}) - {country.name}
                   </option>
                 ))}
+              </select> */}
+              <select onChange={handleCountryChange}>
+                <option value="+1">+1 - US</option>
               </select>
             </div>
-            <div className="col-10">
-              <input type="tel" name="phNumber" placeholder="Phone number" onChange={handleChange} required />
+            <div className="col-9">
+              <input
+                type="number"
+                name="phNumber"
+                placeholder="Phone number"
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
           <div className="row">
             <div className="col-12">
-              <select name="city" onChange={handleChange} required>
+              {/* <select name="city" onChange={handleChange} required>
                 <option value="">Select City</option>
                 {cities.map((city, index) => (
                   <option key={index} value={city}>{city}</option>
+                ))}
+              </select> */}
+              <select name="city" onChange={handleChange} required>
+                <option disabled="">Select City</option>
+                <option value="United States">United States</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country.name}>
+                    {country.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -201,7 +239,7 @@ const Signup = () => {
             </button>
             {error && <p className="error text-danger">{error}</p>}
             <div className='register_link'>
-              <h5>Already have an account? <Link href="signin">Signin</Link></h5>
+              <h5>Already have an account? <Link href="signin">Sign in</Link></h5>
             </div>
           </div>
         </form>
