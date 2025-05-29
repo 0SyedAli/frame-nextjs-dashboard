@@ -1,11 +1,20 @@
 "use client"
 import axios from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { IoCartSharp } from "react-icons/io5";
 import Skeleton from "react-loading-skeleton";
 import { useRouter, useSearchParams } from "next/navigation";
+
+const AddSubServicesWrapper = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SubServices />
+        </Suspense>
+    );
+};
+
 const SubServices = () => {
     const searchParams = useSearchParams(); // No destructuring
     const serviceId = searchParams.get("serviceId");
@@ -109,4 +118,4 @@ const SubServices = () => {
     )
 }
 
-export default SubServices
+export default AddSubServicesWrapper

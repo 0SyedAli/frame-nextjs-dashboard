@@ -2,10 +2,19 @@
 import axios from "axios";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { IoCartSharp } from "react-icons/io5";
 import Skeleton from "react-loading-skeleton";
+
+const AddServiceWrapper = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <Service />
+        </Suspense>
+    );
+};
+
 const Service = () => {
     const [employees, setEmployees] = useState()
     const [loading, setLoading] = useState(true)
@@ -223,4 +232,4 @@ const Service = () => {
     )
 }
 
-export default Service
+export default AddServiceWrapper

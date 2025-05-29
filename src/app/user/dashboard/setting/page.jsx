@@ -8,10 +8,16 @@ import { ImProfile } from "react-icons/im";
 import { MdOutlineMiscellaneousServices } from "react-icons/md";
 import { HiBadgeCheck } from "react-icons/hi";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
 import api from "@/api/axiosInstance";
-
+const AddSettingWrapper = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <Setting />
+        </Suspense>
+    );
+};
 const Setting = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -456,4 +462,4 @@ const Setting = () => {
     )
 }
 
-export default Setting;
+export default AddSettingWrapper;
