@@ -1,7 +1,7 @@
 "use client"
 import SidebarUserDash from '@/components/SidebarUserDash';
 import '@/styles/dashboard_main.css';
-
+import 'react-loading-skeleton/dist/skeleton.css'
 export default function DashboardLayout({ children }) {
 
   return (

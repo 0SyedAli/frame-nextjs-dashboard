@@ -967,6 +967,7 @@ button.lwb_btn {
     gap: 7px;
 }
 
+
 button.lwb_btn:nth-child(2) {
     margin: 12px 0;
     background-color: #000;
@@ -1091,7 +1092,7 @@ form.next_appointment input::placeholder {
 .next_confirm select,
 .next_confirm input {
     padding: 10px 15px;
-    color: #000;
+    color: #777777;
 }
 
 .next_confirm select {

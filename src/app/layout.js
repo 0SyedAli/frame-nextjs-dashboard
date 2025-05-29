@@ -6,7 +6,7 @@ import BootstrapClients from "../components/BootstrapClients";
 import { Provider } from "react-redux";
 import { store } from "../lib/store";
 import ToastProvider from "../components/ToastProvider";
-
+import { GoogleOAuthProvider } from '@react-oauth/google';
 const interFont = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -40,12 +40,16 @@ const poppins = Poppins({
   weight: ["300", "400", "700"]
 });
 
+const CLIENT_ID = "797389704553-dflobc44jfaqjp2d2038nhiksg031t5v.apps.googleusercontent.com"
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${poppins.variable} ${epilogue.variable} ${roboto.variable} ${lato.variable} ${montserrat.variable} ${interFont.variable} ${openSans.variable}`}>
         <ToastProvider /> {/* Global toast notifications */}
-        <Provider store={store}>{children}</Provider>
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+          <Provider store={store}>{children}</Provider>
+        </GoogleOAuthProvider>
         <BootstrapClients />
       </body>
     </html>

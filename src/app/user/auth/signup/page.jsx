@@ -1,131 +1,115 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-// import { useDispatch } from "react-redux";
-// import { useRouter } from "next/navigation";
-// import axios from "axios";
-// import { setUser } from "../../../lib/slices/authslice";
-// import { showErrorToast, showSuccessToast } from "@/lib/toast";
-// import Spinner from "@/components/Spinner";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
+import countriesData from "../../../../../data/allcountries.json";
+import Spinner from "@/components/Spinner";
 const Signup = () => {
-    // const dispatch = useDispatch();
-    // const router = useRouter();
+    const router = useRouter();
     const [countries, setCountries] = useState([]);
-    const [countriesName, setCountriesName] = useState([]);
-    // const [fileError, setFileError] = useState("");
-    // const [loading, setLoading] = useState(false);
-    // const [error, setError] = useState("");
-    // const [previewImage, setPreviewImage] = useState("/images/emp_img1.png"); // Default image
-    const [selectedCountry, setSelectedCountry] = useState("+92");
-    // const [formData, setFormData] = useState({
-    //     firstName: "",
-    //     lastName: "",
-    //     email: "",
-    //     password: "",
-    //     phNumber: "",
-    //     city: "",
-    //     AdminImage: null,
-    // });
-
-    const cities = ["New York", "Los Angeles", "Chicago", "Houston", "Phoenix", "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose"];
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [selectedCountryCode, setSelectedCountryCode] = useState(""); // Store selected country code
+    const [isClient, setIsClient] = useState(false);
+    const [formData, setFormData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        city: "",
+        password: "",
+    });
 
     useEffect(() => {
-        fetch("https://restcountries.com/v3.1/all")
-            .then((response) => response.json())
-            .then((data) => {
-                const countryList = data.map((country) => ({
+        setIsClient(true); // Mark as client-side rendering
+        const token = localStorage.getItem("userAccessToken")
+        const user_data = localStorage.getItem("user_data")
+
+        if (token && user_data) {
+            router.replace("/user/dashboard"); // Redirect if logged in
+        }
+
+    }, [router]);
+
+    const handleCountryChange = (e) => {
+        setSelectedCountryCode(e.target.value); // Update selected country code
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        if (name === "phNumber") {
+            const sanitizedValue = value.replace(/[^0-9]/g, ""); // Only allow numbers
+            setFormData((prev) => ({
+                ...prev,
+                [name]: sanitizedValue, // Store the plain phone number
+            }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
+    };
+
+    useEffect(() => {
+        const processCountries = () => {
+            const countryList = countriesData
+                .filter((country) => country.name && country.idd)
+                .map((country) => ({
                     name: country.name.common,
-                    code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : ""),
-                }));
+                    code: parseInt(
+                        `${country.idd.root || ""}${country.idd.suffixes ? country.idd.suffixes[0] : ""}`.replace("+", "").trim()
+                    ),
+                }))
+                .filter((c) => !isNaN(c.code)); // Ensure code is a valid number
 
-                // Remove duplicates
-                const uniqueCountries = Array.from(new Map(countryList.map(c => [c.code, c])).values());
-                const uniqueCountriesName = Array.from(new Map(countryList.map(c => [c.code, c])).values());
+            // Sort numerically by country code
+            countryList.sort((a, b) => a.code - b.code);
 
-                setCountries(uniqueCountries);
-            })
-            .catch((error) => console.error("Error fetching country data:", error));
-    }, []);
+            setCountries(countryList);
+        };
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-    //     setFormData((prev) => ({ ...prev, [name]: value }));
-    // };
+        processCountries();
+    }, [countriesData]);
 
-    // const handleFileChange = (e) => {
-    //     const file = e.target.files[0];
+    const handleSignup = async (e) => {
+        e.preventDefault();
+        setIsLoading(true); // Disable the button on submit
 
-    //     if (!file) return;
+        const formDataToSend = new FormData();
+        Object.entries({
+            ...formData,
+            phNumber: `${selectedCountryCode}${formData.phNumber}`, // Combine country code and phone number
+        }).forEach(([key, value]) => {
+            if (value !== null) {
+                formDataToSend.append(key, value);
+            }
+        });
 
-    //     // Validate file type (only images)
-    //     if (!file.type.startsWith("image/")) {
-    //         setFileError("Only image files are allowed.");
-    //         return;
-    //     }
+        try {
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
+                formDataToSend,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+                    },
+                }
+            );
+            showSuccessToast(response?.data?.msg || "Signup Successfully!");
+            setError(null);
+            localStorage.setItem("user_data", JSON.stringify(response?.data?.data));
+            router.push("otp");
+        } catch (error) {
+            setError(error?.response?.data?.error?.message || error?.response?.data?.msg || error?.msg);
+            showErrorToast(error.response?.data?.msg || "Signup Failed!");
+            setIsLoading(false); // Re-enable button on error
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    //     // Validate file size (2MB limit)
-    //     if (file.size > 2 * 1024 * 1024) {
-    //         setFileError("File size should be less than 2MB.");
-    //         return;
-    //     }
-
-    //     setFileError(""); // Clear error if validation passes
-
-    //     // Preview the selected image
-    //     const imageUrl = URL.createObjectURL(file);
-    //     setPreviewImage(imageUrl);
-
-    //     setFormData((prev) => ({ ...prev, AdminImage: file }));
-    // };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     if (!formData.AdminImage) {
-    //         setFileError("Please select a profile image before submitting.");
-    //         return;
-    //     }
-
-    //     const formDataToSend = new FormData();
-    //     Object.entries(formData).forEach(([key, value]) => {
-    //         if (value !== null) {
-    //             formDataToSend.append(key, value);
-    //         }
-    //     });
-
-    //     try {
-    //         setLoading(true)
-    //         const response = await axios.post(
-    //             `${process.env.NEXT_PUBLIC_API_URL}/admin/signup`,
-    //             formDataToSend,
-    //             {
-    //                 headers: { "Content-Type": "multipart/form-data" },
-    //             }
-    //         );
-
-    //         const { data, accessToke } = response.data;
-
-    //         const userData = {
-    //             id: data.id,
-    //             email: data.email,
-    //             name: data.name,
-    //             profileImage: data.profileImage,
-    //         };
-    //         showSuccessToast("Signup Successfully!"); //
-    //         localStorage.setItem('user', JSON.stringify(response?.data?.data));
-    //         localStorage.setItem("token", accessToke);
-    //         dispatch(setUser({ user: data, token: accessToke }));
-
-    //         router.replace("/auth/pricing");
-    //     } catch (error) {
-    //         setError("Signup failed:", error.response?.data || error.message);
-    //         setLoading(false)
-    //         showErrorToast(error.response?.data?.message || "Signup Failed!");
-    //     } finally {
-    //         setLoading(false)
-    //     }
-    // };
+    if (!isClient) return null;
 
     return (
         <div className="content align-self-center mw-600">
@@ -134,48 +118,67 @@ const Signup = () => {
                     <h2>Continue To Sign Up</h2>
                     <p>Get started in minutes and transform your business</p>
                 </div>
-                <form >
-                    <div className="row">
+                <form onSubmit={handleSignup}>
+                    <div className="row gy-4">
                         <div className="col-6">
-                            <input type="text" name="firstName" placeholder="First Name" required />
+                            <input type="text" name="firstName" placeholder="First Name" required onChange={handleChange} />
+                        </div>
+
+                        <div className="col-6">
+                            <input type="text" name="lastName" placeholder="Last Name" required onChange={handleChange} />
                         </div>
                         <div className="col-6">
-                            <input type="text" name="lastName" placeholder="Last Name" required />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                                required
+                                onChange={handleChange}
+                            />
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-2">
-                            <select onChange={(e) => setSelectedCountry(e.target.value)}>
-                                <option value="+92">+92</option>
-                                {countries.map((country) => (
-                                    <option key={`${country.name}-${country.code}`} value={country.code}>
-                                        {country.code}
-                                    </option>
-                                ))}
+                        <div className="col-6">
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                required
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="col-3">
+                            <select onChange={handleCountryChange}>
+                                <option value="+1">+1 - US</option>
                             </select>
                         </div>
-                        <div className="col-10">
-                            <input type="tel" name="phNumber" placeholder="Phone number" required />
+                        <div className="col-9">
+                            <input
+                                type="number"
+                                name="phNumber"
+                                placeholder="Phone number"
+                                onChange={handleChange}
+                                required
+                            />
                         </div>
-                    </div>
-                    <div className="row">
                         <div className="col-12">
-                            <select name="city" required>
-                                <option value="">Select City</option>
-                                {cities.map((city, index) => (
-                                    <option key={index} value={city}>{city}</option>
+                            <select name="city" onChange={handleChange} required>
+                                <option disabled="">Select City</option>
+                                <option value="United States">United States</option>
+                                {countries.map((country, index) => (
+                                    <option key={index} value={country.name}>
+                                        {country.name}
+                                    </option>
                                 ))}
                             </select>
                         </div>
                     </div>
                     <div className='text-center'>
-                        <button type="submit" className="theme-btn2">
-                            {/* {loading ? <Spinner /> : "Sign Up"} */}
-                            Sign Up
+                        {error && <p style={{ color: "red" }}>{error}</p>}
+                        <button type="submit" disabled={isLoading} className="theme-btn2 w-100">
+                            {isLoading ? <Spinner /> : "Sign Up"}
                         </button>
                         {/* {error && <p className="error text-danger">{error}</p>} */}
                         <div className='register_link'>
-                            <h5>Already have an account? <Link href="signin">Signin</Link></h5>
+                            <h5>Already have an account? <Link href="signin">Sign In</Link></h5>
                         </div>
                     </div>
                 </form>

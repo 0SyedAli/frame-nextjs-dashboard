@@ -14,16 +14,13 @@ const Appointment = () => {
                 <div className='w-100'>
                     <form className="next_appointment">
                         <input type="text" placeholder="Enter city or zipcode" />
-
                         <div>
                             <h5>
                                 <span><FaLocationDot /></span>
                                 Use my current location
                             </h5>
                         </div>
-
                         <SingleRangeSlider />
-
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="switchCheckChecked"  />
                             <label class="form-check-label" htmlFor="switchCheckChecked">Enable home services</label>
@@ -31,7 +28,7 @@ const Appointment = () => {
                     </form>
                 </div>
             </div>
-            <Link className="skip_btn" href="/">Skip</Link>
+            <Link className="skip_btn" href="confirm-address">Skip</Link>
         </div >
     );
 };

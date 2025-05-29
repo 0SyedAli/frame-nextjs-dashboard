@@ -5,7 +5,7 @@ const Terms = () => {
     return (
         <div className="more_dash setting_dash w-100 h-100 py-5">
             <div className="sd_top py-0">
-                <h3>terms & Condition</h3>
+                <h3>Terms & Condition</h3>
                 <span><FaRegQuestionCircle /></span>
             </div>
             <div className="ab_content">

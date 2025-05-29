@@ -14,15 +14,15 @@ const AdminLogin = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { loading, error, token, user } = useSelector((state) => state.auth);
-  useEffect(() => { 
+  useEffect(() => {
     console.log("signin Rendered");
-    
+
   }, [])
   useEffect(() => {
     setIsClient(true); // Mark as client-side rendering
 
-    if (token) {
-      router.replace("/dashboard"); // Redirect if logged in
+    if (token !== undefined && token !== null && token !== "" && user && user.adminId) {
+      router.replace("/dashboard"); // Redirect if logged in and adminId exists
     }
 
     return () => {

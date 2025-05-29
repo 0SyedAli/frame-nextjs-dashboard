@@ -199,7 +199,7 @@ const Dashboard = () => {
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : statistics.totalCustomers}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
-                    <h5>2.45%</h5>
+                    <h5>0%</h5>
                   </div>
                 </div>
               </div>
@@ -212,7 +212,7 @@ const Dashboard = () => {
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : statistics.totalIncome}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
-                    <h5>2.45%</h5>
+                    <h5>0%</h5>
                   </div>
                 </div>
               </div>
@@ -225,7 +225,7 @@ const Dashboard = () => {
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : (statistics.profits ? statistics.profits : "0")}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
-                    <h5>2.45%</h5>
+                    <h5>0%</h5>
                   </div>
                 </div>
               </div>
@@ -238,7 +238,7 @@ const Dashboard = () => {
                   <h3>{!statistics ? <Spinner borderWidth="border-2" /> : (statistics.insights ? statistics.insights : "0")}</h3>
                   <div className="profit_perc">
                     <span><IoMdArrowUp /></span>
-                    <h5>2.45%</h5>
+                    <h5>0%</h5>
                   </div>
                 </div>
               </div>
@@ -255,7 +255,7 @@ const Dashboard = () => {
               {/* <Image src="/images/chart2.svg" width={500} height={100} alt="chart" /> */}
               <div className="dg_income">
                 <h4>Income</h4>
-                <h5>{revenue.totalRevenue ? revenue.totalRevenue : "2000"}</h5>
+                <h5>{revenue.totalRevenue ? revenue.totalRevenue : "0"}</h5>
               </div>
               <IncomeChart data={response23.data} />
             </div>
@@ -276,7 +276,7 @@ const Dashboard = () => {
                         <th scope="col">Status <span><RxCaretSort /></span></th>
                       </tr>
                     </thead>
-                    <tbody>
+                    {/* <tbody>
                       {orders
                         .filter((val) => val.status.toLowerCase().includes(activeTab))
                         .map((order, index) => (
@@ -292,8 +292,9 @@ const Dashboard = () => {
                             </td>
                           </tr>
                         ))}
-                    </tbody>
+                    </tbody> */}
                   </table>
+                  <p>No appointment available.</p>
                 </div>
                 {/* <div className="pagination justify-content-end">
                   <button className="active">1</button>
@@ -304,9 +305,9 @@ const Dashboard = () => {
                 </div> */}
               </div>
             </div>
-            <div className="text-end pt-3">
+            {/* <div className="text-end pt-3">
               <button className="btn det_ins">DETAILED INSIGHTS</button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

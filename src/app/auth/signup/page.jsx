@@ -66,8 +66,6 @@ const Signup = () => {
     processCountries();
   }, [countriesData]);
 
-
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -123,7 +121,7 @@ const Signup = () => {
         }
       );
 
-      const { data, accessToke } = response.data;
+      const { data, signupToken } = response?.data;
 
       const userData = {
         id: data.id,
@@ -131,14 +129,14 @@ const Signup = () => {
         name: data.name,
         profileImage: data.profileImage,
       };
-      showSuccessToast("Signup Successfully!");
-      localStorage.setItem("user", JSON.stringify(response?.data?.data));
-      localStorage.setItem("token", accessToke);
-      dispatch(setUser({ user: data, token: accessToke }));
+      showSuccessToast("OTP is Sent!");
+      localStorage.setItem("user", JSON.stringify(response?.data?.data?.email));
+      localStorage.setItem("token", signupToken);
+      // dispatch(setUser({ user: data, token: signupToken }));
 
-      router.replace("/auth/pricing");
+      router.replace("/auth/otp");
     } catch (error) {
-      setError("Signup failed:", error.response?.data || error.message);
+      setError("Sign Up failed:", error.response?.data || error.message);
       setLoading(false);
       showErrorToast(error.response?.data?.message || "Signup Failed!");
     } finally {

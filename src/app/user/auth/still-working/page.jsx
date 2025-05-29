@@ -44,11 +44,14 @@ const ConfirmAddress = () => {
                     <p className="mt-2">You can send your query to our customer service representative.</p>
                 </div>
                 <div className='w-100 '>
-                    <div className='text-start mt-3'>
+                    <div className='text-start mt-3 d-flex align-items-center gap-3'>
                         <button type="submit" className="theme-btn2">
                             {/* {loading ? <Spinner /> : "Sign Up"} */}
                             Support
                         </button>
+                        <Link href="/user/dashboard" className="theme-btn3">
+                            Dashboard
+                        </Link>
                     </div>
                 </div>
             </div>

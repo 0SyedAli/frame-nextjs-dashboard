@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense, useRef  } from "react";
+import { useEffect, useState, Suspense, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import axios from "axios";
@@ -69,6 +69,7 @@ const AddService = () => {
     const [subServiceImages, setSubServiceImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const fileInputRef = useRef(null);
+    const serviceTextInputRef = useRef(null);
 
     useEffect(() => {
         const storedId = localStorage.getItem(`${category}_serviceId`);
@@ -119,7 +120,10 @@ const AddService = () => {
                 setServiceId(newServiceId);
                 setPreviewImage(null);
                 setServiceImage(null);
-                setServiceText("")
+                // setServiceText(null)
+                if (serviceTextInputRef.current) {
+                    serviceTextInputRef.current.value = ""; // Reset the file input value
+                }
                 setIsServiceCreated(true);
                 if (fileInputRef.current) {
                     fileInputRef.current.value = ""; // Reset the file input value
@@ -268,10 +272,10 @@ const AddService = () => {
                         <textarea
                             rows="5"
                             required
-                            defaultValue={serviceText}
+                            ref={serviceTextInputRef}
                             onChange={(e) => setServiceText(e.target.value)}
                             placeholder="Service Introduction text (100 words)"
-                        />
+                        >{serviceText}</textarea>
                     </div>
                     <div className="d-flex align-items-center gap-4">
                         <button type="submit" disabled={loading} className="btn theme-btn2">

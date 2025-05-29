@@ -713,7 +713,13 @@ img.aic_cover_img {
   overflow-y: auto !important;
 
 }
-
+.emp_md_heading {
+  justify-content: start!important;
+  gap: 25px;
+}
+.emp_md_heading img { 
+  border-radius: 10px;
+}
 .add_service_btn5 {
   border: 1px solid #000;
   border-radius: 30px;
@@ -1274,12 +1280,18 @@ li.add_stylist_btn .add_note_btn:hover {
   font-size: 21px;
 }
 
-.dt_select_location select {
+.dt_select_location select,
+.dt_select_location input {
   border: none;
   font-size: 16px;
   color: #0B0C15;
   font-family: var(--font-inter);
   font-weight: 500;
+}
+
+.dt_select_location input::placeholder {
+  color: #0B0C15;
+  padding: 0 0 0 4px;
 }
 
 .dt_select_location select:focus-visible {
@@ -1440,6 +1452,7 @@ li.add_stylist_btn .add_note_btn:hover {
 
 .dm_card img {
   border-radius: 13px;
+  min-width: 115px;
 }
 
 .near_salo {
@@ -1465,6 +1478,17 @@ li.add_stylist_btn .add_note_btn:hover {
 }
 
 .dc_content {
+  width: 100%;
+}
+
+.custom_skeleton.a {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+}
+
+.custom_skeleton.a>span {
   width: 100%;
 }
 
@@ -1533,13 +1557,13 @@ li.add_stylist_btn .add_note_btn:hover {
 }
 
 .sd_top span {
-  font-size: 25px;
   color: #000;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 50px;
   line-height: 0;
+  font-size: 30px;
 }
 
 .sd_tabs_container .tab-content {
@@ -1563,9 +1587,9 @@ li.add_stylist_btn .add_note_btn:hover {
 }
 
 .sd_tabs_container .nav-tabs li .nav-link.active {
-  border-color: #51004F;
+  border-color: #A83F98;
   background-color: #51005018;
-  color: #51004F;
+  color: #A83F98;
 }
 
 .service_user_card {
@@ -1840,7 +1864,7 @@ li.add_stylist_btn .add_note_btn:hover {
   font-size: 32px;
   font-family: var(--font-open-sans);
   font-weight: 800;
-  color: #51004F;
+  color: #A83F98;
 }
 
 .md_inner .sd_tabs_container .nav-tabs li {
@@ -1850,7 +1874,7 @@ li.add_stylist_btn .add_note_btn:hover {
 .more_tabs1 ul {
   padding: 0;
   list-style-type: none;
-  max-width: 350px;
+  /* max-width: 350px; */
 }
 
 .more_tabs1 li {
@@ -1867,6 +1891,7 @@ li.add_stylist_btn .add_note_btn:hover {
 .more_tabs1 li span {
   line-height: 0;
   font-size: 16px;
+  color: #000;
 }
 
 .more_tabs1 li:nth-child(4) span {
@@ -1875,6 +1900,23 @@ li.add_stylist_btn .add_note_btn:hover {
 
 .md_inner .sd_tabs_container .tab-content {
   padding: 30px;
+}
+
+.mts1_wt {
+  display: flex;
+  /* max-width: 400px; */
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mts1_wt span {
+  line-height: 20px !important;
+  font-size: 14px !important;
+  font-family: var(--font-inter) !important;
+  color: #939393 !important;
+  padding: 5px 10px;
+  border: 1px solid;
+  border-radius: 30px;
 }
 
 .mt1r {
@@ -1901,7 +1943,8 @@ li.add_stylist_btn .add_note_btn:hover {
 }
 
 .mt1r span {
-  color: #51004F;
+  color: #A83F98;
+  font-size: 21px;
 }
 
 .mt1r .red_arrow {
@@ -2004,14 +2047,6 @@ li.add_stylist_btn .add_note_btn:hover {
   position: relative;
 }
 
-.sd_top span {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 0;
-  font-size: 30px;
-}
-
 .setting_dash h3 {
   color: #000;
   font-family: var(--font-open-sans);
@@ -2029,7 +2064,7 @@ li.add_stylist_btn .add_note_btn:hover {
   padding: 10px 20px;
   border: 1px solid #A83F98;
   background-color: transparent;
-  font-weight: 500;
+  font-weight: 400;
   font-family: var(--font-open-sans);
   font-size: 15px;
   color: #000000;
@@ -2694,9 +2729,11 @@ form.s4_form .dt_select_location {
   border-bottom: 2px solid #ccc;
 }
 
-form.s4_form .dt_select_location select {
+form.s4_form .dt_select_location select,
+form.s4_form .dt_select_location input {
   padding: 5px 0;
   width: 100%;
+  border: none;
 }
 
 .auth_container.bussiness .thumb .caption {
@@ -2736,13 +2773,15 @@ form.s4_form .dt_select_location select {
   padding-left: 15px;
   position: relative;
 }
+
 .dg_income h4 {
   font-family: var(--font-open-sans);
   font-size: 16px;
   font-weight: 600;
   color: #7e7e7e;
-      margin: 0 0 3px;
+  margin: 0 0 3px;
 }
+
 .dg_income h5 {
   font-family: var(--font-lato);
   font-size: 20px;
@@ -2750,6 +2789,7 @@ form.s4_form .dt_select_location select {
   color: #000;
   margin: 0;
 }
+
 .dg_income::before {
   content: "";
   position: absolute;
@@ -2760,7 +2800,130 @@ form.s4_form .dt_select_location select {
   border-radius: 12px;
   background-color: #A83F98;
 }
+
+.auth_otp div {
+  gap: 15px;
+  justify-content: center;
+}
+
+.auth_otp input {
+  font-family: var(--font-open-sans);
+}
+
+.resend_code {
+  text-align: center;
+}
+
+.resend_code p {
+  color: #858585;
+  font-size: 15px;
+  font-family: var(--font-inter);
+  margin: 0;
+}
+
+.resend_code h5 {
+  color: #000;
+  font-size: 16px;
+  font-family: var(--font-inter);
+  font-weight: 600;
+  border-bottom: 1px solid #000;
+  display: inline-block;
+}
+
+.auth_container.otp_container {
+  gap: 50px;
+}
+
+.dt_cart {
+  border-radius: 20px;
+  box-shadow: 0 0 10px 2px #ccc;
+  padding: 25px 25px 30px;
+}
+
+
+
+.dt_cart .dt_cart_item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dt_cart_item h5 {
+  margin: 0;
+  font-size: 18px;
+  font-family: var(--font-poppins);
+  font-weight: 900;
+}
+
+.dt_cart_item .dtc_cross {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  background: rgb(129, 1, 127);
+  background: linear-gradient(90deg, rgba(129, 1, 127, 1) 0%, rgba(168, 63, 152, 1) 35%, rgba(245, 183, 202, 1) 100%);
+  color: #FFF;
+  border: none;
+  font-size: 19px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dtci {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dtci span {
+  margin: 0;
+  font-size: 20px;
+  color: #51004F;
+  line-height: 10px;
+}
+
+.dtci h4 {
+  margin: 0;
+  color: #000;
+  font-size: 18px;
+  font-family: var(--font-open-sans);
+  font-weight: 600;
+}
+
+.dtci h4 span {
+  color: #969696;
+  font-size: 15px;
+}
+
+.dtci.timing h4 {
+  padding: 10px 20px;
+  min-width: 150px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.dtci.timing h4.active {
+  background-color: #000;
+  color: #FFF;
+}
+
+.s5_dash {
+  height: 100%;
+  padding-top: 60px;
+}
+
 /* basket css */
+
+/* sub service css */
+.ss_main_body {
+  padding: 0 40px;
+}
+
+/* sub service css */
 
 @media only screen and (max-height: 800px) {
   .sidebar .logo img {

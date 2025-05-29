@@ -39,7 +39,7 @@ const Employees = () => {
     // Check each field for emptiness
     if (!employeeName.trim()) errors.employeeName = "Employee name is required.";
     if (!about.trim()) errors.about = "About is required.";
-    if (availableServices.length === 0) errors.availableServices = "Please select at least one service.";
+    // if (availableServices.length === 0) errors.availableServices = "Please select at least one service.";
     if (workingDays.filter(day => day.isActive).length === 0) errors.workingDays = "Please activate at least one working day.";
     if (!EmployeeImage) errors.EmployeeImage = "Employee image is required.";
 
@@ -62,6 +62,7 @@ const Employees = () => {
       // Fetch services once adminId is available
       const timer = setTimeout(() => {
         fetchServices();
+        fetchSubServices();
         fetchEmployees();
       }, 1000);
       return () => clearTimeout(timer); // Clean up timeout on component unmount
@@ -88,11 +89,14 @@ const Employees = () => {
       setLoading(false); // Stop loading
     }
   };
+
   const groupByCategory = (data) => {
     const grouped = data.reduce((acc, employee) => {
+      console.log("employee", employee);
+
       employee.availableServices.forEach((service) => {
-        if (!acc[service.Title]) acc[service.Title] = [];
-        acc[service.Title].push(employee);
+        if (!acc[service.serviceId.Title]) acc[service.serviceId.Title] = [];
+        acc[service.serviceId.Title].push(employee);
       });
       return acc;
     }, {});
@@ -103,6 +107,19 @@ const Employees = () => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+      );
+      // setSubServices(response.data.data || []); // Update services state
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
+
+  const fetchSubServices = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdmin?adminId=${adminId}`
       );
       setServices(response.data.data || []); // Update services state
     } catch (error) {
@@ -239,9 +256,9 @@ const Employees = () => {
             <div className="d-flex align-items-center gap-3 mt-4">
               {services.map((service, index) => (
                 <div key={index} className="auth_form_check auth_form_check2">
-                  <input className="form-check-input" name="form-check-input" defaultChecked={availableServices.includes(service._id)} onChange={() => handleServiceChange(service._id)} type="checkbox" id={service.Title} />
-                  <label className="form-check-label" htmlFor={service.Title}>
-                    {service.Title}
+                  <input className="form-check-input" name="form-check-input" defaultChecked={availableServices.includes(service._id)} onChange={() => handleServiceChange(service._id)} type="checkbox" id={service.title} />
+                  <label className="form-check-label" htmlFor={service.title}>
+                    {service.title}
                   </label>
                 </div>
               ))}
@@ -254,7 +271,7 @@ const Employees = () => {
       {console.log(employees.length)}
 
       <div className="employees_dash">
-       {employees.length && Object.keys(groupedEmployees).length ? (
+        {employees.length && Object.keys(groupedEmployees).length ? (
           Object.keys(groupedEmployees).map((category) => (
             <div key={category}>
               <h3>{category}</h3>
@@ -290,7 +307,7 @@ const Employees = () => {
             </div>
           ))
         ) : (
-          <div >
+          <div>
             <h3>Pls add sub services</h3>
             <div className="row mt-3 mb-4">
               <div className="col-12">

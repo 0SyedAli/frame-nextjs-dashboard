@@ -12,7 +12,7 @@ export default function SidebarUserDash() {
   const dispatch = useDispatch();
   const links = [
     { href: '/', name: 'Dashboard', icon: HiOutlineSquares2X2 },
-    { href: '/service', name: 'Service', icon: IoCalendarOutline },
+    // { href: '/service', name: 'Service', icon: IoCalendarOutline },
     { href: '/booking', name: 'Booking', icon: BiMessageSquareDots },
     { href: '/favorites', name: 'Favorites', icon: MdDisplaySettings },
     { href: '/receipt-detail', name: 'Receipt Detail', icon: MdDisplaySettings },
