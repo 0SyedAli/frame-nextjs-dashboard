@@ -121,7 +121,7 @@ const Signup = () => {
         }
       );
 
-      const { data, signupToken } = response?.data;
+      const { data, accessToke } = response?.data;
 
       const userData = {
         id: data.id,
@@ -131,8 +131,8 @@ const Signup = () => {
       };
       showSuccessToast("OTP is Sent!");
       localStorage.setItem("user", JSON.stringify(response?.data?.data?.email));
-      localStorage.setItem("token", signupToken);
-      // dispatch(setUser({ user: data, token: signupToken }));
+      localStorage.setItem("token", accessToke);
+      // dispatch(setUser({ user: data, token: accessToke }));
 
       router.replace("/auth/otp");
     } catch (error) {
