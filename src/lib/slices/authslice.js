@@ -32,7 +32,7 @@ export const adminLogin = createAsyncThunk(
                 showErrorToast(response?.data?.msg);
             }
             // Save necessary data from the response to localStorage
-            const { data, accessToke } = response.data;
+            const { data, aceessToken } = response.data;
             const userData = {
                 id: data.id,
                 email: data.email,
@@ -41,9 +41,9 @@ export const adminLogin = createAsyncThunk(
             };
 
             localStorage.setItem('user', JSON.stringify(response?.data?.data)); // Save user info
-            localStorage.setItem('token', accessToke); // Save token
+            localStorage.setItem('token', aceessToken); // Save token
 
-            return { user: userData, token: accessToke }; // Return structured data
+            return { user: userData, token: aceessToken }; // Return structured data
         } catch (error) {
             const errorMessage = error.response?.data?.msg || "Login Failed!";
             // showErrorToast(errorMessage); // Show API error message
