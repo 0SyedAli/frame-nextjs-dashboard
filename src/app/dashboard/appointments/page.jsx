@@ -7,6 +7,7 @@ import { RxCaretSort, RxCross2 } from "react-icons/rx";
 import axios from 'axios';
 import AuthGuard from '@/components/AuthGuard';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Appointment = () => {
     const [activeSlot, setActiveSlot] = useState("");
@@ -19,27 +20,30 @@ const Appointment = () => {
     const [serviceId, setServiceId] = useState(null); // Initialize as an empty array
     const [employeeId, setEmployeeId] = useState(null); // Initialize as an empty array
     const [adminId, setadminId] = useState(null);
+    const [token, setToken] = useState(null);
     const [clientName, setClientName] = useState("");
     const [date, setDate] = useState("");
     const [timeSlot, setTimeSlot] = useState("");
     const [price, setPrice] = useState("");
     const [notes, setNotes] = useState("");
+    const router = useRouter();
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (!user && (!user?.id || !user?._id)) {
-            router.push('/auth/signin')
+        const token = localStorage.getItem("token");
+
+        if (!user || (!user.id && !user._id)) {
+            router.push("/auth/signin");
+        } else {
+            setadminId(user.id || user._id);
+            setToken(token);
         }
-        else {
-            setadminId(user?.id || user?._id)
-        }
-    }, [])
+    }, [router]);
 
     const handleSlotClick = (slot) => {
         setActiveSlot(slot);
         setTimeSlot(slot);
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -75,9 +79,6 @@ const Appointment = () => {
 
     useEffect(() => {
         if (adminId) {
-            // Fetch services and employees once adminId is available
-            console.log("aa");
-
             setLoading(true);
             const timer = setTimeout(() => {
                 fetchServices();
@@ -92,7 +93,12 @@ const Appointment = () => {
     const fetchServices = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setServices(response.data.data || []); // Update services state
         } catch (error) {
@@ -105,7 +111,7 @@ const Appointment = () => {
     const fetchEmployees = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllEmployees?adminId=${adminId}`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllStylists?adminId=${adminId}`
             );
             setEmployees(response.data.data || []); // Update employees state
         } catch (error) {
@@ -117,7 +123,7 @@ const Appointment = () => {
     const fetchAllAppointments = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAppointmentByAdmin?adminId=${adminId}&status=All`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?adminId=${adminId}`
             );
             setLoading2(true)
             setAppointments(response.data.data || []); // Update employees state
@@ -130,7 +136,7 @@ const Appointment = () => {
     const fetchAllSubServices = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdmin?adminId=${adminId}&status=All`
+               `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllSubServices?adminId=${adminId}`,
             );
             setSubservices(response.data.data || []); // Update employees state
         } catch (error) {
@@ -196,7 +202,7 @@ const Appointment = () => {
                                 <option value="">Select Stylish</option>
                                 {employees.map((employee, index) => (
                                     <option key={index} value={employee._id}>
-                                        {employee.employeeName}
+                                        {employee.stylistName}
                                     </option>
                                 ))}
                             </select>
@@ -326,21 +332,21 @@ const Appointment = () => {
                                         <tbody>
                                             {appointments.map((order, index) => {
                                                 // Map service IDs to their titles
-                                                const serviceTitles = order.services
+                                                const serviceTitles = order?.services
                                                     .map((serviceId) => {
                                                         const service = subservices.find((s) => s._id === serviceId);
-                                                        return service ? service.title : "Unknown Service";
+                                                        return service ? service?.title : "Unknown Service";
                                                     })
                                                     .join(", "); // Join multiple service titles with a comma
 
                                                 return (
                                                     <tr key={index}>
-                                                        <td scope="row">{order._id}</td>
-                                                        <td className="user_td">{order.clientName}</td>
-                                                        <td>{`${order.date} ${order.timeSlot}`}</td>
+                                                        <td scope="row">{order?._id}</td>
+                                                        <td className="user_td">{order?.clientName}</td>
+                                                        <td>{`${order?.date} ${order?.timeSlot}`}</td>
                                                         <td>{serviceTitles}</td> {/* Display service titles here */}
-                                                        <td className={`status_td ${order.status.toLowerCase()}`}>
-                                                            <span>{order.status}</span>
+                                                        <td className={`status_td ${order?.status.toLowerCase()}`}>
+                                                            <span>{order?.status}</span>
                                                         </td>
                                                     </tr>
                                                 );

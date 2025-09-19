@@ -17,10 +17,9 @@ const Employees = () => {
   const [loading, setLoading] = useState(true); // Loading state
   const [isLoading, setIsLoading] = useState(true); // Loading state
   const [isLoading2, setIsLoading2] = useState(false); // Loading state
-  const [token, setToken] = useState(null);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
+  const [token, setToken] = useState(null);
   const [employeeName, setEmployeeName] = useState("");
   const [about, setAbout] = useState("");
   const [EmployeeImage, setEmployeeImage] = useState(null);
@@ -38,6 +37,7 @@ const Employees = () => {
   const [groupedEmployees, setGroupedEmployees] = useState({});
   const validateFields = () => {
     const errors = {};
+
     // Check each field for emptiness
     if (!employeeName.trim()) errors.employeeName = "Employee name is required.";
     if (!email.trim()) errors.email = "Employee Email is required.";
@@ -46,20 +46,22 @@ const Employees = () => {
     // if (availableServices.length === 0) errors.availableServices = "Please select at least one service.";
     if (workingDays.filter(day => day.isActive).length === 0) errors.workingDays = "Please activate at least one working day.";
     if (!EmployeeImage) errors.EmployeeImage = "Employee image is required.";
+
     return errors;
   };
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")); // Parse user from localStorage
     const storedToken = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user && (!user?.id || !user?._id) && !storedToken) {
-      router.push('/auth/signin')
-    }
-    else {
-      setAdminId(user?.id || user?._id)
+    if (user && (user.id || user._id) && !storedToken) {
+      setAdminId(user.id || user._id); // Set adminId if available
       setToken(storedToken)
+    } else {
+      console.error("User not found or missing 'id' property");
+      router.push("/auth/add-services"); // Redirect to add services if user is invalid
     }
-  }, [router])
+  }, [router]); // Runs once on mount
+
 
   useEffect(() => {
     if (adminId) {
@@ -120,7 +122,7 @@ const Employees = () => {
   const fetchServices = async () => {
     try {
       const response = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -138,13 +140,7 @@ const Employees = () => {
   const fetchSubServices = async () => {
     try {
       const response = await axios.get(
-
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdminId`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdmin?adminId=${adminId}`
       );
       setServices(response.data.data || []); // Update services state
     } catch (error) {
@@ -198,10 +194,9 @@ const Employees = () => {
 
     const formData = new FormData();
     formData.append("createdBy", adminId);
-    formData.append("salonId", "68aca00ef8e0d97921a1a960");
-    formData.append("stylistName", employeeName);
+    formData.append("employeeName", employeeName);
     formData.append("about", about);
-    if (EmployeeImage) formData.append("stylistImage", EmployeeImage);
+    if (EmployeeImage) formData.append("EmployeeImage", EmployeeImage);
     formData.append("workingDays", JSON.stringify(workingDays.filter(d => d.isActive)));
     formData.append("availableServices", JSON.stringify(availableServices));
     formData.append("email", email);
@@ -211,7 +206,7 @@ const Employees = () => {
     //   return; // Prevent form submission
     // }
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/addStylist`, formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/admin/stylistLogin`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -259,11 +254,7 @@ const Employees = () => {
               <textarea rows="3" value={about} onChange={(e) => setAbout(e.target.value)} placeholder="About the Employee" />
             </div>
           </div>
-          <div className="aem_input mt-2" style={{ gap: "10px" }}>
-            <input type="email" placeholder="Employee Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Employee Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div className="timings mt-2 mb-3">
+          <div className="timings mt-4 mb-4">
             <h4>Working Days & Hours</h4>
             <div className="row gx-5 gy-2">
               {workingDays.map((day, index) => (
@@ -283,9 +274,8 @@ const Employees = () => {
               ))}
             </div>
           </div>
-          <div className="timings mt-3">
+          <div className="timings mt-4">
             <h4>Available Services</h4>
-            {services.length ? (
             <div className="d-flex align-items-center gap-3 mt-4">
               {services.map((service, index) => (
                 <div key={index} className="auth_form_check auth_form_check2">
@@ -296,8 +286,6 @@ const Employees = () => {
                 </div>
               ))}
             </div>
-            ) : ""
-            }
           </div>
           <button className="btn det_ins mt-4" disabled={isLoading2} onClick={handleSubmit}>
             {isLoading2 ? <Spinner /> : "Add Employee"}</button>
@@ -318,13 +306,13 @@ const Employees = () => {
                       <div className="col-3" key={employee._id}>
                         <div className="ed_item">
                           <Image
-                            src={employee?.stylistImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${employee?.stylistImage}` : "/images/default.png"}
+                            src={employee?.employeeImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${employee?.employeeImage}` : "/images/default.png"}
                             width={144}
                             height={144}
                             className="emp_img"
-                            alt={employee.stylistName}
+                            alt={employee.employeeName}
                           />
-                          <h5>{employee.stylistName}</h5>
+                          <h5>{employee.employeeName}</h5>
                         </div>
                       </div>
                     ))}

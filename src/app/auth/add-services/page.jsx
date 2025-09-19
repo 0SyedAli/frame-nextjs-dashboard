@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,22 +16,14 @@ const AddServiceWrapper = () => {
         </Suspense>
     );
 };
+
 const AddService = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const dispatch = useDispatch();
 
-    // Get category from URL params
-    const category = searchParams.get("service"); // hair, nail, skin, others
-
-
-
-    // Retrieve specific service from Redux
-    const services = useSelector((state) => state?.auth?.services || {});
-    const service = services[category] || {};
-
-    // const adminId = useSelector((state) => state?.auth?.user?._id || "");
-    // const token = useSelector((state) => state?.auth?.token || "");
+    // Get category ID from URL params
+    const categoryId = searchParams.get("service");
 
     // State Variables
     const [loading, setLoading] = useState(false);
@@ -41,48 +32,85 @@ const AddService = () => {
     const [subMessage, setSubMessage] = useState(null);
     const [serviceSuccess, setServiceSuccess] = useState(null);
     const [subServiceSuccess, setSubServiceSuccess] = useState(false);
-    const [title, setTitle] = useState(service?.title || category || "");
-    const [serviceId, setServiceId] = useState(service?.serviceId || null);
+    const [title, setTitle] = useState("");
+    const [serviceId, setServiceId] = useState(null);
     const [serviceText, setServiceText] = useState("");
     const [serviceImage, setServiceImage] = useState("");
     const [previewImage, setPreviewImage] = useState(null);
-    const [isServiceCreated, setIsServiceCreated] = useState(!!service?.serviceId);
+    const [isServiceCreated, setIsServiceCreated] = useState(false);
     const [adminId, setadminId] = useState(null);
     const [token, setToken] = useState(null);
+    const [categories, setCategories] = useState([]);
+    const [categoryName, setCategoryName] = useState("");
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user && (!user?.id || !user?._id) && !storedToken) {
             router.push('/auth/signin')
-        }
-        else {
+        } else {
             setadminId(user?.id || user?._id)
             setToken(storedToken)
         }
     }, [])
+
+    // Fetch all categories and match the ID to get category name
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/superAdmin/getAllCategories`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setCategories(data.date || []);
+
+                    // Find the category name by ID
+                    const category = data.date.find(cat => cat._id === categoryId);
+                    if (category) {
+                        setCategoryName(category.categoryName);
+                        setTitle(category.categoryName);
+                    }
+                } else {
+                    showErrorToast(data.msg || "Failed to load categories");
+                }
+            } catch (err) {
+                showErrorToast("Error fetching categories");
+            }
+        };
+
+        if (token && categoryId) {
+            fetchCategories();
+        }
+    }, [token, categoryId]);
+
+    // Retrieve specific service from Redux using category ID
+    const services = useSelector((state) => state?.auth?.services || {});
+    const service = services[categoryId] || {};
+
     // Subservice States
     const [serviceTitle, setServiceTitle] = useState("");
     const [serviceDescription, setServiceDescription] = useState("");
     const [servicePrice, setServicePrice] = useState("");
-    // const [servicePoints, setServicePoints] = useState("");
     const [subServiceImages, setSubServiceImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const fileInputRef = useRef(null);
     const serviceTextInputRef = useRef(null);
 
     useEffect(() => {
-        const storedId = localStorage.getItem(`${category}_serviceId`);
+        const storedId = localStorage.getItem(`${categoryId}_serviceId`);
         if (storedId) setServiceId(storedId);
-        if (category) setTitle(category);
 
         const pendingServices = JSON.parse(localStorage.getItem("pendingServices") || "[]");
         if (pendingServices.length === 0) {
             router.push("/dashboard"); // Redirect if no pending services
-        } else if (!category || !pendingServices.includes(category)) {
-            router.push(`add-services?service=${pendingServices[0]}`);
+        } else if (!categoryId || !pendingServices.some(s => s._id === categoryId || s === categoryId)) {
+            // Handle both object and string formats in pendingServices
+            const firstPending = pendingServices[0];
+            const firstCategoryId = typeof firstPending === 'object' ? firstPending._id : firstPending;
+            router.push(`add-services?service=${firstCategoryId}`);
         }
-    }, [category, router]);
+    }, [categoryId, router]);
 
     const handleServiceSubmit = async (e) => {
         e.preventDefault();
@@ -96,6 +124,7 @@ const AddService = () => {
         formData.append("Title", title);
         formData.append("ServiceImage", serviceImage);
         formData.append("text", serviceText);
+        formData.append("categoryId", categoryId);
         setLoading(true);
         try {
             const response = await axios.post(
@@ -114,23 +143,22 @@ const AddService = () => {
                 const newServiceId = response.data.data._id;
                 const uploadedImage = `${process.env.NEXT_PUBLIC_IMAGE_URL}/${response.data.data.bannerImage}`;
 
-                showSuccessToast(response?.data?.msg || "Service Created!"); //
+                showSuccessToast(response?.data?.msg || "Service Created!");
 
                 // Update state
                 setServiceId(newServiceId);
                 setPreviewImage(null);
                 setServiceImage(null);
-                // setServiceText(null)
                 if (serviceTextInputRef.current) {
-                    serviceTextInputRef.current.value = ""; // Reset the file input value
+                    serviceTextInputRef.current.value = "";
                 }
                 setIsServiceCreated(true);
                 if (fileInputRef.current) {
-                    fileInputRef.current.value = ""; // Reset the file input value
+                    fileInputRef.current.value = "";
                 }
-                // Save to Redux with category key
+                // Save to Redux with category ID as key
                 dispatch(setServiceData({
-                    category,
+                    category: categoryId, // Use ID as key
                     serviceId: newServiceId,
                     title,
                     text: serviceText,
@@ -158,8 +186,7 @@ const AddService = () => {
         formData.append("title", serviceTitle);
         formData.append("text", serviceDescription);
         formData.append("price", servicePrice);
-        // formData.append("servicePoints", servicePoints);
-
+        formData.append("categoryId", categoryId);
         // Append all images
         subServiceImages.forEach((file) => {
             formData.append("subServiceImages", file);
@@ -178,32 +205,43 @@ const AddService = () => {
             );
 
             if (response.data?.success) {
-                showSuccessToast(response?.data?.msg); //
+                showSuccessToast(response?.data?.msg);
                 setSubMessage("Subservice added successfully!");
                 // Clear form fields
                 setServiceTitle("");
                 setServiceDescription("");
                 setServicePrice("");
-                // setServicePoints("");
                 setSubServiceImages([]);
                 setPreviewImages("");
                 setSubServiceSuccess(true)
                 setServiceSuccess(null)
                 setIsServiceCreated("")
+
                 // Remove completed service from pending list
                 const pendingServices = JSON.parse(localStorage.getItem("pendingServices") || "[]");
-                const remainingServices = pendingServices.filter((s) => s !== category);
+
+                // Filter out the completed category (handle both object and string formats)
+                const remainingServices = pendingServices.filter((s) => {
+                    if (typeof s === 'object') {
+                        return s._id !== categoryId;
+                    } else {
+                        return s !== categoryId;
+                    }
+                });
+
                 localStorage.setItem("pendingServices", JSON.stringify(remainingServices));
 
                 // Redirect to next service if available
                 if (remainingServices.length > 0) {
                     setTimeout(() => {
-                        router.push(`add-services?service=${remainingServices[0]}`);
+                        const nextService = remainingServices[0];
+                        const nextCategoryId = typeof nextService === 'object' ? nextService._id : nextService;
+                        router.push(`add-services?service=${nextCategoryId}`);
                         localStorage.removeItem("services");
-                    }, 1500); // Small delay for UX
+                    }, 1500);
                 } else {
-                    localStorage.removeItem("pendingServices"); // Cleanup if done
-                    localStorage.removeItem("bussinessDetail"); // Cleanup if done
+                    localStorage.removeItem("pendingServices");
+                    localStorage.removeItem("bussinessDetail");
                     router.push("/dashboard");
                     localStorage.removeItem("services");
                 }
@@ -229,8 +267,8 @@ const AddService = () => {
         <div className="content w-100">
             <div className="auth_container bussiness hair_services">
                 <div className="auth_head">
-                    {title && <h2>{title}</h2>}
-                    {title && <p>Please provide details of the {title} services you are offering.</p>}
+                    {categoryName && <h2>{categoryName}</h2>}
+                    {categoryName && <p>Please provide details of the {categoryName} services you are offering.</p>}
                 </div>
 
                 {/* Service Form */}
@@ -244,7 +282,7 @@ const AddService = () => {
                                 const file = e.target.files[0];
                                 if (file) {
                                     setServiceImage(file);
-                                    setPreviewImage(URL.createObjectURL(file)); // Set preview URL
+                                    setPreviewImage(URL.createObjectURL(file));
                                 }
                             }}
                         />
@@ -253,13 +291,13 @@ const AddService = () => {
                                 <span className="aic_icon">
                                     <Image src="/images/upload-icon.png" width={16} height={18} alt="Upload" />
                                 </span>
-                                {title && <h5>Upload header image for {title}</h5>}
+                                {categoryName && <h5>Upload header image for {categoryName}</h5>}
                                 <h5>800px x 400px</h5>
                             </div>
                         </label>
                         {previewImage && (
                             <Image
-                                src={previewImage} // Default image if previewImage is null
+                                src={previewImage}
                                 className="aic_cover_img"
                                 width={300}
                                 height={100}
@@ -285,9 +323,8 @@ const AddService = () => {
                             Skip
                         </Link>
                     </div>
-                    {/* {!isServiceCreated && (
-                    )} */}
                 </form>
+
                 {/* Subservice Form */}
                 {(isServiceCreated || serviceSuccess === true) && (
                     <form onSubmit={handleSubServiceSubmit}>
@@ -295,7 +332,6 @@ const AddService = () => {
                         <div className="row gy-4">
                             <div className="col-12">
                                 <div className="auth_upload_bussiness_logo">
-
                                     <input
                                         type="file"
                                         multiple
@@ -332,7 +368,6 @@ const AddService = () => {
                                         </div>
                                     )}
                                 </div>
-
                             </div>
                             <div className="col-12">
                                 <div className="bd_fields">
@@ -375,23 +410,6 @@ const AddService = () => {
                                     </div>
                                 </div>
                             </div>
-                            {/* <div className="col-12">
-                                <div className="row align-items-center">
-                                    <div className="col-2">
-                                        <h4 className='sp_h4'>Service Points</h4>
-                                    </div>
-                                    <div className="col-4">
-                                        <div className="bd_fields sp_input2">
-                                            <input
-                                                type="number"
-                                                value={servicePoints}
-                                                onChange={(e) => setServicePoints(e.target.value)}
-                                                placeholder=""
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> */}
                         </div>
                         <div className="d-flex align-items-center gap-5 justify-content-between">
                             <button type="submit" disabled={loading2} className="btn theme-btn3">

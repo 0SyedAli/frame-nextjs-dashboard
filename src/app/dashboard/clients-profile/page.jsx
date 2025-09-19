@@ -156,8 +156,12 @@ const ClientsProfile = () => {
     const fetchServices = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdmin?adminId=${adminId}`,
-
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdminId`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
             setSubServices(response.data.data || []);
         } catch (error) {
@@ -188,7 +192,7 @@ const ClientsProfile = () => {
         if (!userId) return;
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllEmployees?adminId=${adminId}`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllStylists?adminId=${adminId}`
             );
 
             if (response.data.success) {

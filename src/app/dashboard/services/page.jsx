@@ -12,22 +12,29 @@ const ServicesDashboard = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [token, setToken] = useState(null);
+  const [adminId, setAdminId] = useState(null);
   const [hasFetchedServices, setHasFetchedServices] = useState(false); // New state to track API call
 
   const { servicesData, serviceIds, loading } = useSelector((state) => state.services);
-
   useEffect(() => {
-    // Ensure this runs only on the client
     const storedToken = localStorage.getItem("token");
-    setToken(storedToken);
-  }, []);
-
-  useEffect(() => {
-    if (token && !hasFetchedServices && !Object.keys(serviceIds).length) {
-      dispatch(fetchAllServices(token));
-      setHasFetchedServices(true); // Mark that the API call has been made
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user && (!user?.id || !user?._id) && !storedToken) {
+      router.push('/auth/signin')
     }
-  }, [dispatch, token, hasFetchedServices, serviceIds]);
+    else {
+      setAdminId(user?.id || user?._id)
+      setToken(storedToken)
+    }
+  }, [router])
+
+
+useEffect(() => {
+  if (token && !hasFetchedServices && !Object.keys(serviceIds).length) {
+    dispatch(fetchAllServices({ token, adminId })); 
+    setHasFetchedServices(true);
+  }
+}, [dispatch, token, adminId, hasFetchedServices, serviceIds]);
 
   useEffect(() => {
     if (Object.keys(serviceIds).length) {
@@ -88,16 +95,16 @@ const ServicesDashboard = () => {
           <div className="d-flex align-items-center gap-4">
             <h3 className="mb-0">Hair Services</h3>
           </div>
-          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("hairservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("hair")}</div>
 
           <h3>Nails Services</h3>
-          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("nailservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("nail")}</div>
 
           <h3>Skin Services</h3>
-          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("skinservices")}</div>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("skin")}</div>
 
-          <h3>Other Services</h3>
-          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("othersservices")}</div>
+          <h3>Massage Services</h3>
+          <div className="row mt-3 mb-5 flex-nowrap py-4" style={{ overflow: "auto", scrollBehavior: "smooth" }}>{renderServices("massage")}</div>
         </>
       )}
     </div>

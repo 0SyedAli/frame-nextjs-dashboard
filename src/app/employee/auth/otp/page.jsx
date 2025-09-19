@@ -1,48 +1,32 @@
 "use client";
 import OtpInput from "react-otp-input";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
-import { setUser } from "../../../lib/slices/authslice";
 import axios from "axios";
 import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const OTP = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [code, setCode] = useState("");
+  const [userId, setUserId] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [token, setToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false); // Loading state for Resend OTP
   const [error, setError] = useState("");
   const [resendMessage, setResendMessage] = useState(""); // Message for Resend OTP
 
-  // useEffect(() => {
-  //   const userData = JSON.parse(localStorage.getItem("user"));
-  //   if (!userData) {
-  //     // Redirect to signup if userData doesn't exist
-  //     router.push('/user/auth/signup');
-  //   } else if (userData?.customerAddress) {
-  //     router.push('/user/dashboard');
-  //   } else {
-  //     // Set user details if userData exists
-  //     setUserEmail(userData?.email || "");
-  //     setUserId(userData?.id || userData?._id || "");
-  //   }
-  // }, []);
-
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("token");
+    const userData = JSON.parse(localStorage.getItem("user_data"));
     if (!userData) {
-      // Redirect to signup if userData doesn't exist
-      router.push('/auth/signup');
+      // Redirect to signin if userData doesn't exist
+      router.push('/user/auth/signin');
+    } else if (userData?.customerAddress) {
+      router.push('/user/dashboard');
     } else {
       // Set user details if userData exists
-      setUserEmail(userData.email || "");
-      setToken(token || "");
+      setUserEmail(userData?.email || "");
+      setUserId(userData?.id || userData?._id || "");
     }
   }, []);
 
@@ -52,6 +36,7 @@ const OTP = () => {
       setCode(code);
     }
   };
+
   const verifyOTP = async () => {
 
     setIsLoading(true);
@@ -61,12 +46,11 @@ const OTP = () => {
     const requestData = {
       email: userEmail,
       OTP: code,
-      signupToken: token,
     };
 
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/verifyOTP`,
+        `${process.env.NEXT_PUBLIC_API_URL}/user/verifyOTP`,
         requestData,
         {
           headers: {
@@ -74,15 +58,14 @@ const OTP = () => {
           },
         }
       );
-      const { data, accessToke } = response?.data;
+
       // Check if response status is successful
       if (response?.status === 200 || response?.status === 201) {
         // Handle successful response
-        localStorage.setItem("user", JSON.stringify(response?.data?.data));
-        localStorage.setItem("token", accessToke);
-        dispatch(setUser({ user: data, token: accessToke }));
+        localStorage.setItem("user_data", JSON.stringify(response?.data?.data));
+        localStorage.setItem("userAccessToken", response?.data?.accessToken);
         showSuccessToast(response?.data?.msg || "OTP has been verified successfully!");
-        router.push("/auth/pricing");
+        router.push("appointment");
       } else {
         // Handle unexpected success responses with non-2xx status codes
         throw new Error(response?.data?.msg || "An unexpected error occurred.");
@@ -109,34 +92,34 @@ const OTP = () => {
     }
   };
 
-  // const resendOTP = async () => {
-  //   setIsResending(true);
-  //   setResendMessage("");
-  //   setError("");
+  const resendOTP = async () => {
+    setIsResending(true);
+    setResendMessage("");
+    setError("");
 
-  //   try {
-  //     const response = await axios.post(
-  //       `${process.env.NEXT_PUBLIC_API_URL}/user/OTP`,
-  //       { userId: userId },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/OTP`,
+        { userId: userId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  //     // Handle successful resend
-  //     setResendMessage("A new OTP has been sent to your email.");
-  //     showSuccessToast("A new OTP has been sent to your email.!")
-  //     console.log("OTP Resent Successfully", response.data);
-  //   } catch (err) {
-  //     // Handle resend error
-  //     showErrorToast(err.response?.data?.msg || "Failed to resend OTP. Please try again.")
-  //     setError(err.response?.data?.msg || "Failed to resend OTP. Please try again.");
-  //   } finally {
-  //     setIsResending(false);
-  //   }
-  // };
+      // Handle successful resend
+      setResendMessage("A new OTP has been sent to your email.");
+      showSuccessToast("A new OTP has been sent to your email.!")
+      console.log("OTP Resent Successfully", response.data);
+    } catch (err) {
+      // Handle resend error
+      showErrorToast(err.response?.data?.msg || "Failed to resend OTP. Please try again.")
+      setError(err.response?.data?.msg || "Failed to resend OTP. Please try again.");
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   return (
     <div className="content align-self-center mw-600">
@@ -189,15 +172,13 @@ const OTP = () => {
           {resendMessage && <p style={{ color: "green", marginBottom: "30px", fontSize: '18px' }}>{resendMessage}</p>}
           <p>Didn't receive the code?</p>
           <h5
-            onClick={() => {
-              router.push("/auth/signup")
-            }}
+            onClick={resendOTP}
             style={{
-              color: "#7843AA",
-              cursor: "pointer"
+              color: isResending ? "#aaa" : "#7843AA",
+              cursor: isResending ? "not-allowed" : "pointer",
             }}
           >
-            Pls sign up again
+            {isResending ? "Resending..." : "Resend Code"}
           </h5>
         </div>
       </div>

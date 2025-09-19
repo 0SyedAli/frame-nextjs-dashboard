@@ -19,22 +19,33 @@ const Service = () => {
     const [employees, setEmployees] = useState()
     const [loading, setLoading] = useState(true)
     const [isLoading, setIsLoading] = useState(true);
+    const [token, setToken] = useState("");
     const [services, setServices] = useState([]); // State to store fetched services
     const searchParams = useSearchParams();
     const router = useRouter();
     const adminId = searchParams.get("adminId");
-    console.log(adminId);
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (!storedToken) {
+            setToken(storedToken)
+        } else {
+            router.push("/auth/login");
+        }
+    }, [router]); // Runs once on mount
 
     useEffect(() => {
         fetchEmployees();
         fetchServices();
     }, [])
 
+
+
     const fetchEmployees = async () => {
         try {
             setLoading(true); // Start loading
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllEmployees?adminId=${adminId}`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllStylists?adminId=${adminId}`
             );
 
             if (response.data.success) {
@@ -54,7 +65,12 @@ const Service = () => {
         try {
             setIsLoading(true); // Start loading
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+                   `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
             );
 
             if (response.data.success) {

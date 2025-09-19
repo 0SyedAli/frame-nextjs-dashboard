@@ -1,25 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { HiOutlineSquares2X2 } from "react-icons/hi2";
-import { IoCalendarOutline } from "react-icons/io5";
-import { BiMessageSquareDots } from "react-icons/bi";
-import { MdDisplaySettings, MdMiscellaneousServices } from "react-icons/md";
-import { FaRegStar } from "react-icons/fa";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { logout } from "@/lib/slices/authslice";
+import { IoCalendarOutline } from 'react-icons/io5';
+import { BiMessageSquareDots } from 'react-icons/bi';
 export default function SidebarUserDash() {
   const dispatch = useDispatch();
   const links = [
     { href: '/', name: 'Dashboard', icon: HiOutlineSquares2X2 },
-    // { href: '/service', name: 'Service', icon: IoCalendarOutline },
-    { href: '/booking', name: 'Booking', icon: BiMessageSquareDots },
-    { href: '/favorites', name: 'Favorites', icon: MdDisplaySettings },
-    { href: '/receipt-detail', name: 'Receipt Detail', icon: MdDisplaySettings },
-    { href: '/more', name: 'More', icon: HiOutlineSquares2X2 },
-    { href: '/setting', name: 'Setting', icon: MdMiscellaneousServices },
-    { href: '/about', name: 'About Us', icon: FaRegStar },
-    { href: '/refer-friend', name: 'Refer a Friend', icon: MdDisplaySettings },
+    { href: '/appointments', name: 'Appointments', icon: IoCalendarOutline },
+    { href: '/message', name: 'Message', icon: BiMessageSquareDots },
+    // { href: '/', name: 'Dashboard', icon: HiOutlineSquares2X2 },
   ];
   const handleLogout = () => {
     dispatch(logout()); // Dispatch the logout action

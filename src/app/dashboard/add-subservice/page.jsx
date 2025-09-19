@@ -22,6 +22,7 @@ const AddSubService = () => {
   const [subServiceImages, setSubServiceImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [serviceId, setServiceId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [employeeId, setEmployeeId] = useState("");
   const [adminId, setadminId] = useState(null);
   const [token, setToken] = useState(null);
@@ -53,7 +54,12 @@ const AddSubService = () => {
   const fetchServices = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setServices(response.data.data || []); // Update services state
     } catch (error) {
@@ -66,7 +72,7 @@ const AddSubService = () => {
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllEmployees?adminId=${adminId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllStylists?adminId=${adminId}`
       );
       setEmployees(response.data.data || []); // Update employees state
     } catch (error) {
@@ -75,83 +81,93 @@ const AddSubService = () => {
       setLoading(false); // Stop loading
     }
   };
+  const handleServiceChange = (e) => {
+    const selectedId = e.target.value;
+    setServiceId(selectedId);
 
+    const selectedService = services.find((s) => s._id === selectedId);
+    if (selectedService?.categoryId?._id) {
+      setCategoryId(selectedService.categoryId._id);
+    }
+  };
   const handleSubServiceSubmit = async (e) => {
     e.preventDefault();
     if (
       !serviceTitle ||
       !serviceDescription ||
       !servicePrice ||
-      !serviceId
+      !serviceId ||
+      !categoryId
     ) {
-      alert("Please fill all fields.");
-      return;
+  alert("Please fill all fields.");
+  return;
+}
+
+const formData = new FormData();
+formData.append("adminId", adminId);
+formData.append("serviceId", serviceId);
+formData.append("categoryId", categoryId);
+formData.append("title", serviceTitle);
+formData.append("text", serviceDescription);
+formData.append("price", servicePrice);
+// formData.append("employeeId", employeeId);
+// formData.append("servicePoints", servicePoints);
+
+// Append all images
+subServiceImages.forEach((file) => {
+  formData.append("subServiceImages", file);
+});
+setLoading2(true);
+try {
+  const response = await axios.post(
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/addSubService`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
     }
+  );
 
-    const formData = new FormData();
-    formData.append("adminId", adminId);
-    formData.append("serviceId", serviceId);
-    formData.append("title", serviceTitle);
-    formData.append("text", serviceDescription);
-    formData.append("price", servicePrice);
-    // formData.append("employeeId", employeeId);
-    // formData.append("servicePoints", servicePoints);
-
-    // Append all images
-    subServiceImages.forEach((file) => {
-      formData.append("subServiceImages", file);
-    });
-    setLoading2(true);
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/addSubService`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response?.data?.success) {
-        // Clear form fields
-        setServiceTitle("");
-        setServiceDescription("");
-        setServicePrice("");
-        // setServicePoints("");
-        setSubServiceImages([]);
-        setPreviewImages([]);
-        setServiceId("");
-        setEmployeeId("");
-        showSuccessToast(response?.data?.msg); //
-      }
-    } catch (error) {
-      console.error("Subservice creation failed", error);
-      showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
-    } finally {
-      setLoading2(false);
-    }
+  if (response?.data?.success) {
+    // Clear form fields
+    setServiceTitle("");
+    setServiceDescription("");
+    setServicePrice("");
+    // setServicePoints("");
+    setSubServiceImages([]);
+    setPreviewImages([]);
+    setServiceId("");
+    setEmployeeId("");
+    showSuccessToast(response?.data?.msg); //
+  }
+} catch (error) {
+  console.error("Subservice creation failed", error);
+  showErrorToast(error.response?.data?.message || "Error adding Sub Service!");
+} finally {
+  setLoading2(false);
+}
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setSubServiceImages(files);
+const handleFileChange = (e) => {
+  const files = Array.from(e.target.files);
+  setSubServiceImages(files);
 
-    // Generate preview URLs
-    const previewUrls = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages(previewUrls);
-  };
+  // Generate preview URLs
+  const previewUrls = files.map((file) => URL.createObjectURL(file));
+  setPreviewImages(previewUrls);
+};
 
-  if (loading) return <Spinner />;
-  return (
-    <div className='add_service2_dash'>
-      <form onSubmit={handleSubServiceSubmit}>
-        <div className="row align-items-end">
-          <div className="col-7">
-            <div className="row">
-              <div className="col-12">
-                {/* <div className="auth_upload_bussiness_logo">
+if (loading) return <Spinner />;
+return (
+  <div className='add_service2_dash'>
+    <form onSubmit={handleSubServiceSubmit}>
+      <div className="row align-items-end">
+        <div className="col-7">
+          <div className="row">
+            <div className="col-12">
+              {/* <div className="auth_upload_bussiness_logo">
                   <input
                     type="file"
                     multiple
@@ -173,92 +189,94 @@ const AddSubService = () => {
                     <h5>Upload Subservices Pictures</h5>
                   </label>
                 </div> */}
-                <div className="auth_upload_bussiness_logo">
+              <div className="auth_upload_bussiness_logo">
 
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  {previewImages.length === 0 ? (
-                    <label htmlFor="">
-                      <div className="aubl_img_container">
-                        <span className="aic_icon">
-                          <Image
-                            src="/images/upload-icon.png"
-                            width={16}
-                            height={18}
-                            className="pb-icon"
-                            alt="Frame"
-                          />
-                        </span>
-                      </div>
-                      <h5>Upload Subservices Pictures</h5>
-                    </label>
-                  ) : (
-                    <div className="d-flex align-items-center gap-2 flex-wrap">
-                      {previewImages.map((src, index) => (
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                {previewImages.length === 0 ? (
+                  <label htmlFor="">
+                    <div className="aubl_img_container">
+                      <span className="aic_icon">
                         <Image
-                          key={index}
-                          src={src}
-                          width={100}
-                          height={100}
-                          alt={`Preview ${index + 1}`}
-                          className="preview-thumbnail"
+                          src="/images/upload-icon.png"
+                          width={16}
+                          height={18}
+                          className="pb-icon"
+                          alt="Frame"
                         />
-                      ))}
+                      </span>
                     </div>
-                  )}
-                </div>
+                    <h5>Upload Subservices Pictures</h5>
+                  </label>
+                ) : (
+                  <div className="d-flex align-items-center gap-2 flex-wrap">
+                    {previewImages.map((src, index) => (
+                      <Image
+                        key={index}
+                        src={src}
+                        width={100}
+                        height={100}
+                        alt={`Preview ${index + 1}`}
+                        className="preview-thumbnail"
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="row as_form gy-4">
-          <div className="col-12">
-            <input
-              type="text"
-              placeholder="Service Title *"
-              required
-              value={serviceTitle}
-              onChange={(e) => setServiceTitle(e.target.value)}
-            />
-          </div>
+      </div>
+      <div className="row as_form gy-4">
+        <div className="col-12">
+          <input
+            type="text"
+            placeholder="Service Title *"
+            required
+            value={serviceTitle}
+            onChange={(e) => setServiceTitle(e.target.value)}
+          />
+        </div>
+        <div className="col-12">
+          <select
+            value={serviceId}
+            required
+            onChange={handleServiceChange}
+          >
+            <option value="">Select Service Type *</option>
+            {services.map((service) => (
+              <option key={service._id} value={service._id}>
+                {service.Title}
+              </option>
+            ))}
+          </select>
+        </div>
+        {employees && employees.length > 0 && (
           <div className="col-12">
             <select
-              value={serviceId}
+              value={employeeId}
               required
-              onChange={(e) => setServiceId(e.target.value)}
+              onChange={(e) => setEmployeeId(e.target.value)}
             >
-              <option value="">Select Service Type *</option>
-              {services.map((service, index) => (
-                <option key={index} value={service._id}>{service.Title}</option>
+              <option>Select Employee *</option>
+              {employees.map((employee, index) => (
+                <option key={index} value={employee?._id}>{employee?.employeeName}</option>
               ))}
             </select>
           </div>
-          {employees && employees.length > 0 && (
-            <div className="col-12">
-              <select
-                value={employeeId}
-                required
-                onChange={(e) => setEmployeeId(e.target.value)}
-              >
-                <option>Select Employee *</option>
-                {employees.map((employee, index) => (
-                  <option key={index} value={employee?._id}>{employee?.employeeName}</option>
-                ))}
-              </select>
-            </div>
-          )}
-          <div className="col-12">
-            <textarea
-              rows="5"
-              placeholder='Description'
-              onChange={(e) => setServiceDescription(e.target.value)}
-            >{serviceDescription}</textarea>
-          </div>
-          {/* <div className="col-12">
+        )}
+        <div className="col-12">
+          <textarea
+            rows="5"
+            placeholder='Description'
+            onChange={(e) => setServiceDescription(e.target.value)}
+          >{serviceDescription}</textarea>
+        </div>
+        {/* <div className="col-12">
             <input
               type="number"
               placeholder="Service Point"
@@ -266,27 +284,27 @@ const AddSubService = () => {
               onChange={(e) => setServicePoints(e.target.value)}
             />
           </div> */}
-          <div className="col-12">
-            <div className="dollar_input">
-              <span>$</span>
-              <input
-                type="number"
-                value={servicePrice}
-                required
-                onChange={(e) => setServicePrice(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className='col-12 pt-4 d-flex align-items-center justify-content-between'>
-            <button type="submit" disabled={loading} className="theme-btn2">
-              {loading2 ? <Spinner /> : "Sumbit"}
-            </button>
-            <Link href="/dashboard/services" className="btn theme-btn3" style={{ width: "240px" }}>Go back</Link>
+        <div className="col-12">
+          <div className="dollar_input">
+            <span>$</span>
+            <input
+              type="number"
+              value={servicePrice}
+              required
+              onChange={(e) => setServicePrice(e.target.value)}
+            />
           </div>
         </div>
-      </form>
-    </div>
-  );
+        <div className='col-12 pt-4 d-flex align-items-center justify-content-between'>
+          <button type="submit" disabled={loading} className="theme-btn2">
+            {loading2 ? <Spinner /> : "Sumbit"}
+          </button>
+          <Link href="/dashboard/services" className="btn theme-btn3" style={{ width: "240px" }}>Go back</Link>
+        </div>
+      </div>
+    </form>
+  </div>
+);
 };
 
 

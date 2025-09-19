@@ -27,7 +27,7 @@ const Employees = () => {
   const fetchServices = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
       );
       setServices(response.data.data || []);
     } catch (error) {
@@ -39,7 +39,7 @@ const Employees = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServicesByAdminId?adminId=${adminId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
       );
       setServices(response.data.data || []);
     } catch (error) {

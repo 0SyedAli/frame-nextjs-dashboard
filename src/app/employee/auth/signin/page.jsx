@@ -1,47 +1,66 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { adminLogin, clearAuthState } from "../../../lib/slices/authslice";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Spinner from "@/components/Spinner";
+import axios from "axios";
+import { showErrorToast, showSuccessToast } from "@/lib/toast";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isClient, setIsClient] = useState(false); // Prevent hydration issues
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
-  const dispatch = useDispatch();
   const router = useRouter();
-  const { loading, error, token, user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    console.log("signin Rendered");
+    setIsClient(true);
 
-  }, [])
-  
-  useEffect(() => {
-    setIsClient(true); // Mark as client-side rendering
+    const token = localStorage.getItem("AccessToken");
+    const userData = localStorage.getItem("emp_data");
 
-    if (token !== undefined && token !== null && token !== "" && user && user.adminId) {
-      router.replace("/dashboard"); // Redirect if logged in and adminId exists
+    if (token && userData) {
+      router.replace("/employee/dashboard");
     }
+  }, [router]);
 
-    return () => {
-      dispatch(clearAuthState());
-    };
-  }, [dispatch, user, router]);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(adminLogin({ email, password })).then((action) => {
-      if (action.meta.requestStatus === "fulfilled") {
-        router.replace("/dashboard"); // Redirect on successful login
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/stylistLogin`,
+        { email, password },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      const { success, msg, data, accessToken } = response.data;
+
+      if (success && accessToken && data) {
+        localStorage.setItem("AccessToken", accessToken);
+        localStorage.setItem("emp_data", JSON.stringify(data));
+
+        showSuccessToast(msg || "Login successful!");
+        router.replace("/employee/dashboard");
+      } else {
+        throw new Error(msg || "Invalid response from server");
       }
-    });
+    } catch (err) {
+      const message =
+        err.response?.data?.msg || err.message || "Login failed!";
+      setError(message);
+      showErrorToast(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  if (!isClient) return null; // Prevent mismatched server & client rendering
+  if (!isClient) return null; // prevent hydration mismatch
 
   return (
     <div className="content align-self-center mw-600">
@@ -70,15 +89,9 @@ const AdminLogin = () => {
               {loading ? <Spinner /> : "Login"}
             </button>
             <div className="mt-4">
-              {user && <p className="success  text-success">Welcome, {user.name}!</p>}
               {error && <p className="error text-danger">{error}</p>}
             </div>
-            <div className="register_link">
-              <h5>
-                Don't have an account?
-                <Link href="signup"> Sign Up</Link>
-              </h5>
-            </div>
+
           </div>
         </form>
       </div>

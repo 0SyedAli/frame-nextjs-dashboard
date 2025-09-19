@@ -29,6 +29,7 @@ const BillingDetails = () => {
         postCode: "",
         city: "",
         phNumber: "",
+        username: "",
     });
 
     const [loading, setLoading] = useState(false);
@@ -54,6 +55,7 @@ const BillingDetails = () => {
             "street",
             "city",
             "phNumber",
+            "username",
         ];
         for (let field of requiredFields) {
             if (!formData[field]) {
@@ -79,6 +81,7 @@ const BillingDetails = () => {
                     postCode: formData.postCode,
                     city: formData.city,
                     phNumber: formData.phNumber,
+                    username: formData.username,
                     differentAddress: false,
                     order: "124",
                 },
@@ -97,6 +100,7 @@ const BillingDetails = () => {
                 postCode: "",
                 city: "",
                 phNumber: "",
+                username: "",
             });
         } catch (error) {
             setError("Failed to save billing details.");
@@ -139,6 +143,7 @@ const BillingDetails = () => {
                                     { name: "postCode", label: "Postcode / ZIP (optional)" },
                                     { name: "city", label: "Town / City *" },
                                     { name: "phNumber", label: "Phone *" },
+                                    { name: "username", label: "User Name *" },
                                 ].map(({ name, label }) => (
                                     <div key={name} className="col-6">
                                         <div className="auth_form_field">

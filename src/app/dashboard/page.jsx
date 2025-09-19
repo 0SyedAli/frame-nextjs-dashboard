@@ -172,10 +172,8 @@ const Dashboard = () => {
         <div className="col-4 pe-1">
           <div className="dash_profile1">
             <div className="dp_img mb-4">
-              <Image
-                src={
-                  `https://predemo.site/Framie/1747156600261-book-jessie-jones.jpg`
-                }// : "/images/placeholder.jpg"}
+              <img
+                src={userData?.profileImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${userData?.profileImage}` : "/images/unknown_user.jpg"}// : "/images/placeholder.jpg"}
                 width={135}
                 height={135}
               />

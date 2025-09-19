@@ -33,22 +33,19 @@ const BussinessDetail = () => {
                 <div className='w-100'>
                     <form>
                         <div className="auth_upload_bussiness_logo">
-                            <input type="file" name="" id="" />
-                            <label htmlFor="">
-                                <div className="aubl_img_container">
-                                    <img src="" alt="" />
-                                    <span className="aic_icon">
-                                        <Image
-                                            src="/images/upload-icon.png"
-                                            width={16}
-                                            height={18}
-                                            className="pb-icon"
-                                            alt="Frame"
-                                        />
-                                    </span>
-                                </div>
-                                <h5>Upload business logo</h5>
-                            </label>
+                            <input type="file" accept="image/*" required onChange={handleFileChange} />
+                            {formData.businessImage ? (
+                                <img src={URL.createObjectURL(formData.businessImage)} alt="Preview" />
+                            ) : (
+                                <label>
+                                    <div className="aubl_img_container">
+                                        <span className="aic_icon">
+                                            <Image src="/images/upload-icon.png" width={16} height={18} alt="Frame" />
+                                        </span>
+                                    </div>
+                                    <h5>Upload business logo *</h5>
+                                </label>
+                            )}
                         </div>
                         <div className="row pt-4 gy-4">
                             <div className="col-6">

@@ -17,19 +17,15 @@ const initialState = {
 // Async thunk to fetch all services
 export const fetchAllServices = createAsyncThunk(
   "services/fetchAllServices",
-  async (token, { rejectWithValue }) => {
+  async ({ token, adminId }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
 
       );
-      console.log(token);
       return response.data.data; // Returns the array of services
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error fetching services");
@@ -43,7 +39,7 @@ export const fetchSubServices = createAsyncThunk(
   async ({ category, serviceId }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByServiceId`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllSubServices`,
         { params: { serviceId } }
       );
       return { category, subServices: response.data.data || [] };
