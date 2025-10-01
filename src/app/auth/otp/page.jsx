@@ -41,7 +41,7 @@ const OTP = () => {
       router.push('/auth/signup');
     } else {
       // Set user details if userData exists
-      setUserEmail(userData.email || "");
+      setUserEmail(userData || "");
       setToken(token || "");
     }
   }, []);
@@ -74,22 +74,23 @@ const OTP = () => {
           },
         }
       );
-      const { data, accessToke } = response?.data;
+      const { success, msg, data, accessToke } = response?.data;
       // Check if response status is successful
-      if (response?.status === 200 || response?.status === 201) {
+      if (success) {
         // Handle successful response
         localStorage.setItem("user", JSON.stringify(response?.data?.data));
         localStorage.setItem("token", accessToke);
         dispatch(setUser({ user: data, token: accessToke }));
-        showSuccessToast(response?.data?.msg || "OTP has been verified successfully!");
+        showSuccessToast(msg || "OTP has been verified successfully!");
         router.push("/auth/pricing");
       } else {
         // Handle unexpected success responses with non-2xx status codes
-        throw new Error(response?.data?.msg || "An unexpected error occurred.");
+        throw new Error(msg || "An unexpected error occurred.");
       }
     } catch (error) {
       // Handle error
-      const errorMessage = error.response?.data?.msg || "An error occurred. Please try again later.";
+      const errorMessage =
+        error.response?.data?.msg || "An error occurred. Please try again later.";
       showErrorToast(errorMessage);
       setError(errorMessage);
 

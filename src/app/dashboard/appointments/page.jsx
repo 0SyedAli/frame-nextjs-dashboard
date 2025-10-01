@@ -332,8 +332,7 @@ const Appointment = () => {
                                         <tbody>
                                             {appointments.map((order, index) => {
                                                 // Map service IDs to their titles
-                                                const serviceTitles = order?.services
-                                                    .map((serviceId) => {
+                                                const serviceTitles = order?.services?.map((serviceId) => {
                                                         const service = subservices.find((s) => s._id === serviceId);
                                                         return service ? service?.title : "Unknown Service";
                                                     })

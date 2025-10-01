@@ -260,9 +260,6 @@ const BusinessDetail = () => {
                                 </div>
                             </div>
                         </div>
-
-
-
                         {/* Available Services */}
                         <div className="avail_serv pt-3">
                             <div className="pb-4">
