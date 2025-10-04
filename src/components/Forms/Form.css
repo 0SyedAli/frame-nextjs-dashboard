@@ -1,0 +1,160 @@
+/* FormInput.css */
+.form-input-custom::placeholder {
+  color: #727272 !important;
+  opacity: 1;
+}
+
+.form-input-custom {
+  border-color: #E3E3E3 !important;
+  background-color: #fff !important;
+  transition: all 0.15s ease-in-out;
+  height: 48px !important;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  /* rounded-2 equivalent */
+}
+
+.form-input-custom:focus {
+  border-color: #A83F98 !important;
+  box-shadow: 0 0 0 0.2rem rgba(168, 63, 152, 0.25) !important;
+  outline: none;
+}
+
+/* Date input calendar icon color - Default focus color */
+input[type="date"].form-input-custom::-webkit-calendar-picker-indicator {
+  filter: invert(0.8) sepia(0) saturate(0) hue-rotate(0deg);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Date input calendar icon on focus/hover */
+input[type="date"].form-input-custom:focus::-webkit-calendar-picker-indicator,
+input[type="date"].form-input-custom:hover::-webkit-calendar-picker-indicator {
+  filter: invert(0.3) sepia(1) saturate(5) hue-rotate(290deg);
+  opacity: 1;
+}
+
+input[type="date"].form-input-custom {
+  color: #727272;
+}
+
+/* Select dropdown styling */
+.select-wrapper {
+  position: relative;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #E3E3E3;
+  /* Default color */
+  pointer-events: none;
+  font-size: 16px;
+  z-index: 1;
+  transition: color 0.15s ease-in-out;
+}
+
+/* Select arrow color when select is focused */
+select.form-input-custom:focus+.select-arrow {
+  color: #A83F98 !important;
+}
+
+/* Ensure select has same height and removes default arrow */
+select.form-input-custom {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+  padding-right: 40px !important;
+  /* Space for custom arrow */
+}
+
+/* Remove default arrow in IE */
+select.form-input-custom::-ms-expand {
+  display: none;
+}
+
+/* Firefox date input styling */
+input[type="date"].form-input-custom {
+  position: relative;
+}
+
+input[type="date"].form-input-custom::-moz-focus-inner {
+  border: 0;
+}
+
+/* For Firefox calendar icon */
+input[type="date"].form-input-custom::-moz-calendar-picker-indicator {
+  filter: invert(0.8) sepia(0) saturate(0) hue-rotate(0deg);
+  opacity: 0.7;
+  transition: all 0.15s ease-in-out;
+}
+
+input[type="date"].form-input-custom:focus::-moz-calendar-picker-indicator,
+input[type="date"].form-input-custom:hover::-moz-calendar-picker-indicator {
+  filter: invert(0.3) sepia(1) saturate(5) hue-rotate(290deg);
+  opacity: 1;
+}
+
+
+
+/* Add these styles to your existing FormInput.css */
+
+/* Textarea specific styles */
+.form-textarea-custom {
+  min-height: 120px !important;
+  height: auto !important;
+  resize: vertical;
+  padding: 12px 16px !important;
+  line-height: 1.5 !important;
+  font-family: inherit !important;
+}
+
+.form-textarea-custom::placeholder {
+  color: #727272 !important;
+  opacity: 1;
+  font-size: 14px !important;
+}
+
+.form-textarea-custom:focus {
+  border-color: #A83F98 !important;
+  box-shadow: 0 0 0 0.2rem rgba(168, 63, 152, 0.25) !important;
+  outline: none;
+}
+
+/* Ensure consistent styling with input fields */
+.form-textarea-custom {
+  border-color: #E3E3E3 !important;
+  background-color: #fff !important;
+  transition: all 0.15s ease-in-out;
+  font-size: 16px !important;
+  border-radius: 8px !important;
+  width: 100%;
+}
+
+/* Professional scrollbar styling for textarea */
+.form-textarea-custom::-webkit-scrollbar {
+  width: 6px;
+}
+
+.form-textarea-custom::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.form-textarea-custom::-webkit-scrollbar-thumb {
+  background: #E3E3E3;
+  border-radius: 3px;
+}
+
+.form-textarea-custom::-webkit-scrollbar-thumb:hover {
+  background: #A83F98;
+}
+
+/* Focus state for accessibility */
+.form-textarea-custom:focus {
+  transform: translateY(-1px);
+}
