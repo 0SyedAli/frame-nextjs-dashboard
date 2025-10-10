@@ -1455,6 +1455,10 @@ li.add_stylist_btn .add_note_btn:hover {
   transform: translateY(-50%);
 }
 
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: transparent !important;
+}
+
 .du_banner {
   width: 100%;
   height: 275px;

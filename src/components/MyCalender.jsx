@@ -424,14 +424,14 @@ export default function CalendarPage() {
   return (
     <div className='calendar-container'>
       {/* Header showing selected client in week view */}
-      {selectedClient && currentView === 'timeGridWeek' && (
+      {/* {selectedClient && currentView === 'timeGridWeek' && (
         <div className="client-week-header">
           <h3>📅 Weekly Schedule for: {selectedClient}</h3>
           <button onClick={handleBackToMonthView} className="back-button">
             ← Back to Month View
           </button>
         </div>
-      )}
+      )} */}
       
       <FullCalendar
         ref={calendarRef}

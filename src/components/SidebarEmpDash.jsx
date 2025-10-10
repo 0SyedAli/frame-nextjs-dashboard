@@ -36,7 +36,7 @@ export default function SidebarUserDash() {
         <ul className='pt-0 m-0'>
           <li className='pt-0 m-0'>
             <span><RiLogoutBoxLine /></span>
-            <Link href="/auth/signin" onClick={handleLogout} >Logout</Link>
+            <Link href="/employee/auth/signin" onClick={handleLogout} >Logout</Link>
           </li>
         </ul>
       </div>

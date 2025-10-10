@@ -289,8 +289,8 @@ export default function AppointmentsPage() {
                     </td> */}
                       <td className="py-4">
                         <div className="d-flex align-items-center">
-                          <div
-                            className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3"
+                          {/* <div
+                            className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
                             style={{
                               width: "40px",
                               height: "40px",
@@ -299,7 +299,7 @@ export default function AppointmentsPage() {
                             }}
                           >
                             {appointment.clientName.charAt(0).toUpperCase()}
-                          </div>
+                          </div> */}
                           <div>
                             <div
                               className="fw-semibold text-dark"

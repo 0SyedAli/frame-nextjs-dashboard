@@ -502,10 +502,4 @@ const Message = () => {
     );
 };
 
-const ProtectedMessageDashboard = () => (
-    <AuthGuard>
-      <Message />
-    </AuthGuard>
-  );
-  
-  export default ProtectedMessageDashboard;
+export default Message;
