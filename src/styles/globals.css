@@ -136,8 +136,9 @@ textarea:focus {
   align-items: center;
   gap: 10px;
   position: absolute;
-  bottom: 150px;
+  top: 85%;
   left: 150px;
+  transform: translateY(-50%);
 }
 
 .dot {
