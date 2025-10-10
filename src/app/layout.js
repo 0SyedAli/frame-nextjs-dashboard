@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { store } from "../lib/store";
 import ToastProvider from "../components/ToastProvider";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import NextTopLoader from "nextjs-toploader";
 const interFont = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className={`${poppins.variable} ${epilogue.variable} ${roboto.variable} ${lato.variable} ${montserrat.variable} ${interFont.variable} ${openSans.variable}`}>
+         <NextTopLoader color="#A83F98" showSpinner={false} />
         <ToastProvider /> {/* Global toast notifications */}
         <GoogleOAuthProvider clientId={CLIENT_ID}>
           <Provider store={store}>{children}</Provider>

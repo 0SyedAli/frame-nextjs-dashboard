@@ -120,9 +120,9 @@
 
 /* Event styling */
 .fc-event {
-    background-color: #4f46e5;
-    border-color: #4f46e5;
-    color: white;
+    background-color: #F5B7CA;
+    border-color: #F5B7CA;
+    color: #000;
     border-radius: 4px;
     padding: 2px 4px;
     font-size: 0.85em;
@@ -213,4 +213,346 @@
 .fc-event-title {
     color: white !important;
     font-weight: 500;
+}
+
+
+
+
+
+/* Custom Event Styling */
+.custom-event {
+  padding: 2px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  height: 100%;
+  overflow: hidden;
+}
+
+.event-client {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 2px;
+  color: #1A1615;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.event-category {
+  font-size: 10px;
+  color: #66615E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  font-size: 10px;
+  color: #66615E;
+  font-weight: 500;
+}
+
+/* Month view events */
+.fc-daygrid-event {
+  padding: 1px 2px !important;
+}
+
+.fc-event-time {
+  display: none !important;
+}
+
+.fc-event-title {
+  display: none !important;
+}
+
+/* Week view events */
+.fc-timegrid-event {
+  padding: 2px 4px !important;
+}
+
+.fc-timegrid-event .custom-event {
+  font-size: 11px;
+}
+
+/* Hover effects */
+.fc-event:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+
+/* Client Week Header */
+.client-week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px 20px;
+  border-bottom: 2px solid #5a6bc2;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  color: white;
+}
+
+.client-week-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Custom Event Styling */
+.custom-event {
+  padding: 4px 6px;
+  font-size: 12px;
+  line-height: 1.3;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.event-client {
+  font-weight: bold;
+  font-size: 11px;
+  margin-bottom: 2px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-category {
+  font-size: 10px;
+  color: #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  font-size: 9px;
+  color: #b0b0b0;
+  font-weight: 500;
+}
+
+/* Week view specific styling */
+.fc-timegrid-event {
+  border-radius: 6px;
+}
+
+.fc-timegrid-event .custom-event {
+  padding: 6px 8px;
+}
+
+.fc-timegrid-event .event-client {
+  font-size: 12px;
+}
+
+.fc-timegrid-event .event-details {
+  font-size: 11px;
+}
+
+/* Month view events */
+.fc-daygrid-event {
+  padding: 2px 4px !important;
+  border-radius: 4px;
+}
+
+/* Ensure events are visible in week view */
+.fc-timegrid-event-harness {
+  z-index: 1;
+}
+
+.fc-event {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Hover effects */
+.fc-event:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+
+
+/* Client Week Header */
+.client-week-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px 20px;
+  border-bottom: 2px solid #5a6bc2;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  color: white;
+}
+
+.client-week-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Custom Event Styling */
+.custom-event {
+  padding: 4px 6px;
+  font-size: 12px;
+  line-height: 1.3;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 4px;
+  border-left: 3px solid rgba(255,255,255,0.5);
+}
+
+.event-client {
+  font-weight: bold;
+  font-size: 11px;
+  margin-bottom: 2px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.event-category {
+  font-size: 10px;
+  color: #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event-time {
+  font-size: 9px;
+  color: #b0b0b0;
+  font-weight: 500;
+}
+
+/* Week view specific styling */
+.fc-timegrid-event {
+  border-radius: 6px;
+  margin: 1px 0;
+}
+
+.fc-timegrid-event .custom-event {
+  padding: 6px 8px;
+}
+
+.fc-timegrid-event .event-client {
+  font-size: 12px;
+}
+
+.fc-timegrid-event .event-details {
+  font-size: 11px;
+}
+
+/* Month view events */
+.fc-daygrid-event {
+  padding: 2px 4px !important;
+  border-radius: 4px;
+  margin: 1px 0;
+}
+
+/* Hide empty time slots in week view */
+.fc-timegrid-slots tr[style*="display: none"] {
+  display: none !important;
+}
+
+/* Make the calendar more compact */
+.fc-timegrid-slot {
+  height: 40px !important; /* Reduce height of time slots */
+}
+
+.fc-timegrid-event {
+  margin: 0 !important;
+}
+
+/* Remove hover effects from empty cells */
+.fc-timegrid-slot:hover {
+  background-color: transparent !important;
+}
+
+/* Ensure events are properly spaced */
+.fc-timegrid-event-harness {
+  margin: 1px 0;
+}
+
+.fc-event {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Hover effects only for actual events */
+.fc-event:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
+}
+
+/* Remove background from empty cells */
+.fc-timegrid-col.fc-day-today {
+  background-color: transparent;
+}
+
+.fc-timegrid-col {
+  background-color: transparent;
 }

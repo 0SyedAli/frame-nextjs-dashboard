@@ -7,7 +7,7 @@ import { RxCaretSort, RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import AuthGuard from "@/components/AuthGuard";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import LeaveRequestModal from "@/components/Modals/LeaveModal";
 
 const AppointmentCheckBox = ({ color, text }) => {
@@ -24,6 +24,19 @@ const AppointmentCheckBox = ({ color, text }) => {
 
 const Appointment = () => {
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [appointments, setAppointments] = useState(false);
+  const [stylistId, setStylistId] = useState(null);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("emp_data"));
+
+    if (user) {
+      setStylistId(user?.id || user?._id);
+    }
+  }, [pathname]);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -45,6 +58,30 @@ const Appointment = () => {
     //     console.error('Error submitting leave request:', error);
     //   });
   };
+
+  const fetchAllAppointments = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?stylistId=${stylistId}`
+      );
+      setLoading(true);
+      setAppointments(response.data.data || []); // Update employees state
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      if (stylistId) {
+        await fetchAllAppointments();
+      }
+    })();
+  }, [pathname, stylistId]);
+
   return (
     <>
       <div style={{ margin: "20px", width: "100%" }} className="pt-5">
@@ -64,112 +101,10 @@ const Appointment = () => {
                 <AppointmentCheckBox color={"#A83F98"} text={"Waitlist"} />
               </div>
             </div>
-            {/* <div className="stylist">
-              <h3>Stylists</h3>
-              <div className="form-check mt-3">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="Booked"
-                />
-                <label className="form-check-label" htmlFor="Booked">
-                  Sara Jackal
-                </label>
-              </div>
-              <div className="form-check mt-2">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="Available"
-                />
-                <label className="form-check-label" htmlFor="Available">
-                  June Smith
-                </label>
-              </div>
-              <div className="form-check mt-2">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="Available"
-                />
-                <label className="form-check-label" htmlFor="Available">
-                  Mark William
-                </label>
-              </div>
-              <div className="form-check mt-2">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="Available"
-                />
-                <label className="form-check-label" htmlFor="Available">
-                  Abby Jin
-                </label>
-              </div>
-              <div className="form-check mt-2">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="Available"
-                />
-                <label className="form-check-label" htmlFor="Available">
-                  Jack Banner
-                </label>
-              </div>
-            </div> */}
           </div>
           <div className="col-9">
             <MyCalender />
           </div>
-          {/* <div className="col-12">
-                        <div className="dr_head">
-                            <h5>Appointments</h5>
-                            <Link href="/" className="dr_btn">View All</Link>
-                        </div>
-                        <div className="dr_table">
-                            <div className="pt-2 dash_list page">
-                                <div className="table-responsive">
-                                    <table className="table caption-top">
-                                        <thead>
-                                            <tr className="borderless">
-                                                <th scope="col">Customer ID <span><RxCaretSort /></span></th>
-                                                <th scope="col">Name <span><RxCaretSort /></span></th>
-                                                <th scope="col">Date & Time <span><RxCaretSort /></span></th>
-                                                <th scope="col">Treatment <span><RxCaretSort /></span></th>
-                                                <th scope="col">Status <span><RxCaretSort /></span></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {appointments.map((order, index) => {
-                                                const serviceTitles = order?.services?.map((serviceId) => {
-                                                        const service = subservices.find((s) => s._id === serviceId);
-                                                        return service ? service?.title : "Unknown Service";
-                                                    })
-                                                    .join(", "); 
-
-                                                return (
-                                                    <tr key={index}>
-                                                        <td scope="row">{order?._id}</td>
-                                                        <td className="user_td">{order?.clientName}</td>
-                                                        <td>{`${order?.date} ${order?.timeSlot}`}</td>
-                                                        <td>{serviceTitles}</td> 
-                                                        <td className={`status_td ${order?.status.toLowerCase()}`}>
-                                                            <span>{order?.status}</span>
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
         </div>
       </div>
       {/* Leave Request Modal */}
