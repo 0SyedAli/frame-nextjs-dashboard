@@ -3097,15 +3097,14 @@ form.s4_form .dt_select_location input {
   .sidebar.sidebar2 {
     padding: 50px 50px 0 !important;
   }
+
 }
 
-@media only screen and (max-height: 600px) {
-  /* .add_employee {
-    height: 450px !important;
-    overflow: hidden !important;
-    overflow-y: auto !important;
-
-  } */
+@media only screen and (max-height: 650px) {
+  .side_menu2.side_menu2_top {
+    height: 300px;
+    overflow: auto;
+  }
 }
 
 @media only screen and (max-width: 1299px) {

@@ -19,7 +19,7 @@ export default function SidebarDash() {
     { href: '/employees', name: 'Employees', icon: HiOutlineSquares2X2 },
     { href: '/services', name: 'Services', icon: MdMiscellaneousServices },
     { href: '/marketing', name: 'Marketing', icon: FaRegStar },
-    { href: '/refer-friend', name: 'Refer a Friend', icon: MdDisplaySettings },
+    // { href: '/refer-friend', name: 'Refer a Friend', icon: MdDisplaySettings },
   ];
   const handleLogout = () => {
     dispatch(logout()); // Dispatch the logout action
@@ -29,7 +29,7 @@ export default function SidebarDash() {
       <div className="logo">
         <Image src={"/images/logo.png"} alt="Profile" width={353} height={190} />
       </div>
-      <div className="side_menu2">
+      <div className="side_menu2 side_menu2_top">
         <ul>
           {links.map((link, i) => (
             <li key={i}>

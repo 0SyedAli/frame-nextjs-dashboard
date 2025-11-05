@@ -78,7 +78,7 @@ const EditProfile = () => {
             // Compare initial data with updated data
             const initialUser = JSON.parse(localStorage.getItem("user"));
 
-            if (adminId) formDataToSend.append("id", adminId);
+            if (initialUser) formDataToSend.append("adminId", initialUser?._id);
             // if (formData.firstName && formData.firstName !== initialUser?.name?.split(" ")[0]) {
             //     formDataToSend.append("firstName", formData.firstName);
             // }

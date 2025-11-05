@@ -49,7 +49,7 @@ const Appointment = () => {
         e.preventDefault();
 
         const requestBody = {
-            userId: "67e1a32982124b9a6a749882", // Replace with dynamic userId
+            // userId: "67e1a32982124b9a6a749882", // Replace with dynamic userId
             adminId: adminId, // Replace with dynamic adminId
             clientName,
             date,
@@ -72,7 +72,6 @@ const Appointment = () => {
         }
     };
 
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
@@ -93,6 +92,7 @@ const Appointment = () => {
     const fetchServices = async () => {
         try {
             const response = await axios.get(
+                // `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
                 `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
                 {
                     headers: {
@@ -123,7 +123,7 @@ const Appointment = () => {
     const fetchAllAppointments = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?adminId=${adminId}`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?adminId=6827c02148b81a6e5170d287`
             );
             setLoading2(true)
             setAppointments(response.data.data || []); // Update employees state
@@ -314,7 +314,7 @@ const Appointment = () => {
                     <div className="col-12">
                         <div className="dr_head">
                             <h5>Appointments</h5>
-                            <Link href="/" className="dr_btn">View All</Link>
+                            {/* <Link href="#!" className="dr_btn">View All</Link> */}
                         </div>
                         <div className="dr_table">
                             <div className="pt-2 dash_list page">

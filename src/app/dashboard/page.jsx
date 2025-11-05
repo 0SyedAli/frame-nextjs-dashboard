@@ -3,24 +3,11 @@ import { LuUsersRound } from "react-icons/lu";
 import { IoMdArrowUp } from "react-icons/io";
 import { RxCaretSort } from "react-icons/rx";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Spinner from "@/components/Spinner";
 import AuthGuard from "@/components/AuthGuard";
 import IncomeChart from "@/components/IncomeChart";
-const image1 = "/images/user1.png";
-const image2 = "/images/user1.png";
-const image3 = "/images/user1.png";
-const image4 = "/images/user1.png";
-const image5 = "/images/user1.png";
-const image6 = "/images/user1.png";
-const image7 = "/images/user1.png";
-const image8 = "/images/user1.png";
-const image9 = "/images/user1.png";
-const image10 = "/images/user1.png";
-const image11 = "/images/user1.png";
-const image12 = "/images/user1.png";
 
 const Dashboard = () => {
   const [tab, setTab] = useState();

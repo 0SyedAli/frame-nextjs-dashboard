@@ -1248,7 +1248,9 @@ span.aic_icon g {
     gap: 10px;
 }
 
-
+.ast_item img {
+    border-radius: 8px;
+}
 .ast_item .ast_file {
     background-color: #FFF;
     border: 1px solid #6F1785;

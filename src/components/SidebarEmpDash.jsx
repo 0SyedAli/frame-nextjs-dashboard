@@ -22,7 +22,7 @@ export default function SidebarUserDash() {
       <div className="logo">
         <Image src={"/images/logo.png"} alt="Profile" width={353} height={190} />
       </div>
-      <div className="side_menu2">
+      <div className="side_menu2 side_menu2_top">
         <ul>
           {links.map((link, i) => (
             <li key={i}>
