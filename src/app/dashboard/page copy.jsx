@@ -12,9 +12,6 @@ import IncomeChart from "@/components/IncomeChart";
 const Dashboard = () => {
   const [tab, setTab] = useState();
   const [userData, setUserData] = useState();
-  const [loading, setLoading] = useState(false);
-  const [loading2, setLoading2] = useState(false);
-  const [appointments, setAppointments] = useState([]); // Initialize as an empty array
   const [adminId, setadminId] = useState();
   const [statistics, setStatistics] = useState("");
   const [revenue, setRevenue] = useState("");
@@ -153,30 +150,6 @@ const Dashboard = () => {
       },
     ],
   };
-
-  const fetchAllAppointments = async () => {
-    try {
-      const response = await axios.get(
-        // `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?adminId=6827c02148b81a6e5170d287`
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllWalkins`
-      );
-      setLoading2(true)
-      setAppointments(response.data.data || []); // Update employees state
-    } catch (error) {
-      console.error("Error fetching employees:", error);
-    } finally {
-      setLoading2(false); // Stop loading
-    }
-  };
-  useEffect(() => {
-    if (adminId) {
-      setLoading(true);
-      const timer = setTimeout(() => {
-        fetchAllAppointments();
-      }, 1000);
-      return () => clearTimeout(timer); // Clean up timeout on component unmount
-    }
-  }, [adminId]);
   if (!tab) {
     return <></>;
   }
@@ -271,47 +244,51 @@ const Dashboard = () => {
               </div>
               <IncomeChart data={response23.data} />
             </div>
-            <div className="col-12">
-              <div className="dr_head">
-                <h5>Appointments</h5>
-                {/* <Link href="#!" className="dr_btn">View All</Link> */}
-              </div>
-              <div className="dr_table">
-                <div className="pt-2 dash_list page">
-                  <div className="table-responsive">
-                    <table className="table caption-top">
-                      <thead>
-                        <tr className="borderless">
-                          <th scope="col">Customer ID <span><RxCaretSort /></span></th>
-                          <th scope="col">Name <span><RxCaretSort /></span></th>
-                          <th scope="col">Phone <span><RxCaretSort /></span></th>
-                          <th scope="col">Date & Time <span><RxCaretSort /></span></th>
-                          <th scope="col">Treatment <span><RxCaretSort /></span></th>
-                          <th scope="col">Stylist <span><RxCaretSort /></span></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {loading2 ? "loading" :
-                          appointments.map((order, index) => {
-                            return (
-                              <tr key={index}>
-                                <td scope="row">{order?._id}</td>
-                                <td className="user_td">{order?.name || "N/A"}</td>
-                                <td className="user_td">{order?.phone || "N/A"}</td>
-                                <td>{`${order?.date} ${order?.timeSlot}`}</td>
-                                <td>{order?.subService?.title || "Unknown Service"}</td> {/* Display service titles here */}
-                                <td>{order?.stylist?.stylistName || "Unknown Stylist"}</td> {/* Display service titles here */}
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  </div>
+            <div className="dr_head">
+              <h5>Appointments</h5>
+              {/* <Link href="/" className="dr_btn">View All</Link> */}
+            </div>
+            <div className="dr_table">
+              <div className="pt-2 dash_list page">
+                <div className="table-responsive">
+                  <table className="table caption-top">
+                    <thead>
+                      <tr className="borderless">
+                        <th scope="col">Customer ID <span><RxCaretSort /></span></th>
+                        <th scope="col">Name <span><RxCaretSort /></span></th>
+                        <th scope="col">Date & Time <span><RxCaretSort /></span></th>
+                        <th scope="col">Treatment <span><RxCaretSort /></span></th>
+                        <th scope="col">Status <span><RxCaretSort /></span></th>
+                      </tr>
+                    </thead>
+                    {/* <tbody>
+                      {orders
+                        .filter((val) => val.status.toLowerCase().includes(activeTab))
+                        .map((order, index) => (
+                          <tr key={index}>
+                            <td scope="row">{order.cust_id}</td>
+                            <td className="user_td">
+                              {order.name}
+                            </td>
+                            <td>{order.date}</td>
+                            <td>{order.treatment}</td>
+                            <td className={`status_td ${order.status.toLowerCase()}`}>
+                              <span>{order.status}</span>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody> */}
+                  </table>
+                  <p>No appointment available.</p>
                 </div>
+                {/* <div className="pagination justify-content-end">
+                  <button className="active">1</button>
+                  <button>2</button>
+                  <button>3</button>
+                  <button>4</button>
+                  <button>&gt;&gt;</button>
+                </div> */}
               </div>
-              {/* <div className="text-end pt-3">
-                            <button className="btn det_ins">DETAILED INSIGHTS</button>
-                        </div> */}
             </div>
             {/* <div className="text-end pt-3">
               <button className="btn det_ins">DETAILED INSIGHTS</button>

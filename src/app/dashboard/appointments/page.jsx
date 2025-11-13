@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 
 const Appointment = () => {
     const [activeSlot, setActiveSlot] = useState("");
-    const [services, setServices] = useState([]); // Initialize as an empty array
+    // const [services, setServices] = useState([]); // Initialize as an empty array
     const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(false);
     const [employees, setEmployees] = useState([]); // Initialize as an empty array
@@ -22,6 +22,7 @@ const Appointment = () => {
     const [adminId, setadminId] = useState(null);
     const [token, setToken] = useState(null);
     const [clientName, setClientName] = useState("");
+    const [phone, setPhone] = useState("");     // ← ADD THIS
     const [date, setDate] = useState("");
     const [timeSlot, setTimeSlot] = useState("");
     const [price, setPrice] = useState("");
@@ -49,28 +50,34 @@ const Appointment = () => {
         e.preventDefault();
 
         const requestBody = {
-            // userId: "67e1a32982124b9a6a749882", // Replace with dynamic userId
-            adminId: adminId, // Replace with dynamic adminId
-            clientName,
+            adminId,
+            name: clientName,
+            phone,
             date,
-            services: [serviceId], // Adjust for multiple selections if needed
+            subService: serviceId,
             stylist: employeeId,
             timeSlot,
-            price,
             notes,
-            createdByModel: "Admin",
-            createdBy: adminId, // Replace with dynamic createdBy
+            price,
         };
 
         try {
             const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/addAppointment`, requestBody);
-            console.log("Appointment added successfully:", response.data);
-            closeModal(); // Close modal after successful submission
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/createWalkin`,
+                requestBody,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            console.log("Walkin created:", response.data);
+            closeModal();
         } catch (error) {
-            console.error("Error adding appointment:", error);
+            console.log(error);
         }
     };
+
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
@@ -80,7 +87,7 @@ const Appointment = () => {
         if (adminId) {
             setLoading(true);
             const timer = setTimeout(() => {
-                fetchServices();
+                // fetchServices();
                 fetchEmployees();
                 fetchAllAppointments();
                 fetchAllSubServices();
@@ -89,24 +96,24 @@ const Appointment = () => {
         }
     }, [adminId]); // Runs when adminId changes
 
-    const fetchServices = async () => {
-        try {
-            const response = await axios.get(
-                // `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            setServices(response.data.data || []); // Update services state
-        } catch (error) {
-            console.error("Error fetching services:", error);
-        } finally {
-            setLoading(false); // Stop loading
-        }
-    };
+    // const fetchServices = async () => {
+    //     try {
+    //         const response = await axios.get(
+    //             // `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllServices?adminId=${adminId}`,
+    //             `${process.env.NEXT_PUBLIC_API_URL}/admin/getSubServicesByAdminId`,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`,
+    //                 },
+    //             }
+    //         );
+    //         setServices(response.data.data || []); // Update services state
+    //     } catch (error) {
+    //         console.error("Error fetching services:", error);
+    //     } finally {
+    //         setLoading(false); // Stop loading
+    //     }
+    // };
 
     const fetchEmployees = async () => {
         try {
@@ -123,7 +130,8 @@ const Appointment = () => {
     const fetchAllAppointments = async () => {
         try {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?adminId=6827c02148b81a6e5170d287`
+                // `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllAppointments?adminId=6827c02148b81a6e5170d287`
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllWalkins`
             );
             setLoading2(true)
             setAppointments(response.data.data || []); // Update employees state
@@ -136,7 +144,7 @@ const Appointment = () => {
     const fetchAllSubServices = async () => {
         try {
             const response = await axios.get(
-               `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllSubServices?adminId=${adminId}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/admin/getAllSubServices?adminId=${adminId}`,
             );
             setSubservices(response.data.data || []); // Update employees state
         } catch (error) {
@@ -169,6 +177,16 @@ const Appointment = () => {
                             />
                         </div>
                         <div className="amp_field">
+                            <label>Phone</label>
+                            <input
+                                type="tel"
+                                placeholder="Enter phone"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="amp_field">
                             <label>Select Date</label>
                             <input
                                 type="date"
@@ -185,9 +203,9 @@ const Appointment = () => {
                                 onChange={(e) => setServiceId(e.target.value)}
                             >
                                 <option value="">Select Service Type</option>
-                                {services.map((service, index) => (
+                                {subservices.map((service, index) => (
                                     <option key={index} value={service._id}>
-                                        {service.Title}
+                                        {service.title}
                                     </option>
                                 ))}
                             </select>
@@ -324,29 +342,28 @@ const Appointment = () => {
                                             <tr className="borderless">
                                                 <th scope="col">Customer ID <span><RxCaretSort /></span></th>
                                                 <th scope="col">Name <span><RxCaretSort /></span></th>
+                                                <th scope="col">Phone <span><RxCaretSort /></span></th>
                                                 <th scope="col">Date & Time <span><RxCaretSort /></span></th>
                                                 <th scope="col">Treatment <span><RxCaretSort /></span></th>
-                                                <th scope="col">Status <span><RxCaretSort /></span></th>
+                                                <th scope="col">Stylist <span><RxCaretSort /></span></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {appointments.map((order, index) => {
                                                 // Map service IDs to their titles
-                                                const serviceTitles = order?.services?.map((serviceId) => {
-                                                        const service = subservices.find((s) => s._id === serviceId);
-                                                        return service ? service?.title : "Unknown Service";
-                                                    })
-                                                    .join(", "); // Join multiple service titles with a comma
+                                                
 
                                                 return (
                                                     <tr key={index}>
                                                         <td scope="row">{order?._id}</td>
-                                                        <td className="user_td">{order?.clientName}</td>
+                                                        <td className="user_td">{order?.name  || "N/A"}</td>
+                                                        <td className="user_td">{order?.phone || "N/A"}</td>
                                                         <td>{`${order?.date} ${order?.timeSlot}`}</td>
-                                                        <td>{serviceTitles}</td> {/* Display service titles here */}
-                                                        <td className={`status_td ${order?.status.toLowerCase()}`}>
+                                                        <td>{order?.subService?.title || "Unknown Service"}</td> {/* Display service titles here */}
+                                                        <td>{order?.stylist?.stylistName || "Unknown Stylist"}</td> {/* Display service titles here */}
+                                                        {/* <td className={`status_td ${order?.status && order?.status.toLowerCase()}`}>
                                                             <span>{order?.status}</span>
-                                                        </td>
+                                                        </td> */}
                                                     </tr>
                                                 );
                                             })}
