@@ -1,0 +1,46 @@
+.conversation_heading {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    color: #51004F;
+
+}
+
+.txt_color {
+    color: #1A1615;
+
+}
+
+.list-group-item {
+    /* background: linear-gradient(90deg, rgba(208, 125, 178, 1) 0%, rgba(245, 183, 202, 0) 100%);; */
+     background-color: transparent !important;
+}
+
+.list-group-item:active {
+    background-color: transparent !important;
+}
+
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #F5B7CA transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #120C31;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #120C31;
+}
